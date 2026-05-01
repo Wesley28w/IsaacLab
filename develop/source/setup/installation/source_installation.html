@@ -315,6 +315,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../how-to/haply_teleoperation.html">Setting up Haply Teleoperation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../how-to/simulation_performance.html">PhysX Simulation Performance and Tuning</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../how-to/optimize_stage_creation.html">Optimize Stage Creation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../how-to/profile_with_nsys.html">Profiling Isaac Lab with Nsight Systems</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../overview/developer-guide/index.html">Developer’s Guide</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -767,6 +768,15 @@ This approach is meant for users who wish to modify the source code of Isaac Sim
 or want to test Isaac Lab with the nightly version of Isaac Sim.</p>
 <p>The following instructions are adapted from the <a class="reference external" href="https://github.com/isaac-sim/IsaacSim?tab=readme-ov-file#quick-start">Isaac Sim documentation</a>
 for the convenience of users.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><strong>Compatibility warning for Isaac Sim GitHub develop:</strong> A recent breaking change on the Isaac Lab
+<code class="docutils literal notranslate"><span class="pre">develop</span></code> branch is not compatible with the <code class="docutils literal notranslate"><span class="pre">develop</span></code> branch of Isaac Sim on GitHub. To run
+Isaac Lab with Isaac Sim’s GitHub <code class="docutils literal notranslate"><span class="pre">develop</span></code> branch, use Isaac Lab commit
+<a class="reference external" href="https://github.com/isaac-sim/IsaacLab/commit/f0234a82e432e2a0b0f0a26ca3c5b59e527ddaaa">f0234a82e432e2a0b0f0a26ca3c5b59e527ddaaa</a>
+or an earlier commit. Alternatively, use the Isaac Lab
+<a class="reference external" href="https://github.com/isaac-sim/IsaacLab/tree/v3.0.0-beta">v3.0.0-beta</a> tag.</p>
+</div>
 <div class="admonition attention">
 <p class="admonition-title">Attention</p>
 <p>Building Isaac Sim from source requires Ubuntu 22.04 LTS or higher.</p>
