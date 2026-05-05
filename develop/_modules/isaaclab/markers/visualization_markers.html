@@ -670,20 +670,15 @@
 <span class="c1">#</span>
 <span class="c1"># SPDX-License-Identifier: BSD-3-Clause</span>
 
-<span class="sd">&quot;&quot;&quot;A class to coordinate groups of visual markers (such as spheres, frames or arrows)</span>
-<span class="sd">using `UsdGeom.PointInstancer`_ class.</span>
+<span class="sd">&quot;&quot;&quot;Backend-agnostic facade for coordinating groups of visual markers.</span>
 
-<span class="sd">The class :class:`VisualizationMarkers` is used to create a group of visual markers and</span>
-<span class="sd">visualize them in the viewport. The markers are represented as :class:`UsdGeom.PointInstancer` prims</span>
-<span class="sd">in the USD stage. The markers are created as prototypes in the :class:`UsdGeom.PointInstancer` prim</span>
-<span class="sd">and are instanced in the :class:`UsdGeom.PointInstancer` prim. The markers can be visualized by</span>
-<span class="sd">passing the indices of the marker prototypes and their translations, orientations and scales.</span>
-<span class="sd">The marker prototypes can be configured with the :class:`VisualizationMarkersCfg` class.</span>
-
-<span class="sd">.. _UsdGeom.PointInstancer: https://graphics.pixar.com/usd/dev/api/class_usd_geom_point_instancer.html</span>
+<span class="sd">The :class:`VisualizationMarkers` class is used to create a group of visual</span>
+<span class="sd">markers and visualize them through the active visualizer backends. The marker</span>
+<span class="sd">prototypes are configured with :class:`VisualizationMarkersCfg`, and individual</span>
+<span class="sd">marker instances can be updated by passing prototype indices and their</span>
+<span class="sd">translations, orientations, and scales.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="c1"># needed to import for allowing type-hinting: np.ndarray | torch.Tensor | None</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
@@ -691,56 +686,50 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pxr</span><span class="w"> </span><span class="kn">import</span> <span class="n">Gf</span><span class="p">,</span> <span class="n">Sdf</span><span class="p">,</span> <span class="n">Usd</span><span class="p">,</span> <span class="n">UsdGeom</span><span class="p">,</span> <span class="n">UsdPhysics</span><span class="p">,</span> <span class="n">Vt</span>
-
 <span class="kn">import</span><span class="w"> </span><span class="nn">isaaclab.sim</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sim_utils</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.utils.version</span><span class="w"> </span><span class="kn">import</span> <span class="n">has_kit</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.visualization_markers_cfg</span><span class="w"> </span><span class="kn">import</span> <span class="n">VisualizationMarkersCfg</span>
 
-<span class="c1"># import logger</span>
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="VisualizationMarkers">
 <a class="viewcode-back" href="../../../source/api/lab/isaaclab.markers.html#isaaclab.markers.VisualizationMarkers">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">VisualizationMarkers</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class to coordinate groups of visual markers (loaded from USD).</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Coordinate groups of visual markers across active visualizer backends.</span>
 
-<span class="sd">    This class allows visualization of different UI markers in the scene, such as points and frames.</span>
-<span class="sd">    The class wraps around the `UsdGeom.PointInstancer`_ for efficient handling of objects</span>
-<span class="sd">    in the stage via instancing the created marker prototype prims.</span>
+<span class="sd">    This class allows visualization of different UI markers in the scene, such</span>
+<span class="sd">    as points, frames, arrows, and shapes. Marker prototypes are reusable</span>
+<span class="sd">    templates that define variations of objects to visualize. For example, a</span>
+<span class="sd">    sphere marker prototype can be used to create many sphere marker instances</span>
+<span class="sd">    at different locations.</span>
 
-<span class="sd">    A marker prototype prim is a reusable template prim used for defining variations of objects</span>
-<span class="sd">    in the scene. For example, a sphere prim can be used as a marker prototype prim to create</span>
-<span class="sd">    multiple sphere prims in the scene at different locations. Thus, prototype prims are useful</span>
-<span class="sd">    for creating multiple instances of the same prim in the scene.</span>
+<span class="sd">    The class parses the configuration to create the marker prototypes in each</span>
+<span class="sd">    active backend. The marker prototype name comes from the key in the</span>
+<span class="sd">    :attr:`VisualizationMarkersCfg.markers` dictionary, and prototype indices</span>
+<span class="sd">    are based on the dictionary order. For example, if the dictionary has two</span>
+<span class="sd">    markers, ``&quot;marker1&quot;`` and ``&quot;marker2&quot;``, their prototype indices are 0</span>
+<span class="sd">    and 1 respectively. These indices can be passed to :meth:`visualize` as a</span>
+<span class="sd">    list or array of integers.</span>
 
-<span class="sd">    The class parses the configuration to create different the marker prototypes into the stage. Each marker</span>
-<span class="sd">    prototype prim is created as a child of the :class:`UsdGeom.PointInstancer` prim. The prim path for the</span>
-<span class="sd">    marker prim is resolved using the key of the marker in the :attr:`VisualizationMarkersCfg.markers`</span>
-<span class="sd">    dictionary. The marker prototypes are created using the :meth:`isaaclab.sim.utils.prims.create_prim`</span>
-<span class="sd">    function, and then instanced using :class:`UsdGeom.PointInstancer` prim to allow creating multiple</span>
-<span class="sd">    instances of the marker prims.</span>
-
-<span class="sd">    Switching between different marker prototypes is possible by calling the :meth:`visualize` method with</span>
-<span class="sd">    the prototype indices corresponding to the marker prototype. The prototype indices are based on the order</span>
-<span class="sd">    in the :attr:`VisualizationMarkersCfg.markers` dictionary. For example, if the dictionary has two markers,</span>
-<span class="sd">    &quot;marker1&quot; and &quot;marker2&quot;, then their prototype indices are 0 and 1 respectively. The prototype indices</span>
-<span class="sd">    can be passed as a list or array of integers.</span>
+<span class="sd">    Switching between marker prototypes is possible by calling</span>
+<span class="sd">    :meth:`visualize` with the corresponding prototype indices. The marker</span>
+<span class="sd">    transforms are updated only for the arguments that are provided; omitted</span>
+<span class="sd">    translations, orientations, scales, or marker indices are left unchanged</span>
+<span class="sd">    when supported by the active backend.</span>
 
 <span class="sd">    Usage:</span>
-<span class="sd">        The following snippet shows how to create 24 sphere markers with a radius of 1.0 at random translations</span>
-<span class="sd">        within the range [-1.0, 1.0]. The first 12 markers will be colored red and the rest will be colored green.</span>
+<span class="sd">        The following snippet creates 24 sphere markers at random translations.</span>
+<span class="sd">        The first 12 markers use the first prototype and the rest use the</span>
+<span class="sd">        second prototype.</span>
 
 <span class="sd">        .. code-block:: python</span>
 
-<span class="sd">            import isaaclab.sim as sim_utils</span>
-<span class="sd">            from isaaclab.markers import VisualizationMarkersCfg, VisualizationMarkers</span>
+<span class="sd">            import numpy as np</span>
 
-<span class="sd">            # Create the markers configuration</span>
-<span class="sd">            # This creates two marker prototypes, &quot;marker1&quot; and &quot;marker2&quot; which are spheres with a radius of 1.0.</span>
-<span class="sd">            # The color of &quot;marker1&quot; is red and the color of &quot;marker2&quot; is green.</span>
+<span class="sd">            import isaaclab.sim as sim_utils</span>
+<span class="sd">            from isaaclab.markers import VisualizationMarkers, VisualizationMarkersCfg</span>
+
 <span class="sd">            cfg = VisualizationMarkersCfg(</span>
 <span class="sd">                prim_path=&quot;/World/Visuals/testMarkers&quot;,</span>
 <span class="sd">                markers={</span>
@@ -748,50 +737,37 @@
 <span class="sd">                        radius=1.0,</span>
 <span class="sd">                        visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=(1.0, 0.0, 0.0)),</span>
 <span class="sd">                    ),</span>
-<span class="sd">                    &quot;marker2&quot;: VisualizationMarkersCfg.SphereCfg(</span>
+<span class="sd">                    &quot;marker2&quot;: sim_utils.SphereCfg(</span>
 <span class="sd">                        radius=1.0,</span>
 <span class="sd">                        visual_material=sim_utils.PreviewSurfaceCfg(diffuse_color=(0.0, 1.0, 0.0)),</span>
 <span class="sd">                    ),</span>
 <span class="sd">                },</span>
 <span class="sd">            )</span>
-<span class="sd">            # Create the markers instance</span>
-<span class="sd">            # This will create a UsdGeom.PointInstancer prim at the given path along with the marker prototypes.</span>
-<span class="sd">            marker = VisualizationMarkers(cfg)</span>
 
-<span class="sd">            # Set position of the marker</span>
-<span class="sd">            # -- randomly sample translations between -1.0 and 1.0</span>
+<span class="sd">            marker = VisualizationMarkers(cfg)</span>
 <span class="sd">            marker_translations = np.random.uniform(-1.0, 1.0, (24, 3))</span>
-<span class="sd">            # -- this will create 24 markers at the given translations</span>
-<span class="sd">            # note: the markers will all be `marker1` since the marker indices are not given</span>
+
+<span class="sd">            # This creates 24 markers using the first prototype because marker</span>
+<span class="sd">            # indices are not given.</span>
 <span class="sd">            marker.visualize(translations=marker_translations)</span>
 
-<span class="sd">            # alter the markers based on their prototypes indices</span>
-<span class="sd">            # first 12 markers will be marker1 and the rest will be marker2</span>
-<span class="sd">            # 0 -&gt; marker1, 1 -&gt; marker2</span>
+<span class="sd">            # 0 -&gt; marker1, 1 -&gt; marker2. Since translations are omitted here,</span>
+<span class="sd">            # only the marker prototypes are changed.</span>
 <span class="sd">            marker_indices = [0] * 12 + [1] * 12</span>
-<span class="sd">            # this will change the marker prototypes at the given indices</span>
-<span class="sd">            # note: the translations of the markers will not be changed from the previous call</span>
-<span class="sd">            #  since the translations are not given.</span>
 <span class="sd">            marker.visualize(marker_indices=marker_indices)</span>
 
-<span class="sd">            # alter the markers based on their prototypes indices and translations</span>
+<span class="sd">            # Update both marker prototypes and translations.</span>
 <span class="sd">            marker.visualize(marker_indices=marker_indices, translations=marker_translations)</span>
 
-<span class="sd">    .. _UsdGeom.PointInstancer: https://graphics.pixar.com/usd/dev/api/class_usd_geom_point_instancer.html</span>
-
+<span class="sd">    The public API intentionally remains the historical marker API:</span>
+<span class="sd">    :meth:`set_visibility`, :meth:`is_visible`, and :meth:`visualize`. Backend</span>
+<span class="sd">    details are delegated to Kit and Newton marker implementations.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="VisualizationMarkers.__init__">
 <a class="viewcode-back" href="../../../source/api/lab/isaaclab.markers.html#isaaclab.markers.VisualizationMarkers.__init__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">VisualizationMarkersCfg</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the class.</span>
-
-<span class="sd">        When the class is initialized, the :class:`UsdGeom.PointInstancer` is created into the stage</span>
-<span class="sd">        and the marker prims are registered into it.</span>
-
-<span class="sd">        .. note::</span>
-<span class="sd">            If a prim already exists at the given path, the function will find the next free path</span>
-<span class="sd">            and create the :class:`UsdGeom.PointInstancer` prim there.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize visualization marker backends from the active simulation context.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            cfg: The configuration for the markers.</span>
@@ -799,29 +775,19 @@
 <span class="sd">        Raises:</span>
 <span class="sd">            ValueError: When no markers are provided in the :obj:`cfg`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># get next free path for the prim</span>
-        <span class="n">prim_path</span> <span class="o">=</span> <span class="n">sim_utils</span><span class="o">.</span><span class="n">get_next_free_prim_path</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="p">)</span>
-        <span class="c1"># create a new prim</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">stage</span> <span class="o">=</span> <span class="n">sim_utils</span><span class="o">.</span><span class="n">get_current_stage</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_instancer_manager</span> <span class="o">=</span> <span class="n">UsdGeom</span><span class="o">.</span><span class="n">PointInstancer</span><span class="o">.</span><span class="n">Define</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stage</span><span class="p">,</span> <span class="n">prim_path</span><span class="p">)</span>
-        <span class="c1"># store inputs</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">prim_path</span> <span class="o">=</span> <span class="n">prim_path</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span> <span class="o">=</span> <span class="n">cfg</span>
-        <span class="c1"># check if any markers is provided</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">markers</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The `cfg.markers` cannot be empty. Received: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">markers</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">markers</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The `cfg.markers` cannot be empty. Received: </span><span class="si">{</span><span class="n">cfg</span><span class="o">.</span><span class="n">markers</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-        <span class="c1"># create a child prim for the marker</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_add_markers_prototypes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">markers</span><span class="p">)</span>
-        <span class="c1"># Note: We need to do this the first time to initialize the instancer.</span>
-        <span class="c1">#   Otherwise, the instancer will not be &quot;created&quot; and the function `GetInstanceIndices()` will fail.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_instancer_manager</span><span class="o">.</span><span class="n">GetProtoIndicesAttr</span><span class="p">()</span><span class="o">.</span><span class="n">Set</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_prototypes</span><span class="p">)))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_instancer_manager</span><span class="o">.</span><span class="n">GetPositionsAttr</span><span class="p">()</span><span class="o">.</span><span class="n">Set</span><span class="p">([</span><span class="n">Gf</span><span class="o">.</span><span class="n">Vec3f</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_prototypes</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_prototypes</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span> <span class="o">=</span> <span class="n">cfg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">prim_path</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">markers</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_visible</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_backends</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">object</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_backends_initialized</span><span class="p">()</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return: A string representation of the class.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a string representation of the marker group.&quot;&quot;&quot;</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;VisualizationMarkers(prim_path=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">prim_path</span><span class="si">}</span><span class="s2">)&quot;</span>
         <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">Count: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\t</span><span class="s2">Number of prototypes: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">num_prototypes</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -829,10 +795,6 @@
         <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">marker</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">markers</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
             <span class="n">msg</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n\t\t</span><span class="s2">[Index: </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s2">]: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">marker</span><span class="o">.</span><span class="n">to_dict</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="k">return</span> <span class="n">msg</span>
-
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Properties.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">num_prototypes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
@@ -842,40 +804,25 @@
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">count</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The total number of marker instances.&quot;&quot;&quot;</span>
-        <span class="c1"># TODO: Update this when the USD API is available (Isaac Sim 2023.1)</span>
-        <span class="c1"># return self._instancer_manager.GetInstanceCount()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_count</span>
-
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Operations.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="VisualizationMarkers.set_visibility">
 <a class="viewcode-back" href="../../../source/api/lab/isaaclab.markers.html#isaaclab.markers.VisualizationMarkers.set_visibility">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_visibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visible</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sets the visibility of the markers.</span>
-
-<span class="sd">        The method does this through the USD API.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            visible: flag to set the visibility.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">imageable</span> <span class="o">=</span> <span class="n">UsdGeom</span><span class="o">.</span><span class="n">Imageable</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_instancer_manager</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">visible</span><span class="p">:</span>
-            <span class="n">imageable</span><span class="o">.</span><span class="n">MakeVisible</span><span class="p">()</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">imageable</span><span class="o">.</span><span class="n">MakeInvisible</span><span class="p">()</span></div>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set marker visibility for all initialized backends.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_visible</span> <span class="o">=</span> <span class="n">visible</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_backends_initialized</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">backend</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backends</span><span class="p">:</span>
+            <span class="n">backend</span><span class="o">.</span><span class="n">set_visibility</span><span class="p">(</span><span class="n">visible</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="VisualizationMarkers.is_visible">
 <a class="viewcode-back" href="../../../source/api/lab/isaaclab.markers.html#isaaclab.markers.VisualizationMarkers.is_visible">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">is_visible</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks the visibility of the markers.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            True if the markers are visible, False otherwise.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_instancer_manager</span><span class="o">.</span><span class="n">GetVisibilityAttr</span><span class="p">()</span><span class="o">.</span><span class="n">Get</span><span class="p">()</span> <span class="o">!=</span> <span class="n">UsdGeom</span><span class="o">.</span><span class="n">Tokens</span><span class="o">.</span><span class="n">invisible</span></div>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return whether the marker group is visible.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backends</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">any</span><span class="p">(</span><span class="n">backend</span><span class="o">.</span><span class="n">is_visible</span><span class="p">()</span> <span class="k">for</span> <span class="n">backend</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backends</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_visible</span></div>
 
 
 <div class="viewcode-block" id="VisualizationMarkers.visualize">
@@ -887,191 +834,162 @@
         <span class="n">scales</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">marker_indices</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update markers in the viewport.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update markers in all initialized visualizer backends.</span>
 
 <span class="sd">        .. note::</span>
-<span class="sd">            If the prim `PointInstancer` is hidden in the stage, the function will simply return</span>
-<span class="sd">            without updating the markers. This helps in unnecessary computation when the markers</span>
-<span class="sd">            are not visible.</span>
+<span class="sd">            If the markers are hidden, the function returns without updating</span>
+<span class="sd">            backend marker state. This avoids unnecessary work while debug</span>
+<span class="sd">            visualization is disabled.</span>
 
-<span class="sd">        Whenever updating the markers, the input arrays must have the same number of elements</span>
-<span class="sd">        in the first dimension. If the number of elements is different, the `UsdGeom.PointInstancer`</span>
-<span class="sd">        will raise an error complaining about the mismatch.</span>
+<span class="sd">        Whenever updating the markers, the input arrays must have the same</span>
+<span class="sd">        number of elements in the first dimension. Backends generally require</span>
+<span class="sd">        all per-marker arrays to describe the same number of marker instances.</span>
 
-<span class="sd">        Additionally, the function supports dynamic update of the markers. This means that the</span>
-<span class="sd">        number of markers can change between calls. For example, if you have 24 points that you</span>
-<span class="sd">        want to visualize, you can pass 24 translations, orientations, and scales. If you want to</span>
-<span class="sd">        visualize only 12 points, you can pass 12 translations, orientations, and scales. The</span>
-<span class="sd">        function will automatically update the number of markers in the scene.</span>
+<span class="sd">        The function supports dynamic updates of the marker count. For example,</span>
+<span class="sd">        if you have 24 points to visualize, you can pass 24 translations,</span>
+<span class="sd">        orientations, and scales. If you later want to visualize only 12</span>
+<span class="sd">        points, you can pass arrays with 12 rows and the backends will update</span>
+<span class="sd">        the number of marker instances.</span>
 
-<span class="sd">        The function will also update the marker prototypes based on their prototype indices. For instance,</span>
-<span class="sd">        if you have two marker prototypes, and you pass the following marker indices: [0, 1, 0, 1], the function</span>
-<span class="sd">        will update the first and third markers with the first prototype, and the second and fourth markers</span>
-<span class="sd">        with the second prototype. This is useful when you want to visualize different markers in the same</span>
-<span class="sd">        scene. The list of marker indices must have the same number of elements as the translations, orientations,</span>
-<span class="sd">        or scales. If the number of elements is different, the function will raise an error.</span>
+<span class="sd">        The function also updates marker prototypes based on prototype indices.</span>
+<span class="sd">        For instance, if there are two marker prototypes and you pass marker</span>
+<span class="sd">        indices ``[0, 1, 0, 1]``, the first and third markers use the first</span>
+<span class="sd">        prototype and the second and fourth markers use the second prototype.</span>
 
 <span class="sd">        .. caution::</span>
-<span class="sd">            This function will update all the markers instanced from the prototypes. That means</span>
-<span class="sd">            if you have 24 markers, you will need to pass 24 translations, orientations, and scales.</span>
-
-<span class="sd">            If you want to update only a subset of the markers, you will need to handle the indices</span>
-<span class="sd">            yourself and pass the complete arrays to this function.</span>
+<span class="sd">            This function updates all markers instanced from the prototypes. If</span>
+<span class="sd">            you want to update only a subset of markers, handle the indexing</span>
+<span class="sd">            externally and pass complete arrays to this function.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            translations: Translations w.r.t. parent prim frame. Shape is (M, 3).</span>
-<span class="sd">                Defaults to None, which means left unchanged.</span>
-<span class="sd">            orientations: Quaternion orientations (x, y, z, w) w.r.t. parent prim frame. Shape is (M, 4).</span>
-<span class="sd">                Defaults to None, which means left unchanged.</span>
-<span class="sd">            scales: Scale applied before any rotation is applied. Shape is (M, 3).</span>
-<span class="sd">                Defaults to None, which means left unchanged.</span>
-<span class="sd">            marker_indices: Decides which marker prototype to visualize. Shape is (M).</span>
-<span class="sd">                Defaults to None, which means left unchanged provided that the total number of markers</span>
-<span class="sd">                is the same as the previous call. If the number of markers is different, the function</span>
-<span class="sd">                will update the number of markers in the scene.</span>
+<span class="sd">            translations: Translations w.r.t. parent prim frame. Shape is</span>
+<span class="sd">                (M, 3). Defaults to None, which means left unchanged.</span>
+<span class="sd">            orientations: Quaternion orientations (x, y, z, w) w.r.t. parent</span>
+<span class="sd">                prim frame. Shape is (M, 4). Defaults to None, which means left</span>
+<span class="sd">                unchanged.</span>
+<span class="sd">            scales: Scale applied before any rotation is applied. Shape is</span>
+<span class="sd">                (M, 3). Defaults to None, which means left unchanged.</span>
+<span class="sd">            marker_indices: Decides which marker prototype to visualize. Shape</span>
+<span class="sd">                is (M). Defaults to None, which means left unchanged provided</span>
+<span class="sd">                that the total number of markers is the same as the previous</span>
+<span class="sd">                call. If the number of markers is different, the function will</span>
+<span class="sd">                update the number of markers.</span>
 
 <span class="sd">        Raises:</span>
 <span class="sd">            ValueError: When input arrays do not follow the expected shapes.</span>
 <span class="sd">            ValueError: When the function is called with all None arguments.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># check if it is visible (if not then let&#39;s not waste time)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_backends_initialized</span><span class="p">()</span>
+        <span class="c1"># If markers are hidden, do not spend time normalizing or dispatching</span>
+        <span class="c1"># marker state to the active backends.</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_visible</span><span class="p">():</span>
             <span class="k">return</span>
-        <span class="c1"># check if we have any markers to visualize</span>
+
+        <span class="n">norm_translations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_tensor</span><span class="p">(</span><span class="n">translations</span><span class="p">,</span> <span class="n">expected_width</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;translations&quot;</span><span class="p">)</span>
+        <span class="n">norm_orientations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_tensor</span><span class="p">(</span><span class="n">orientations</span><span class="p">,</span> <span class="n">expected_width</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;orientations&quot;</span><span class="p">)</span>
+        <span class="n">norm_scales</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_tensor</span><span class="p">(</span><span class="n">scales</span><span class="p">,</span> <span class="n">expected_width</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;scales&quot;</span><span class="p">)</span>
+        <span class="n">norm_marker_indices</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_to_index_tensor</span><span class="p">(</span><span class="n">marker_indices</span><span class="p">)</span>
+        <span class="n">target_device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_target_device</span><span class="p">(</span>
+            <span class="n">norm_translations</span><span class="p">,</span> <span class="n">norm_orientations</span><span class="p">,</span> <span class="n">norm_scales</span><span class="p">,</span> <span class="n">norm_marker_indices</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">norm_translations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">norm_translations</span> <span class="o">=</span> <span class="n">norm_translations</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">target_device</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">norm_orientations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">norm_orientations</span> <span class="o">=</span> <span class="n">norm_orientations</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">target_device</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">norm_scales</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">norm_scales</span> <span class="o">=</span> <span class="n">norm_scales</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">target_device</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">norm_marker_indices</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">norm_marker_indices</span> <span class="o">=</span> <span class="n">norm_marker_indices</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="n">target_device</span><span class="p">)</span>
+
         <span class="n">num_markers</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="c1"># resolve inputs</span>
-        <span class="c1"># -- position</span>
-        <span class="k">if</span> <span class="n">translations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">translations</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
-                <span class="n">translations</span> <span class="o">=</span> <span class="n">translations</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
-            <span class="c1"># check that shape is correct</span>
-            <span class="k">if</span> <span class="n">translations</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">3</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">translations</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected `translations` to have shape (M, 3). Received: </span><span class="si">{</span><span class="n">translations</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-            <span class="c1"># apply translations</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_instancer_manager</span><span class="o">.</span><span class="n">GetPositionsAttr</span><span class="p">()</span><span class="o">.</span><span class="n">Set</span><span class="p">(</span><span class="n">Vt</span><span class="o">.</span><span class="n">Vec3fArray</span><span class="o">.</span><span class="n">FromNumpy</span><span class="p">(</span><span class="n">translations</span><span class="p">))</span>
-            <span class="c1"># update number of markers</span>
-            <span class="n">num_markers</span> <span class="o">=</span> <span class="n">translations</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="c1"># -- orientation</span>
-        <span class="k">if</span> <span class="n">orientations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">orientations</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
-                <span class="n">orientations</span> <span class="o">=</span> <span class="n">orientations</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
-            <span class="c1"># check that shape is correct</span>
-            <span class="k">if</span> <span class="n">orientations</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">4</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">orientations</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected `orientations` to have shape (M, 4). Received: </span><span class="si">{</span><span class="n">orientations</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-            <span class="c1"># apply orientations (already in xyzw format expected by USD)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_instancer_manager</span><span class="o">.</span><span class="n">GetOrientationsAttr</span><span class="p">()</span><span class="o">.</span><span class="n">Set</span><span class="p">(</span><span class="n">Vt</span><span class="o">.</span><span class="n">QuathArray</span><span class="o">.</span><span class="n">FromNumpy</span><span class="p">(</span><span class="n">orientations</span><span class="p">))</span>
-            <span class="c1"># update number of markers</span>
-            <span class="n">num_markers</span> <span class="o">=</span> <span class="n">orientations</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="c1"># -- scales</span>
-        <span class="k">if</span> <span class="n">scales</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scales</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
-                <span class="n">scales</span> <span class="o">=</span> <span class="n">scales</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
-            <span class="c1"># check that shape is correct</span>
-            <span class="k">if</span> <span class="n">scales</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">3</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">scales</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected `scales` to have shape (M, 3). Received: </span><span class="si">{</span><span class="n">scales</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-            <span class="c1"># apply scales</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_instancer_manager</span><span class="o">.</span><span class="n">GetScalesAttr</span><span class="p">()</span><span class="o">.</span><span class="n">Set</span><span class="p">(</span><span class="n">Vt</span><span class="o">.</span><span class="n">Vec3fArray</span><span class="o">.</span><span class="n">FromNumpy</span><span class="p">(</span><span class="n">scales</span><span class="p">))</span>
-            <span class="c1"># update number of markers</span>
-            <span class="n">num_markers</span> <span class="o">=</span> <span class="n">scales</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="c1"># -- status</span>
-        <span class="k">if</span> <span class="n">marker_indices</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">num_markers</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_count</span><span class="p">:</span>
-            <span class="c1"># apply marker indices</span>
-            <span class="k">if</span> <span class="n">marker_indices</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">marker_indices</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">):</span>
-                    <span class="n">marker_indices</span> <span class="o">=</span> <span class="n">marker_indices</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
-                <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">marker_indices</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-                    <span class="n">marker_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">marker_indices</span><span class="p">)</span>
-                <span class="c1"># check that shape is correct</span>
-                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">marker_indices</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected `marker_indices` to have shape (M,). Received: </span><span class="si">{</span><span class="n">marker_indices</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
-                <span class="c1"># apply proto indices</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_instancer_manager</span><span class="o">.</span><span class="n">GetProtoIndicesAttr</span><span class="p">()</span><span class="o">.</span><span class="n">Set</span><span class="p">(</span><span class="n">Vt</span><span class="o">.</span><span class="n">IntArray</span><span class="o">.</span><span class="n">FromNumpy</span><span class="p">(</span><span class="n">marker_indices</span><span class="p">))</span>
-                <span class="c1"># update number of markers</span>
-                <span class="n">num_markers</span> <span class="o">=</span> <span class="n">marker_indices</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="c1"># check that number of markers is not zero</span>
-                <span class="k">if</span> <span class="n">num_markers</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Number of markers cannot be zero! Hint: The function was called with no inputs?&quot;</span><span class="p">)</span>
-                <span class="c1"># set all markers to be the first prototype</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_instancer_manager</span><span class="o">.</span><span class="n">GetProtoIndicesAttr</span><span class="p">()</span><span class="o">.</span><span class="n">Set</span><span class="p">([</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">num_markers</span><span class="p">)</span>
-        <span class="c1"># set number of markers</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_count</span> <span class="o">=</span> <span class="n">num_markers</span></div>
+        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">(</span><span class="n">norm_translations</span><span class="p">,</span> <span class="n">norm_orientations</span><span class="p">,</span> <span class="n">norm_scales</span><span class="p">,</span> <span class="n">norm_marker_indices</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">num_markers</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">norm_marker_indices</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">num_markers</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">num_markers</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_count</span><span class="p">:</span>
+            <span class="n">norm_marker_indices</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_markers</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">target_device</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">norm_marker_indices</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">num_markers</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">(</span><span class="n">norm_translations</span><span class="p">,</span> <span class="n">norm_orientations</span><span class="p">,</span> <span class="n">norm_scales</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Number of markers cannot be zero! Hint: The function was called with no inputs?&quot;</span><span class="p">)</span>
+            <span class="n">num_markers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_count</span>
+
+        <span class="k">for</span> <span class="n">backend</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backends</span><span class="p">:</span>
+            <span class="n">backend</span><span class="o">.</span><span class="n">visualize</span><span class="p">(</span><span class="n">norm_translations</span><span class="p">,</span> <span class="n">norm_orientations</span><span class="p">,</span> <span class="n">norm_scales</span><span class="p">,</span> <span class="n">norm_marker_indices</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">num_markers</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_count</span> <span class="o">=</span> <span class="n">num_markers</span></div>
 
 
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Helper functions.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">backend</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_backends&quot;</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">backend</span><span class="p">,</span> <span class="s2">&quot;close&quot;</span><span class="p">):</span>
+                <span class="n">backend</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_add_markers_prototypes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">markers_cfg</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">sim_utils</span><span class="o">.</span><span class="n">SpawnerCfg</span><span class="p">]):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds markers prototypes to the scene and sets the markers instancer to use them.&quot;&quot;&quot;</span>
-        <span class="c1"># add markers based on config</span>
-        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">cfg</span> <span class="ow">in</span> <span class="n">markers_cfg</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="c1"># resolve prim path</span>
-            <span class="n">marker_prim_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">prim_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="c1"># create a child prim for the marker</span>
-            <span class="n">marker_prim</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="n">prim_path</span><span class="o">=</span><span class="n">marker_prim_path</span><span class="p">,</span> <span class="n">cfg</span><span class="o">=</span><span class="n">cfg</span><span class="p">)</span>
-            <span class="c1"># make the asset uninstanceable (in case it is)</span>
-            <span class="c1"># point instancer defines its own prototypes so if an asset is already instanced, this doesn&#39;t work.</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_process_prototype_prim</span><span class="p">(</span><span class="n">marker_prim</span><span class="p">)</span>
-            <span class="c1"># add child reference to point instancer</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_instancer_manager</span><span class="o">.</span><span class="n">GetPrototypesRel</span><span class="p">()</span><span class="o">.</span><span class="n">AddTarget</span><span class="p">(</span><span class="n">marker_prim_path</span><span class="p">)</span>
-        <span class="c1"># check that we loaded all the prototypes</span>
-        <span class="n">prototypes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_instancer_manager</span><span class="o">.</span><span class="n">GetPrototypesRel</span><span class="p">()</span><span class="o">.</span><span class="n">GetTargets</span><span class="p">()</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">prototypes</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">markers_cfg</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Failed to load all the prototypes. Expected: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">markers_cfg</span><span class="p">)</span><span class="si">}</span><span class="s2">. Received: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">prototypes</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span>
-            <span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_backends_initialized</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">sim</span> <span class="o">=</span> <span class="n">sim_utils</span><span class="o">.</span><span class="n">SimulationContext</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">sim</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_kit_backend</span><span class="p">()</span>
+            <span class="k">return</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_process_prototype_prim</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prim</span><span class="p">:</span> <span class="n">Usd</span><span class="o">.</span><span class="n">Prim</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Process a prim and its descendants to make them suitable for defining prototypes.</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">viz</span><span class="o">.</span><span class="n">supports_markers</span><span class="p">()</span> <span class="ow">and</span> <span class="n">viz</span><span class="o">.</span><span class="n">pumps_app_update</span><span class="p">()</span> <span class="ow">and</span> <span class="n">viz</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">enable_markers</span> <span class="k">for</span> <span class="n">viz</span> <span class="ow">in</span> <span class="n">sim</span><span class="o">.</span><span class="n">visualizers</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_kit_backend</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span>
+            <span class="n">viz</span><span class="o">.</span><span class="n">supports_markers</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">viz</span><span class="o">.</span><span class="n">pumps_app_update</span><span class="p">()</span> <span class="ow">and</span> <span class="n">viz</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">enable_markers</span> <span class="k">for</span> <span class="n">viz</span> <span class="ow">in</span> <span class="n">sim</span><span class="o">.</span><span class="n">visualizers</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_newton_backend</span><span class="p">()</span>
 
-<span class="sd">        Point instancer defines its own prototypes so if an asset is already instanced, this doesn&#39;t work.</span>
-<span class="sd">        This function checks if the prim at the specified prim path and its descendants are instanced.</span>
-<span class="sd">        If so, it makes the respective prim uninstanceable by disabling instancing on the prim.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_kit_backend</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the Kit marker backend if it is not already active.&quot;&quot;&quot;</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab_visualizers.kit.kit_visualization_markers</span><span class="w"> </span><span class="kn">import</span> <span class="n">KitVisualizationMarkers</span>
 
-<span class="sd">        Additionally, it makes the prim invisible to secondary rays. This is useful when we do not want</span>
-<span class="sd">        to see the marker prims on camera images.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">backend</span><span class="p">,</span> <span class="n">KitVisualizationMarkers</span><span class="p">)</span> <span class="k">for</span> <span class="n">backend</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backends</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_backends</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">KitVisualizationMarkers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_is_visible</span><span class="p">))</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            prim: The prim to check.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># check if prim is valid</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">prim</span><span class="o">.</span><span class="n">IsValid</span><span class="p">():</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Prim at path &#39;</span><span class="si">{</span><span class="n">prim</span><span class="o">.</span><span class="n">GetPrimAtPath</span><span class="p">()</span><span class="si">}</span><span class="s2">&#39; is not valid.&quot;</span><span class="p">)</span>
-        <span class="c1"># iterate over all prims under prim-path</span>
-        <span class="n">all_prims</span> <span class="o">=</span> <span class="p">[</span><span class="n">prim</span><span class="p">]</span>
-        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">all_prims</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="c1"># get current prim</span>
-            <span class="n">child_prim</span> <span class="o">=</span> <span class="n">all_prims</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-            <span class="c1"># check if it is physics body -&gt; if so, remove it</span>
-            <span class="k">if</span> <span class="n">child_prim</span><span class="o">.</span><span class="n">HasAPI</span><span class="p">(</span><span class="n">UsdPhysics</span><span class="o">.</span><span class="n">ArticulationRootAPI</span><span class="p">):</span>
-                <span class="n">child_prim</span><span class="o">.</span><span class="n">RemoveAPI</span><span class="p">(</span><span class="n">UsdPhysics</span><span class="o">.</span><span class="n">ArticulationRootAPI</span><span class="p">)</span>
-                <span class="n">child_prim</span><span class="o">.</span><span class="n">RemoveAppliedSchema</span><span class="p">(</span><span class="s2">&quot;PhysxArticulationAPI&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">child_prim</span><span class="o">.</span><span class="n">HasAPI</span><span class="p">(</span><span class="n">UsdPhysics</span><span class="o">.</span><span class="n">RigidBodyAPI</span><span class="p">):</span>
-                <span class="n">child_prim</span><span class="o">.</span><span class="n">RemoveAPI</span><span class="p">(</span><span class="n">UsdPhysics</span><span class="o">.</span><span class="n">RigidBodyAPI</span><span class="p">)</span>
-                <span class="n">child_prim</span><span class="o">.</span><span class="n">RemoveAppliedSchema</span><span class="p">(</span><span class="s2">&quot;PhysxRigidBodyAPI&quot;</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">child_prim</span><span class="o">.</span><span class="n">IsA</span><span class="p">(</span><span class="n">UsdPhysics</span><span class="o">.</span><span class="n">Joint</span><span class="p">):</span>
-                <span class="n">child_prim</span><span class="o">.</span><span class="n">GetAttribute</span><span class="p">(</span><span class="s2">&quot;physics:jointEnabled&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">Set</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-            <span class="c1"># check if prim is instanced -&gt; if so, make it uninstanceable</span>
-            <span class="k">if</span> <span class="n">child_prim</span><span class="o">.</span><span class="n">IsInstance</span><span class="p">():</span>
-                <span class="n">child_prim</span><span class="o">.</span><span class="n">SetInstanceable</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
-            <span class="c1"># check if prim is a mesh -&gt; if so, make it invisible to secondary rays</span>
-            <span class="k">if</span> <span class="n">child_prim</span><span class="o">.</span><span class="n">IsA</span><span class="p">(</span><span class="n">UsdGeom</span><span class="o">.</span><span class="n">Gprim</span><span class="p">):</span>
-                <span class="c1"># invisible to secondary rays such as depth images</span>
-                <span class="n">sim_utils</span><span class="o">.</span><span class="n">change_prim_property</span><span class="p">(</span>
-                    <span class="n">prop_path</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">child_prim</span><span class="o">.</span><span class="n">GetPrimPath</span><span class="p">()</span><span class="o">.</span><span class="n">pathString</span><span class="si">}</span><span class="s2">.primvars:invisibleToSecondaryRays&quot;</span><span class="p">,</span>
-                    <span class="n">value</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                    <span class="n">stage</span><span class="o">=</span><span class="n">prim</span><span class="o">.</span><span class="n">GetStage</span><span class="p">(),</span>
-                    <span class="n">type_to_create_if_not_exist</span><span class="o">=</span><span class="n">Sdf</span><span class="o">.</span><span class="n">ValueTypeNames</span><span class="o">.</span><span class="n">Bool</span><span class="p">,</span>
-                <span class="p">)</span>
-            <span class="c1"># add children to list</span>
-            <span class="n">all_prims</span> <span class="o">+=</span> <span class="n">child_prim</span><span class="o">.</span><span class="n">GetChildren</span><span class="p">()</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_newton_backend</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create the Newton-family marker backend if it is not already active.&quot;&quot;&quot;</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab_visualizers.newton.newton_visualization_markers</span><span class="w"> </span><span class="kn">import</span> <span class="n">NewtonVisualizationMarkers</span>
 
-        <span class="c1"># remove any physics on the markers because they are only for visualization!</span>
-        <span class="k">if</span> <span class="n">has_kit</span><span class="p">():</span>
-            <span class="kn">import</span><span class="w"> </span><span class="nn">omni.physx.scripts.utils</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">physx_utils</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">backend</span><span class="p">,</span> <span class="n">NewtonVisualizationMarkers</span><span class="p">)</span> <span class="k">for</span> <span class="n">backend</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backends</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_backends</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">NewtonVisualizationMarkers</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="p">,</span> <span class="n">visible</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_is_visible</span><span class="p">))</span>
 
-            <span class="n">physx_utils</span><span class="o">.</span><span class="n">removeRigidBodySubtree</span><span class="p">(</span><span class="n">prim</span><span class="p">)</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_resolve_target_device</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">values</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">device</span>
+        <span class="k">for</span> <span class="n">backend</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backends</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">backend</span><span class="p">,</span> <span class="s2">&quot;infer_device&quot;</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">backend</span><span class="o">.</span><span class="n">infer_device</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_to_tensor</span><span class="p">(</span>
+        <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">expected_width</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tensor</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">tensor</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">expected_width</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected `</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">` to have shape (M, </span><span class="si">{</span><span class="n">expected_width</span><span class="si">}</span><span class="s2">). Received: </span><span class="si">{</span><span class="nb">tuple</span><span class="p">(</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tensor</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_to_index_tensor</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">|</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">tensor</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">from_numpy</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tensor</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">tensor</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Expected `marker_indices` to have shape (M,). Received: </span><span class="si">{</span><span class="nb">tuple</span><span class="p">(</span><span class="n">tensor</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tensor</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span></div>
 
 </pre></div>
 

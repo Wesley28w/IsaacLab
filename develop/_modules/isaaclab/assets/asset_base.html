@@ -882,16 +882,13 @@
         <span class="k">if</span> <span class="n">debug_vis</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_debug_vis_handle</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">sim_ctx</span> <span class="o">=</span> <span class="n">SimulationContext</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span>
-                <span class="k">if</span> <span class="s2">&quot;physx&quot;</span> <span class="ow">in</span> <span class="n">sim_ctx</span><span class="o">.</span><span class="n">physics_manager</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
-                    <span class="kn">import</span><span class="w"> </span><span class="nn">omni.kit.app</span>
-
-                    <span class="n">app_interface</span> <span class="o">=</span> <span class="n">omni</span><span class="o">.</span><span class="n">kit</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">get_app_interface</span><span class="p">()</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_debug_vis_handle</span> <span class="o">=</span> <span class="n">app_interface</span><span class="o">.</span><span class="n">get_post_update_event_stream</span><span class="p">()</span><span class="o">.</span><span class="n">create_subscription_to_pop</span><span class="p">(</span>
-                        <span class="k">lambda</span> <span class="n">event</span><span class="p">,</span> <span class="n">obj</span><span class="o">=</span><span class="n">weakref</span><span class="o">.</span><span class="n">proxy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="n">obj</span><span class="o">.</span><span class="n">_debug_vis_callback</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-                    <span class="p">)</span>
+                <span class="k">if</span> <span class="n">sim_ctx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_debug_vis_handle</span> <span class="o">=</span> <span class="n">sim_ctx</span><span class="o">.</span><span class="n">vis_marker_registry</span><span class="o">.</span><span class="n">add_debug_vis_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_debug_vis_handle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_debug_vis_handle</span><span class="o">.</span><span class="n">unsubscribe</span><span class="p">()</span>
+            <span class="n">sim_ctx</span> <span class="o">=</span> <span class="n">SimulationContext</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">sim_ctx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">sim_ctx</span><span class="o">.</span><span class="n">vis_marker_registry</span><span class="o">.</span><span class="n">clear_debug_vis_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_debug_vis_handle</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="c1"># return success</span>
         <span class="k">return</span> <span class="kc">True</span></div>
@@ -1097,8 +1094,10 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">_invalidate_initialize_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Invalidates the scene elements.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_is_initialized</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_debug_vis_handle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_debug_vis_handle</span><span class="o">.</span><span class="n">unsubscribe</span><span class="p">()</span>
+        <span class="n">sim_ctx</span> <span class="o">=</span> <span class="n">SimulationContext</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">sim_ctx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sim_ctx</span><span class="o">.</span><span class="n">vis_marker_registry</span><span class="o">.</span><span class="n">clear_debug_vis_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_debug_vis_handle</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_on_prim_deletion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -1128,8 +1127,10 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prim_deletion_handle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_prim_deletion_handle</span><span class="o">.</span><span class="n">deregister</span><span class="p">()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_prim_deletion_handle</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_debug_vis_handle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_debug_vis_handle</span><span class="o">.</span><span class="n">unsubscribe</span><span class="p">()</span>
+        <span class="n">sim_ctx</span> <span class="o">=</span> <span class="n">SimulationContext</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">sim_ctx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sim_ctx</span><span class="o">.</span><span class="n">vis_marker_registry</span><span class="o">.</span><span class="n">clear_debug_vis_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_debug_vis_handle</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 </pre></div>
