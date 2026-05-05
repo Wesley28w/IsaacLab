@@ -878,19 +878,27 @@ name, version, description, and other metadata of the extension.</p>
 for each version of the extension.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The version number on the <code class="docutils literal notranslate"><span class="pre">extension.toml</span></code> file should be updated according to
-<a class="reference external" href="https://semver.org/">Semantic Versioning</a> and should match the version number in the
-<code class="docutils literal notranslate"><span class="pre">CHANGELOG.rst</span></code> file.</p>
+<p><code class="docutils literal notranslate"><span class="pre">CHANGELOG.rst</span></code> and <code class="docutils literal notranslate"><span class="pre">extension.toml</span></code> are compiled by CI from per-PR <strong>fragment
+files</strong> — contributors do not edit them directly. For every package your PR touches
+in <code class="docutils literal notranslate"><span class="pre">source/&lt;pkg&gt;/</span></code> (outside <code class="docutils literal notranslate"><span class="pre">changelog.d/</span></code>), add one fragment under
+<code class="docutils literal notranslate"><span class="pre">source/&lt;pkg&gt;/changelog.d/&lt;slug&gt;.&lt;tier&gt;.rst</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;slug&gt;.rst</span></code> — patch bump</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;slug&gt;.minor.rst</span></code> — minor bump (new public API)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;slug&gt;.major.rst</span></code> — major bump (breaking change)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&lt;slug&gt;.skip</span></code> — no entry, no bump (CI / docs / test-only PRs)</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">&lt;slug&gt;</span></code> is any short, unique name; your branch name with <code class="docutils literal notranslate"><span class="pre">/</span></code> replaced by <code class="docutils literal notranslate"><span class="pre">-</span></code>
+is the recommended default. Within a batch the highest tier wins for the package.
+The version on <code class="docutils literal notranslate"><span class="pre">extension.toml</span></code> is bumped by CI according to
+<a class="reference external" href="https://semver.org/">Semantic Versioning</a>.</p>
 </div>
 <p>The changelog file is written in <a class="reference external" href="https://docutils.sourceforge.io/rst.html">reStructuredText</a> format.
 The goal of this changelog is to help users and contributors see precisely what notable changes have
 been made between each release (or version) of the extension. This is a <em>MUST</em> for every extension.</p>
-<p>For updating the changelog, please follow the following guidelines:</p>
+<p>For each fragment, please follow the following guidelines:</p>
 <ul class="simple">
-<li><p>Each version should have a section with the version number and the release date.</p></li>
-<li><p>The version number is updated according to <a class="reference external" href="https://semver.org/">Semantic Versioning</a>. The
-release date is the date on which the version is released.</p></li>
-<li><p>Each version is divided into subsections based on the type of changes made.</p>
+<li><p>Each fragment is divided into subsections based on the type of changes made.</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">Added</span></code>: For new features.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">Changed</span></code>: For changes in existing functionality.</p></li>
@@ -912,14 +920,8 @@ release date is the date on which the version is released.</p></li>
 <p class="admonition-title">Tip</p>
 <p>When in doubt, please check the style in the existing changelog files and follow the same style.</p>
 </div>
-<p>For example, the following is a sample changelog:</p>
-<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Changelog</span>
-<span class="gh">---------</span>
-
-<span class="gh">0.1.0 (2021-02-01)</span>
-<span class="gh">~~~~~~~~~~~~~~~~~~</span>
-
-<span class="gh">Added</span>
+<p>For example, <code class="docutils literal notranslate"><span class="pre">source/isaaclab/changelog.d/&lt;slug&gt;.minor.rst</span></code>:</p>
+<div class="highlight-rst notranslate"><div class="highlight"><pre><span></span><span class="gh">Added</span>
 <span class="gh">^^^^^</span>
 
 <span class="m">*</span> Added a new feature that helps in a 10x speedup.
