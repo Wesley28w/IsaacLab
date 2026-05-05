@@ -751,9 +751,10 @@
 <h1>Recording video clips during training<a class="headerlink" href="#recording-video-clips-during-training" title="Link to this heading">#</a></h1>
 <p>Isaac Lab supports recording video clips during training using the
 <a class="reference external" href="https://gymnasium.farama.org/main/_modules/gymnasium/wrappers/record_video/">gymnasium.wrappers.RecordVideo</a> class.
-When the <code class="docutils literal notranslate"><span class="pre">--video</span></code> flag is enabled, Isaac Lab captures a perspective view of the scene. The backend
-is chosen automatically from the active physics and renderer stack: an Isaac Sim Kit camera or a
-Newton GL headless viewer.</p>
+When the <code class="docutils literal notranslate"><span class="pre">--video</span></code> flag is enabled, Isaac Lab captures a perspective view of the scene. If a Kit or
+Newton visualizer is active, that visualizer selects the video backend by default. Otherwise, the
+backend is chosen automatically from the active physics and renderer stack: an Isaac Sim Kit camera or
+a Newton GL headless viewer.</p>
 <p>This feature can be enabled by installing <code class="docutils literal notranslate"><span class="pre">ffmpeg</span></code> and using the following command line arguments with the training
 script:</p>
 <ul class="simple">
@@ -772,8 +773,8 @@ script:</p>
 <h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
 <p>The video recording feature is implemented using the <code class="docutils literal notranslate"><span class="pre">VideoRecorder</span></code> class. This class is responsible for resolving the video backend from the scene, capturing the video frames, and saving them to a file.</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">VideoRecorderCfg</span></code> (<code class="docutils literal notranslate"><span class="pre">isaaclab.envs.utils.video_recorder_cfg</span></code>) holds resolution and world-space
-perspective parameters <code class="docutils literal notranslate"><span class="pre">camera_position</span></code> and <code class="docutils literal notranslate"><span class="pre">camera_target</span></code> (defaults to a diagonal view of the
+<li><p><code class="docutils literal notranslate"><span class="pre">VideoRecorderCfg</span></code> (<code class="docutils literal notranslate"><span class="pre">isaaclab.envs.utils.video_recorder_cfg</span></code>) holds resolution, backend source,
+and world-space perspective parameters <code class="docutils literal notranslate"><span class="pre">eye</span></code> and <code class="docutils literal notranslate"><span class="pre">lookat</span></code> (defaults to a diagonal view of the
 scene).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">VideoRecorder</span></code> (<code class="docutils literal notranslate"><span class="pre">isaaclab.envs.utils.video_recorder</span></code>) picks a video backend from the scene
 (Kit vs Newton GL), builds the matching low-level capture object, and returns RGB frames via
@@ -786,9 +787,11 @@ recorder is constructed, so training clips align with the task’s intended view
 </section>
 <section id="configuration-videorecordercfg">
 <h2>Configuration: <code class="docutils literal notranslate"><span class="pre">VideoRecorderCfg</span></code><a class="headerlink" href="#configuration-videorecordercfg" title="Link to this heading">#</a></h2>
-<p>The dataclass lives in <code class="docutils literal notranslate"><span class="pre">isaaclab.envs.utils.video_recorder_cfg</span></code>. Fields <code class="docutils literal notranslate"><span class="pre">camera_position</span></code> and
-<code class="docutils literal notranslate"><span class="pre">camera_target</span></code> are the perspective <code class="docutils literal notranslate"><span class="pre">eye</span></code> and <code class="docutils literal notranslate"><span class="pre">lookat</span></code> points in meters.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@configclass</span>
+<p>The dataclass lives in <code class="docutils literal notranslate"><span class="pre">isaaclab.envs.utils.video_recorder_cfg</span></code>. Fields <code class="docutils literal notranslate"><span class="pre">eye</span></code> and <code class="docutils literal notranslate"><span class="pre">lookat</span></code> are
+the perspective camera position and target in meters.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+
+<span class="nd">@configclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">VideoRecorderCfg</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for :class:`~isaaclab.envs.utils.video_recorder.VideoRecorder`.&quot;&quot;&quot;</span>
 
@@ -801,7 +804,7 @@ recorder is constructed, so training clips align with the task’s intended view
 <span class="sd">    Set automatically by the environment base classes; do not set manually.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">camera_position</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">7.5</span><span class="p">,</span> <span class="mf">7.5</span><span class="p">,</span> <span class="mf">7.5</span><span class="p">)</span>
+    <span class="n">eye</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">7.5</span><span class="p">,</span> <span class="mf">7.5</span><span class="p">,</span> <span class="mf">7.5</span><span class="p">)</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Perspective camera position in world space (metres).</span>
 
 <span class="sd">    Direct RL / MARL and manager-based RL environments overwrite this from</span>
@@ -809,8 +812,16 @@ recorder is constructed, so training clips align with the task’s intended view
 <span class="sd">    task viewport for both Kit (PhysX / Isaac RTX) and Newton GL (Newton / OVRTX / etc.).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">camera_target</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">lookat</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Perspective camera look-at target in world space (metres). Set from ``ViewerCfg.lookat`` at env init.&quot;&quot;&quot;</span>
+
+    <span class="n">backend_source</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;visualizer&quot;</span><span class="p">,</span> <span class="s2">&quot;renderer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;visualizer&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Source used to resolve the video capture backend.</span>
+
+<span class="sd">    ``&quot;visualizer&quot;`` records from the active Kit or Newton visualizer when one is enabled, and falls back to the</span>
+<span class="sd">    physics/renderer stack otherwise. ``&quot;renderer&quot;`` ignores active visualizers and records from the backend implied by</span>
+<span class="sd">    the physics/renderer stack.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">window_width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1280</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Width in pixels of the recorded frame.&quot;&quot;&quot;</span>
@@ -841,17 +852,67 @@ perspective recorder expects.</p>
 <section id="backend-selection-kit-vs-newton-gl">
 <h2>Backend selection: Kit vs Newton GL<a class="headerlink" href="#backend-selection-kit-vs-newton-gl" title="Link to this heading">#</a></h2>
 <p><code class="docutils literal notranslate"><span class="pre">VideoRecorder</span></code> resolves the implementation from the live <a class="reference internal" href="../api/lab/isaaclab.scene.html#isaaclab.scene.InteractiveScene" title="isaaclab.scene.InteractiveScene"><code class="xref py py-class docutils literal notranslate"><span class="pre">InteractiveScene</span></code></a>.
-If the user provides the PhysX physics (<code class="docutils literal notranslate"><span class="pre">presets=physx,...</span></code>) or Isaac RTX (<code class="docutils literal notranslate"><span class="pre">presets=isaac_rtx_renderer,...</span></code>) in the sensor stack, the Kit path is selected (<code class="docutils literal notranslate"><span class="pre">omni.replicator</span></code> on
-<code class="docutils literal notranslate"><span class="pre">/OmniverseKit_Persp</span></code>). The Newton GL path is selected when Newton physics is active (<code class="docutils literal notranslate"><span class="pre">presets=newton,...</span></code>) or the Newton
-Warp renderer (<code class="docutils literal notranslate"><span class="pre">presets=newton_renderer,...</span></code>) appears in the sensor stack - and neither PhysX nor Isaac RTX is present to claim the
-Kit path. OVRTX (<code class="docutils literal notranslate"><span class="pre">presets=ovrtx_renderer,...</span></code> from <code class="docutils literal notranslate"><span class="pre">isaaclab_ov</span></code>) can pair with IsaacSim or Newton physics; in that case the video backend is
-selected via the physics preset. If both Kit and Newton GL signals are present (e.g., <code class="docutils literal notranslate"><span class="pre">presets=physx,isaac_rtx_renderer,...</span></code> or <code class="docutils literal notranslate"><span class="pre">presets=newton,newton_renderer,...</span></code>), the Kit path is chosen.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">_resolve_video_backend</span><span class="p">(</span><span class="n">scene</span><span class="p">:</span> <span class="n">InteractiveScene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_VideoBackend</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resolve which video backend to use from physics and renderer configs.</span>
+With the default <code class="docutils literal notranslate"><span class="pre">VideoRecorderCfg.backend_source</span> <span class="pre">=</span> <span class="pre">&quot;visualizer&quot;</span></code>, an active <code class="docutils literal notranslate"><span class="pre">--visualizer</span> <span class="pre">kit</span></code>
+selects the Kit path (<code class="docutils literal notranslate"><span class="pre">omni.replicator</span></code> on <code class="docutils literal notranslate"><span class="pre">/OmniverseKit_Persp</span></code>), and an active
+<code class="docutils literal notranslate"><span class="pre">--visualizer</span> <span class="pre">newton</span></code> selects the Newton GL path. If both visualizers are active, Kit takes
+precedence and only one <code class="docutils literal notranslate"><span class="pre">--video</span></code> stream is recorded. Rerun records <code class="docutils literal notranslate"><span class="pre">.rrd</span></code> replay data through
+the Rerun visualizer rather than producing <code class="docutils literal notranslate"><span class="pre">--video</span></code> clips, and Viser does not currently provide a
+<code class="docutils literal notranslate"><span class="pre">--video</span></code> recording backend.</p>
+<p>Set <code class="docutils literal notranslate"><span class="pre">VideoRecorderCfg.backend_source</span> <span class="pre">=</span> <span class="pre">&quot;renderer&quot;</span></code> to ignore active visualizers and choose from the
+physics/renderer stack instead. In that mode, PhysX physics (<code class="docutils literal notranslate"><span class="pre">presets=physx,...</span></code>) or Isaac RTX
+(<code class="docutils literal notranslate"><span class="pre">presets=isaac_rtx_renderer,...</span></code>) selects the Kit path. Newton physics (<code class="docutils literal notranslate"><span class="pre">presets=newton,...</span></code>) or
+the Newton Warp renderer (<code class="docutils literal notranslate"><span class="pre">presets=newton_renderer,...</span></code>) selects the Newton GL path when no Kit
+signal is present. OVRTX (<code class="docutils literal notranslate"><span class="pre">presets=ovrtx_renderer,...</span></code> from <code class="docutils literal notranslate"><span class="pre">isaaclab_ov</span></code>) can pair with IsaacSim
+or Newton physics; in that case the video backend is selected via the physics preset. If both Kit and
+Newton GL signals are present, the Kit path is chosen.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="kn">from</span><span class="w"> </span><span class="nn">.video_recorder_cfg</span><span class="w"> </span><span class="kn">import</span> <span class="n">VideoRecorderCfg</span>
 
-<span class="sd">    Priority: PhysX or Isaac RTX -&gt; Kit camera; else Newton or Newton Warp -&gt; GL viewer.</span>
-<span class="sd">    When both are present (e.g. PhysX + Newton Warp), Kit wins.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="n">_VideoBackend</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;kit&quot;</span><span class="p">,</span> <span class="s2">&quot;newton_gl&quot;</span><span class="p">]</span>
+
+<span class="c1"># visualizer types that map to a supported video backend.</span>
+<span class="c1"># viser and rerun are intentionally absent - they have no video-capture API.</span>
+<span class="n">_VISUALIZER_TO_VIDEO_BACKEND</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">_VideoBackend</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;kit&quot;</span><span class="p">:</span> <span class="s2">&quot;kit&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;newton&quot;</span><span class="p">:</span> <span class="s2">&quot;newton_gl&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_resolve_video_backend</span><span class="p">(</span>
+    <span class="n">scene</span><span class="p">:</span> <span class="n">InteractiveScene</span><span class="p">,</span> <span class="n">backend_source</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;visualizer&quot;</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">_VideoBackend</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
+    <span class="s2">&quot;&quot;&quot;Return ``(backend, matched_visualizer_type)`` for the active scene.</span>
+
+<span class="s2">    ``matched_visualizer_type`` is ``&quot;kit&quot;`` / ``&quot;newton&quot;`` when a visualizer drove the</span>
+<span class="s2">    selection, or ``None`` when the physics/renderer preset stack was used instead.</span>
+
+</pre></div>
+</div>
+</section>
+<section id="construction-and-dispatch">
+<h2>Construction and dispatch<a class="headerlink" href="#construction-and-dispatch" title="Link to this heading">#</a></h2>
+<p>When <code class="docutils literal notranslate"><span class="pre">env_render_mode</span></code> is <code class="docutils literal notranslate"><span class="pre">&quot;rgb_array&quot;</span></code> (as when wrappers or scripts request RGB frames for
+video), the recorder instantiates the backend-specific helper and passes through <code class="docutils literal notranslate"><span class="pre">eye</span></code>, <code class="docutils literal notranslate"><span class="pre">lookat</span></code>,
+and window size.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+    <span class="c1"># Prefer the visualizer backend when --visualizer is active alongside --video.</span>
+    <span class="n">visualizer_types</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">sim</span><span class="o">.</span><span class="n">resolve_visualizer_types</span><span class="p">()</span> <span class="k">if</span> <span class="n">backend_source</span> <span class="o">==</span> <span class="s2">&quot;visualizer&quot;</span> <span class="k">else</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">visualizer_types</span><span class="p">:</span>
+        <span class="c1"># kit takes priority when multiple visualizers are active</span>
+        <span class="k">for</span> <span class="n">preferred</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;kit&quot;</span><span class="p">,</span> <span class="s2">&quot;newton&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">preferred</span> <span class="ow">in</span> <span class="n">visualizer_types</span><span class="p">:</span>
+                <span class="n">backend</span> <span class="o">=</span> <span class="n">_VISUALIZER_TO_VIDEO_BACKEND</span><span class="p">[</span><span class="n">preferred</span><span class="p">]</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;[VideoRecorder] Using &#39;</span><span class="si">%s</span><span class="s2">&#39; backend from active &#39;</span><span class="si">%s</span><span class="s2">&#39; visualizer.&quot;</span><span class="p">,</span> <span class="n">backend</span><span class="p">,</span> <span class="n">preferred</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">backend</span><span class="p">,</span> <span class="n">preferred</span>
+        <span class="c1"># only unsupported visualizer types (viser, rerun) are active.</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+            <span class="s2">&quot;[VideoRecorder] Active visualizer(s) </span><span class="si">%s</span><span class="s2"> do not support video capture; &quot;</span>
+            <span class="s2">&quot;falling back to physics/renderer stack detection.&quot;</span><span class="p">,</span>
+            <span class="n">visualizer_types</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># fall back to physics/renderer preset stack detection.</span>
     <span class="n">sim</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">sim</span>
     <span class="n">physics_name</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">physics_manager</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
     <span class="n">renderer_types</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">scene</span><span class="o">.</span><span class="n">_sensor_renderer_types</span><span class="p">()</span>
@@ -860,84 +921,43 @@ selected via the physics preset. If both Kit and Newton GL signals are present (
     <span class="n">use_newton_gl</span> <span class="o">=</span> <span class="s2">&quot;newton&quot;</span> <span class="ow">in</span> <span class="n">physics_name</span> <span class="ow">or</span> <span class="s2">&quot;newton_warp&quot;</span> <span class="ow">in</span> <span class="n">renderer_types</span>
 
     <span class="k">if</span> <span class="n">use_kit</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;kit&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;kit&quot;</span><span class="p">,</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">use_newton_gl</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;newton_gl&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;newton_gl&quot;</span><span class="p">,</span> <span class="kc">None</span>
     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
         <span class="s2">&quot;Video recording (--video) requires a supported backend: &quot;</span>
         <span class="s2">&quot;PhysX or Isaac RTX renderer (Kit camera), or Newton physics / Newton Warp renderer (GL viewer). &quot;</span>
         <span class="s2">&quot;No supported backend detected; do not use --video for this setup.&quot;</span>
     <span class="p">)</span>
-</pre></div>
-</div>
-</section>
-<section id="construction-and-dispatch">
-<h2>Construction and dispatch<a class="headerlink" href="#construction-and-dispatch" title="Link to this heading">#</a></h2>
-<p>When <code class="docutils literal notranslate"><span class="pre">env_render_mode</span></code> is <code class="docutils literal notranslate"><span class="pre">&quot;rgb_array&quot;</span></code> (as when wrappers or scripts request RGB frames for
-video), the recorder instantiates the backend-specific helper and passes through <code class="docutils literal notranslate"><span class="pre">camera_position</span></code>,
-<code class="docutils literal notranslate"><span class="pre">camera_target</span></code>, and window size.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">VideoRecorderCfg</span><span class="p">,</span> <span class="n">scene</span><span class="p">:</span> <span class="n">InteractiveScene</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span> <span class="o">=</span> <span class="n">cfg</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_scene</span> <span class="o">=</span> <span class="n">scene</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span><span class="p">:</span> <span class="n">_VideoBackend</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_capture</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="n">cfg</span><span class="o">.</span><span class="n">env_render_mode</span> <span class="o">==</span> <span class="s2">&quot;rgb_array&quot;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span> <span class="o">=</span> <span class="n">_resolve_video_backend</span><span class="p">(</span><span class="n">scene</span><span class="p">)</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span> <span class="o">==</span> <span class="s2">&quot;newton_gl&quot;</span><span class="p">:</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="kn">import</span><span class="w"> </span><span class="nn">pyglet</span>
 
-                    <span class="k">if</span> <span class="ow">not</span> <span class="n">pyglet</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;headless&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
-                        <span class="n">pyglet</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;headless&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-                <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
-                        <span class="s2">&quot;The Newton GL video backend requires &#39;pyglet&#39;. Install IsaacLab with &#39;./isaaclab.sh -i&#39;.&quot;</span>
-                    <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
-                <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab_newton.video_recording.newton_gl_perspective_video</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-                    <span class="n">create_newton_gl_perspective_video</span><span class="p">,</span>
-                <span class="p">)</span>
-                <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab_newton.video_recording.newton_gl_perspective_video_cfg</span><span class="w"> </span><span class="kn">import</span> <span class="n">NewtonGlPerspectiveVideoCfg</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_sync_camera_from_visualizer</span><span class="p">(</span>
+    <span class="n">scene</span><span class="p">:</span> <span class="n">InteractiveScene</span><span class="p">,</span>
+    <span class="n">visualizer_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">cfg</span><span class="p">:</span> <span class="n">VideoRecorderCfg</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="s2">&quot;&quot;&quot;Overwrite ``cfg.eye`` and ``cfg.lookat`` from the active visualizer.</span>
 
-                <span class="n">ncfg</span> <span class="o">=</span> <span class="n">NewtonGlPerspectiveVideoCfg</span><span class="p">(</span>
-                    <span class="n">window_width</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">window_width</span><span class="p">,</span>
-                    <span class="n">window_height</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">window_height</span><span class="p">,</span>
-                    <span class="n">camera_position</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">camera_position</span><span class="p">,</span>
-                    <span class="n">camera_target</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">camera_target</span><span class="p">,</span>
-                <span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_capture</span> <span class="o">=</span> <span class="n">create_newton_gl_perspective_video</span><span class="p">(</span><span class="n">ncfg</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab_physx.video_recording.isaacsim_kit_perspective_video</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-                    <span class="n">create_isaacsim_kit_perspective_video</span><span class="p">,</span>
-                <span class="p">)</span>
-                <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab_physx.video_recording.isaacsim_kit_perspective_video_cfg</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-                    <span class="n">IsaacsimKitPerspectiveVideoCfg</span><span class="p">,</span>
-                <span class="p">)</span>
-
-                <span class="n">kcfg</span> <span class="o">=</span> <span class="n">IsaacsimKitPerspectiveVideoCfg</span><span class="p">(</span>
-                    <span class="n">camera_position</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">camera_position</span><span class="p">,</span>
-                    <span class="n">camera_target</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">camera_target</span><span class="p">,</span>
-                    <span class="n">window_width</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">window_width</span><span class="p">,</span>
-                    <span class="n">window_height</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">window_height</span><span class="p">,</span>
-                <span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_capture</span> <span class="o">=</span> <span class="n">create_isaacsim_kit_perspective_video</span><span class="p">(</span><span class="n">kcfg</span><span class="p">)</span>
+<span class="s2">    Args:</span>
+<span class="s2">        scene: The interactive scene that owns the sim context.</span>
 </pre></div>
 </div>
 </section>
 <section id="customising-the-camera-view">
 <h2>Customising the camera view<a class="headerlink" href="#customising-the-camera-view" title="Link to this heading">#</a></h2>
-<p>When <code class="docutils literal notranslate"><span class="pre">--video</span></code> is passed, the recording camera uses the same
-position and look-at target as the interactive viewer. The defaults come from
+<p>When <code class="docutils literal notranslate"><span class="pre">--video</span></code> is passed, the recording camera uses the same configured
+position and look-at target as the active Kit or Newton visualizer when that visualizer drives backend
+selection. Otherwise, the defaults come from
 <a class="reference internal" href="../api/lab/isaaclab.envs.html#isaaclab.envs.ViewerCfg" title="isaaclab.envs.common.ViewerCfg"><code class="xref py py-class docutils literal notranslate"><span class="pre">ViewerCfg</span></code></a>:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">eye</span> <span class="pre">=</span> <span class="pre">(7.5,</span> <span class="pre">7.5,</span> <span class="pre">7.5)</span></code> — camera position in world space (metres)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">lookat</span> <span class="pre">=</span> <span class="pre">(0.0,</span> <span class="pre">0.0,</span> <span class="pre">0.0)</span></code> — camera look-at target in world space (metres)</p></li>
 <li><p>Resolution <code class="docutils literal notranslate"><span class="pre">1280x720</span></code></p></li>
 </ul>
-<p>To change the recording angle, override the <code class="docutils literal notranslate"><span class="pre">viewer</span></code> field in your task’s environment config.
-The RL base classes automatically copy <code class="docutils literal notranslate"><span class="pre">eye</span></code> and <code class="docutils literal notranslate"><span class="pre">lookat</span></code> into <code class="docutils literal notranslate"><span class="pre">VideoRecorderCfg</span></code> before
-recording starts (when <code class="docutils literal notranslate"><span class="pre">origin_type</span></code> is <code class="docutils literal notranslate"><span class="pre">&quot;world&quot;</span></code>), so the video clip uses the same viewpoint
-as the interactive viewport:</p>
+<p>To change the recording angle without a visualizer, override the <code class="docutils literal notranslate"><span class="pre">viewer</span></code> field in your task’s
+environment config. The RL base classes automatically copy <code class="docutils literal notranslate"><span class="pre">eye</span></code> and <code class="docutils literal notranslate"><span class="pre">lookat</span></code> into
+<code class="docutils literal notranslate"><span class="pre">VideoRecorderCfg</span></code> before recording starts (when <code class="docutils literal notranslate"><span class="pre">origin_type</span></code> is <code class="docutils literal notranslate"><span class="pre">&quot;world&quot;</span></code>), so the video clip
+uses the same configured viewpoint as the interactive viewport:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.envs</span><span class="w"> </span><span class="kn">import</span> <span class="n">ManagerBasedRLEnvCfg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.envs.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">ViewerCfg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">configclass</span>
@@ -977,6 +997,14 @@ as the interactive viewport:</p>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">newton,...,ovrtx_renderer,...</span></code> (OVRTX + Newton physics)</p></td>
 <td><p>Newton GL (<code class="docutils literal notranslate"><span class="pre">&quot;newton_gl&quot;</span></code>)</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">newton.viewer.ViewerGL</span></code> on the SDP Newton model</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--visualizer</span> <span class="pre">kit</span></code> with default <code class="docutils literal notranslate"><span class="pre">backend_source</span></code></p></td>
+<td><p>Kit (<code class="docutils literal notranslate"><span class="pre">&quot;kit&quot;</span></code>)</p></td>
+<td><p>Visualizer <code class="docutils literal notranslate"><span class="pre">eye</span></code> / <code class="docutils literal notranslate"><span class="pre">lookat</span></code> copied to <code class="docutils literal notranslate"><span class="pre">/OmniverseKit_Persp</span></code> + Replicator RGB</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--visualizer</span> <span class="pre">newton</span></code> with default <code class="docutils literal notranslate"><span class="pre">backend_source</span></code></p></td>
+<td><p>Newton GL (<code class="docutils literal notranslate"><span class="pre">&quot;newton_gl&quot;</span></code>)</p></td>
+<td><p>Visualizer <code class="docutils literal notranslate"><span class="pre">eye</span></code> / <code class="docutils literal notranslate"><span class="pre">lookat</span></code> initially, then live Newton viewer camera sync per frame</p></td>
 </tr>
 </tbody>
 </table>

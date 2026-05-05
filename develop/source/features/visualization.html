@@ -735,6 +735,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#partial-visualization">Partial Visualization</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-recording">Video Recording</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizer-backends">Visualizer Backends</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#omniverse-visualizer">Omniverse Visualizer</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#newton-visualizer">Newton Visualizer</a></li>
@@ -948,6 +949,100 @@ enables randomly sampling the selected envs. If disabled, the first <code class=
 </table>
 </div>
 </section>
+</section>
+<section id="video-recording">
+<h2>Video Recording<a class="headerlink" href="#video-recording" title="Link to this heading">#</a></h2>
+<p>Video recording is enabled with the <code class="docutils literal notranslate"><span class="pre">--video</span></code> flag. When combined with <code class="docutils literal notranslate"><span class="pre">--visualizer</span></code>,
+the visualizer selection also determines which backend captures the video frames:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--visualizer</span> <span class="pre">kit</span></code> enables <code class="docutils literal notranslate"><span class="pre">--video</span></code> capture through the Isaac RTX renderer (Omniverse Replicator).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--visualizer</span> <span class="pre">newton</span></code> enables <code class="docutils literal notranslate"><span class="pre">--video</span></code> capture through the Newton OpenGL renderer.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--visualizer</span> <span class="pre">rerun</span></code> does not produce <code class="docutils literal notranslate"><span class="pre">--video</span></code> clips; it records Rerun <code class="docutils literal notranslate"><span class="pre">.rrd</span></code> data for replay
+through the Rerun visualizer.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--visualizer</span> <span class="pre">viser</span></code> does not currently provide a <code class="docutils literal notranslate"><span class="pre">--video</span></code> recording backend.</p></li>
+</ul>
+<p>When both Kit and Newton visualizers are active, Isaac Lab records a single <code class="docutils literal notranslate"><span class="pre">--video</span></code> stream and
+Kit takes precedence. To record from the renderer/physics stack instead of the active visualizer,
+set <code class="docutils literal notranslate"><span class="pre">VideoRecorderCfg.backend_source</span> <span class="pre">=</span> <span class="pre">&quot;renderer&quot;</span></code> in the task configuration.</p>
+<div class="pst-scrollable-table-container"><table class="table" id="id6">
+<caption><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">--video</span></code> compatibility: visualizer × renderer preset</span><a class="headerlink" href="#id6" title="Link to this table">#</a></caption>
+<colgroup>
+<col style="width: 28.0%" />
+<col style="width: 36.0%" />
+<col style="width: 36.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Renderer preset</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">--visualizer</span> <span class="pre">kit</span> <span class="pre">--video</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">--visualizer</span> <span class="pre">newton</span> <span class="pre">--video</span></code></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">isaacsim_rtx_renderer</span></code></p></td>
+<td><p>✅ Kit RTX captures video <em>(default, no change)</em></p></td>
+<td><p>✅ Newton GL captures video <em>(overrides RTX backend)</em></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">newton_renderer</span></code></p></td>
+<td><p>✅ Kit RTX captures video <em>(overrides Newton backend)</em></p></td>
+<td><p>✅ Newton GL captures video <em>(default, no change)</em></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ovrtx_renderer</span></code></p></td>
+<td><p>❌ <strong>Raises an error</strong> — see note below</p></td>
+<td><p>✅ Newton GL captures video; ovrtx provides camera sensor data</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">--visualizer</span> <span class="pre">kit</span></code> combined with <code class="docutils literal notranslate"><span class="pre">ovrtx_renderer</span></code> raises a <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> at startup.
+Both Kit (Isaac Sim) and ovrtx ship conflicting RTX hydra libraries compiled against
+different USD namespaces (<code class="docutils literal notranslate"><span class="pre">pxrInternal_v0_25_11</span></code> vs <code class="docutils literal notranslate"><span class="pre">ovInternal_v0_25_11</span></code>), which
+causes a dynamic-linker crash when loaded into the same process.
+Use <code class="docutils literal notranslate"><span class="pre">--visualizer</span> <span class="pre">newton</span></code> instead — it is compatible with all renderer presets.</p>
+</div>
+<p><strong>Record video with the ovrtx renderer preset</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./isaaclab.sh<span class="w"> </span>-p<span class="w"> </span>scripts/benchmarks/benchmark_rsl_rl.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--task<span class="o">=</span>Isaac-Repose-Cube-Shadow-Vision-Direct-v0<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--enable_cameras<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--visualizer<span class="w"> </span>newton<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--video<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--video_length<span class="o">=</span><span class="m">300</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--video_interval<span class="o">=</span><span class="m">2000</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--max_iterations<span class="o">=</span><span class="m">5</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--num_envs<span class="o">=</span><span class="m">1024</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--benchmark_backend<span class="o">=</span>summary<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s2">&quot;presets=newton,ovrtx_renderer,rgb&quot;</span>
+</pre></div>
+</div>
+<p><strong>Record video with the Isaac RTX renderer preset using the Newton video backend</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./isaaclab.sh<span class="w"> </span>-p<span class="w"> </span>scripts/benchmarks/benchmark_rsl_rl.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--task<span class="o">=</span>Isaac-Repose-Cube-Shadow-Vision-Direct-v0<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--enable_cameras<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--visualizer<span class="w"> </span>newton<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--video<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--video_length<span class="o">=</span><span class="m">300</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--video_interval<span class="o">=</span><span class="m">2000</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--max_iterations<span class="o">=</span><span class="m">5</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--num_envs<span class="o">=</span><span class="m">1024</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--benchmark_backend<span class="o">=</span>summary<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s2">&quot;presets=physx,isaacsim_rtx_renderer,rgb&quot;</span>
+</pre></div>
+</div>
+<p><strong>Record video with the Isaac RTX renderer preset using the Kit video backend</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./isaaclab.sh<span class="w"> </span>-p<span class="w"> </span>scripts/benchmarks/benchmark_rsl_rl.py<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--task<span class="o">=</span>Isaac-Repose-Cube-Shadow-Vision-Direct-v0<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--enable_cameras<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--visualizer<span class="w"> </span>kit<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--video<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--video_length<span class="o">=</span><span class="m">300</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--video_interval<span class="o">=</span><span class="m">2000</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--max_iterations<span class="o">=</span><span class="m">5</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--num_envs<span class="o">=</span><span class="m">1024</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--benchmark_backend<span class="o">=</span>summary<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span><span class="s2">&quot;presets=physx,isaacsim_rtx_renderer,rgb&quot;</span>
+</pre></div>
+</div>
 </section>
 <section id="visualizer-backends">
 <h2>Visualizer Backends<a class="headerlink" href="#visualizer-backends" title="Link to this heading">#</a></h2>
@@ -1254,6 +1349,7 @@ instead:</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#partial-visualization">Partial Visualization</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-recording">Video Recording</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualizer-backends">Visualizer Backends</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#omniverse-visualizer">Omniverse Visualizer</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#newton-visualizer">Newton Visualizer</a></li>
