@@ -60,7 +60,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="3.0.0" />
-    <meta name="docbuild:last-update" content="May 06, 2026"/>
+    <meta name="docbuild:last-update" content="May 07, 2026"/>
   </head>
   
   
@@ -784,7 +784,8 @@
         <span class="c1"># IsaacRtxRendererCfg overrides to flip /isaaclab/render/rtx_sensors. The</span>
         <span class="c1"># flag must be set pre-sim.reset() because SimulationContext.is_rendering</span>
         <span class="c1"># and several env classes read it before the renderer&#39;s __init__ runs.</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">renderer_cfg</span><span class="o">.</span><span class="n">renderer_type</span> <span class="o">==</span> <span class="s2">&quot;isaac_rtx&quot;</span><span class="p">:</span>
+        <span class="n">renderer_type</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">renderer_cfg</span><span class="p">,</span> <span class="s2">&quot;renderer_type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">renderer_type</span> <span class="o">==</span> <span class="s2">&quot;isaac_rtx&quot;</span><span class="p">:</span>
             <span class="n">get_settings_manager</span><span class="p">()</span><span class="o">.</span><span class="n">set_bool</span><span class="p">(</span><span class="s2">&quot;/isaaclab/render/rtx_sensors&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># Compute camera orientation (convention conversion) and spawn</span>
@@ -1313,7 +1314,7 @@ By The Isaac Lab Project Developers.
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on May 06, 2026.
+  Last updated on May 07, 2026.
   <br/>
 </p>
   </div>

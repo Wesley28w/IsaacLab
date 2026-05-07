@@ -60,7 +60,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="3.0.0" />
-    <meta name="docbuild:last-update" content="May 06, 2026"/>
+    <meta name="docbuild:last-update" content="May 07, 2026"/>
   </head>
   
   
@@ -676,8 +676,6 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">MISSING</span><span class="p">,</span> <span class="n">field</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Literal</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab_physx.renderers</span><span class="w"> </span><span class="kn">import</span> <span class="n">IsaacRtxRendererCfg</span>
-
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.renderers</span><span class="w"> </span><span class="kn">import</span> <span class="n">RendererCfg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.sim</span><span class="w"> </span><span class="kn">import</span> <span class="n">FisheyeCameraCfg</span><span class="p">,</span> <span class="n">PinholeCameraCfg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">configclass</span>
@@ -860,7 +858,7 @@
 <span class="sd">        on :attr:`renderer_cfg` instead.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">renderer_cfg</span><span class="p">:</span> <span class="n">RendererCfg</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">IsaacRtxRendererCfg</span><span class="p">)</span>
+    <span class="n">renderer_cfg</span><span class="p">:</span> <span class="n">RendererCfg</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default_factory</span><span class="o">=</span><span class="n">RendererCfg</span><span class="p">)</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Renderer configuration for camera sensor.&quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -870,6 +868,14 @@
 <span class="sd">        :class:`DeprecationWarning` and is copied onto ``self.renderer_cfg``</span>
 <span class="sd">        when that cfg defines the same-named field.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO when Camera.__init__ moves rtx_sensor setting out of camera initialization</span>
+        <span class="c1"># the default renderer config instantiation can be moved into the render factory</span>
+        <span class="c1"># and get_default_render_cfg method can be removed from backend_utils</span>
+        <span class="n">renderer_type</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">renderer_cfg</span><span class="p">,</span> <span class="s2">&quot;renderer_type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">renderer_type</span> <span class="o">==</span> <span class="s2">&quot;default&quot;</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.utils.backend_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_default_renderer_cfg</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">renderer_cfg</span> <span class="o">=</span> <span class="n">get_default_renderer_cfg</span><span class="p">()</span>
         <span class="c1"># Forwarded by name: any same-named field on ``renderer_cfg`` will receive the value.</span>
         <span class="k">for</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">default</span> <span class="ow">in</span> <span class="n">_DEPRECATED_RENDERER_FIELD_DEFAULTS</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_name</span><span class="p">)</span>
@@ -934,7 +940,7 @@ By The Isaac Lab Project Developers.
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on May 06, 2026.
+  Last updated on May 07, 2026.
   <br/>
 </p>
   </div>
