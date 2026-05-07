@@ -672,16 +672,95 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClassVar</span><span class="p">,</span> <span class="n">Literal</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">configclass</span>
 
+<span class="c1"># Names that moved out of this submodule into ``isaaclab_physx.sim.schemas.schemas_cfg``.</span>
+<span class="c1"># Resolved lazily so callers using ``from isaaclab.sim.schemas.schemas_cfg import</span>
+<span class="c1"># RigidBodyPropertiesCfg`` continue to work without importing ``isaaclab_physx`` at module</span>
+<span class="c1"># load time.</span>
+<span class="n">_PHYSX_FORWARDS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;RigidBodyPropertiesCfg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;JointDrivePropertiesCfg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;PhysxRigidBodyPropertiesCfg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;PhysxJointDrivePropertiesCfg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CollisionPropertiesCfg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;PhysxCollisionPropertiesCfg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;PhysXCollisionPropertiesCfg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;PhysxDeformableCollisionPropertiesCfg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ArticulationRootPropertiesCfg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;PhysxArticulationRootPropertiesCfg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;MeshCollisionPropertiesCfg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ConvexHullPropertiesCfg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ConvexDecompositionPropertiesCfg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;TriangleMeshPropertiesCfg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;TriangleMeshSimplificationPropertiesCfg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;SDFMeshPropertiesCfg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;PhysxConvexHullPropertiesCfg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;PhysxConvexDecompositionPropertiesCfg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;PhysxTriangleMeshPropertiesCfg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;PhysxTriangleMeshSimplificationPropertiesCfg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;PhysxSDFMeshPropertiesCfg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;FixedTendonPropertiesCfg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;SpatialTendonPropertiesCfg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;PhysxFixedTendonPropertiesCfg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;PhysxSpatialTendonPropertiesCfg&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">)</span>
 
-<div class="viewcode-block" id="ArticulationRootPropertiesCfg">
-<a class="viewcode-back" href="../../../../source/api/lab/isaaclab.sim.schemas.html#isaaclab.sim.schemas.ArticulationRootPropertiesCfg">[docs]</a>
+
+<span class="k">def</span><span class="w"> </span><span class="fm">__getattr__</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">_PHYSX_FORWARDS</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab_physx.sim.schemas</span><span class="w"> </span><span class="kn">import</span> <span class="n">schemas_cfg</span> <span class="k">as</span> <span class="n">_physx_cfg</span>
+        <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&#39;isaaclab.sim.schemas.schemas_cfg.</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; has moved to&quot;</span>
+                <span class="s2">&quot; &#39;isaaclab_physx.sim.schemas.schemas_cfg&#39;. Install the isaaclab_physx&quot;</span>
+                <span class="s2">&quot; extension or update your import. This forwarding shim is scheduled for&quot;</span>
+                <span class="s2">&quot; removal in 5.0.&quot;</span>
+            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_physx_cfg</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;module &#39;isaaclab.sim.schemas.schemas_cfg&#39; has no attribute </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_deprecate_field_alias</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">alias</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">canonical</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Forward a deprecated cfg field to its canonical replacement.</span>
+
+<span class="sd">    If ``alias`` is set on the cfg instance, emit a ``DeprecationWarning`` and copy the</span>
+<span class="sd">    value to ``canonical`` (when ``canonical`` is unset). The alias is then nulled so</span>
+<span class="sd">    downstream metadata-driven writers see only the canonical name.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">alias</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;&#39;</span><span class="si">{</span><span class="n">alias</span><span class="si">}</span><span class="s2">&#39; is deprecated; use &#39;</span><span class="si">{</span><span class="n">canonical</span><span class="si">}</span><span class="s2">&#39; instead. The alias is scheduled for removal in 5.0.&quot;</span><span class="p">,</span>
+        <span class="ne">DeprecationWarning</span><span class="p">,</span>
+        <span class="n">stacklevel</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">canonical</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">setattr</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">canonical</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">alias</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+
 <span class="nd">@configclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">ArticulationRootPropertiesCfg</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Properties to apply to the root of an articulation.</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ArticulationRootBaseCfg</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Solver-common properties to apply to the root of an articulation.</span>
+
+<span class="sd">    Carries :attr:`fix_root_link` (writer-side; materializes a</span>
+<span class="sd">    :class:`UsdPhysics.FixedJoint` between the world frame and the root link) and</span>
+<span class="sd">    :attr:`articulation_enabled` whose only USD path today is the PhysX-namespaced</span>
+<span class="sd">    ``physxArticulation:articulationEnabled`` attribute. The base class itself</span>
+<span class="sd">    declares no USD namespace; the writer consults :attr:`_usd_field_exceptions`</span>
+<span class="sd">    to route ``articulation_enabled`` to its non-base namespace and apply</span>
+<span class="sd">    ``PhysxArticulationAPI`` only when the user authored that one field.</span>
+<span class="sd">    For PhysX-only articulation-root properties (self-collisions, TGS solver</span>
+<span class="sd">    iterations, sleep / stabilization thresholds), use</span>
+<span class="sd">    :class:`~isaaclab_physx.sim.schemas.PhysxArticulationRootPropertiesCfg`.</span>
 
 <span class="sd">    See :meth:`modify_articulation_root_properties` for more information.</span>
 
@@ -690,23 +769,36 @@
 <span class="sd">        the properties and leave the rest as-is.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="c1"># -- Class metadata (not dataclass fields) --</span>
+    <span class="c1"># No base-native namespace today: every field is either solver-common (typed</span>
+    <span class="c1"># UsdPhysics API) or routed through ``_usd_field_exceptions``.</span>
+    <span class="n">_usd_namespace</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_usd_applied_schema</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1"># Per-field exceptions: applied_schema -&gt; (namespace, [cfg_field, ...]). The USD</span>
+    <span class="c1"># attribute name is the auto snake -&gt; camelCase of the cfg field name (project</span>
+    <span class="c1"># convention). When any listed field is non-None at write time, the writer applies</span>
+    <span class="c1"># the schema and writes the attribute under the exception namespace.</span>
+    <span class="n">_usd_field_exceptions</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;PhysxArticulationAPI&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;physxArticulation&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;articulation_enabled&quot;</span><span class="p">]),</span>
+    <span class="p">}</span>
+
     <span class="n">articulation_enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether to enable or disable articulation.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether to enable or disable the articulation.</span>
 
-    <span class="n">enabled_self_collisions</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether to enable or disable self-collisions.&quot;&quot;&quot;</span>
+<span class="sd">    PhysX honors this per-articulation at sim time via</span>
+<span class="sd">    ``physxArticulation:articulationEnabled``: setting False makes PhysX skip</span>
+<span class="sd">    the articulation in its solver passes.</span>
 
-    <span class="n">solver_position_iteration_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Solver position iteration counts for the body.&quot;&quot;&quot;</span>
+<span class="sd">    On Newton, the field is read by the IsaacLab Newton wrapper at spawn time</span>
+<span class="sd">    (``isaaclab_newton/assets/rigid_object/rigid_object.py:1035``) as a guard</span>
+<span class="sd">    against accidentally spawning a ``RigidObject`` over a prim that still has</span>
+<span class="sd">    ``ArticulationRootAPI`` applied; setting False suppresses the guard error.</span>
+<span class="sd">    The Newton solver itself does not consult the flag at sim time.</span>
 
-    <span class="n">solver_velocity_iteration_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Solver velocity iteration counts for the body.&quot;&quot;&quot;</span>
-
-    <span class="n">sleep_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mass-normalized kinetic energy threshold below which an actor may go to sleep.&quot;&quot;&quot;</span>
-
-    <span class="n">stabilization_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The mass-normalized kinetic energy threshold below which an articulation may participate in stabilization.&quot;&quot;&quot;</span>
+<span class="sd">    Placed on the solver-common class because the user-facing intent is</span>
+<span class="sd">    universal and both PhysX (sim-time) and the IL Newton wrapper (spawn-time)</span>
+<span class="sd">    honor it.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">fix_root_link</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether to fix the root link of the articulation.</span>
@@ -719,22 +811,41 @@
 <span class="sd">    .. note::</span>
 <span class="sd">        This is a non-USD schema property. It is handled by the :meth:`modify_articulation_root_properties` function.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span></div>
+<span class="sd">    &quot;&quot;&quot;</span>
 
 
-
-<div class="viewcode-block" id="RigidBodyPropertiesCfg">
-<a class="viewcode-back" href="../../../../source/api/lab/isaaclab.sim.schemas.html#isaaclab.sim.schemas.RigidBodyPropertiesCfg">[docs]</a>
 <span class="nd">@configclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">RigidBodyPropertiesCfg</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Properties to apply to a rigid body.</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RigidBodyBaseCfg</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Solver-common properties to apply to a rigid body.</span>
+
+<span class="sd">    Contains properties from the `UsdPhysics.RigidBodyAPI`_ that are common across all</span>
+<span class="sd">    simulation backends, plus :attr:`disable_gravity` whose USD attribute today is</span>
+<span class="sd">    PhysX-namespaced but whose semantics (per-body gravity exclusion) are universal:</span>
+<span class="sd">    PhysX honors it per-body; Newton&#39;s importer consumes it at the scene level</span>
+<span class="sd">    (partial honor, documented on the field). For PhysX-only rigid-body properties,</span>
+<span class="sd">    use :class:`PhysxRigidBodyPropertiesCfg`.</span>
 
 <span class="sd">    See :meth:`modify_rigid_body_properties` for more information.</span>
 
 <span class="sd">    .. note::</span>
 <span class="sd">        If the values are None, they are not modified. This is useful when you want to set only a subset of</span>
 <span class="sd">        the properties and leave the rest as-is.</span>
+
+<span class="sd">    .. _UsdPhysics.RigidBodyAPI: https://openusd.org/dev/api/class_usd_physics_rigid_body_a_p_i.html</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -- Class metadata (not dataclass fields) --</span>
+    <span class="c1"># ``rigid_body_enabled`` and ``kinematic_enabled`` write to ``physics:*`` (UsdPhysics</span>
+    <span class="c1"># standard attributes). The helper&#39;s per-declaring-class routing keeps these under</span>
+    <span class="c1"># the base namespace even when the cfg is a PhysX subclass instance. The</span>
+    <span class="c1"># ``UsdPhysics.RigidBodyAPI`` schema is applied upstream by ``define_rigid_body_properties``</span>
+    <span class="c1"># so ``_usd_applied_schema`` here stays None. ``disable_gravity`` is routed via</span>
+    <span class="c1"># ``_usd_field_exceptions`` to ``physxRigidBody:disableGravity``.</span>
+    <span class="n">_usd_namespace</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;physics&quot;</span>
+    <span class="n">_usd_applied_schema</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_usd_field_exceptions</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;PhysxRigidBodyAPI&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;physxRigidBody&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;disable_gravity&quot;</span><span class="p">]),</span>
+    <span class="p">}</span>
 
     <span class="n">rigid_body_enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether to enable or disable the rigid body.&quot;&quot;&quot;</span>
@@ -749,88 +860,87 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">disable_gravity</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Disable gravity for the actor.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Disable gravity for the body.</span>
 
-    <span class="n">linear_damping</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Linear damping for the body.&quot;&quot;&quot;</span>
+<span class="sd">    PhysX honors this per-body via ``physxRigidBody:disableGravity``: setting True</span>
+<span class="sd">    excludes the body from world gravity integration.</span>
 
-    <span class="n">angular_damping</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Angular damping for the body.&quot;&quot;&quot;</span>
+<span class="sd">    Newton currently consumes the same USD attribute at the **scene level** --</span>
+<span class="sd">    Newton&#39;s importer reads ``physxRigidBody:disableGravity`` on the scene prim</span>
+<span class="sd">    and uses it to drive the scene-wide ``builder.gravity`` flag (``import_usd.py:1212``).</span>
+<span class="sd">    Per-body intent is therefore partially honored on Newton: whichever rigid body</span>
+<span class="sd">    has the attribute authored ends up controlling scene-wide gravity, and other</span>
+<span class="sd">    bodies cannot be selectively excluded.</span>
 
-    <span class="n">max_linear_velocity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum linear velocity for rigid bodies (in m/s).&quot;&quot;&quot;</span>
-
-    <span class="n">max_angular_velocity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum angular velocity for rigid bodies (in deg/s).&quot;&quot;&quot;</span>
-
-    <span class="n">max_depenetration_velocity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum depenetration velocity permitted to be introduced by the solver (in m/s).&quot;&quot;&quot;</span>
-
-    <span class="n">max_contact_impulse</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The limit on the impulse that may be applied at a contact.&quot;&quot;&quot;</span>
-
-    <span class="n">enable_gyroscopic_forces</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enables computation of gyroscopic forces on the rigid body.&quot;&quot;&quot;</span>
-
-    <span class="n">retain_accelerations</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Carries over forces/accelerations over sub-steps.&quot;&quot;&quot;</span>
-
-    <span class="n">solver_position_iteration_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Solver position iteration counts for the body.&quot;&quot;&quot;</span>
-
-    <span class="n">solver_velocity_iteration_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Solver position iteration counts for the body.&quot;&quot;&quot;</span>
-
-    <span class="n">sleep_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mass-normalized kinetic energy threshold below which an actor may go to sleep.&quot;&quot;&quot;</span>
-
-    <span class="n">stabilization_threshold</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The mass-normalized kinetic energy threshold below which an actor may participate in stabilization.&quot;&quot;&quot;</span></div>
+<span class="sd">    The field is placed on the base because the user-facing intent (per-body</span>
+<span class="sd">    gravity exclusion for markers, sensors, kinematic targets) is universal physics</span>
+<span class="sd">    and PhysX honors it fully. Closing the Newton gap is a kernel-level fix</span>
+<span class="sd">    (introduce ``Model.body_disable_gravity`` boolean array consumed by the</span>
+<span class="sd">    integrator) that does not require a cfg-API change.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
 
-
-<div class="viewcode-block" id="CollisionPropertiesCfg">
-<a class="viewcode-back" href="../../../../source/api/lab/isaaclab.sim.schemas.html#isaaclab.sim.schemas.CollisionPropertiesCfg">[docs]</a>
 <span class="nd">@configclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">CollisionPropertiesCfg</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Properties to apply to colliders in a rigid body.</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CollisionBaseCfg</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Solver-common properties to apply to colliders.</span>
+
+<span class="sd">    Contains :attr:`collision_enabled` from the `UsdPhysics.CollisionAPI`_ and the</span>
+<span class="sd">    :attr:`contact_offset` / :attr:`rest_offset` knobs whose USD attributes today are</span>
+<span class="sd">    PhysX-namespaced (``physxCollision:contactOffset``, ``physxCollision:restOffset``)</span>
+<span class="sd">    but whose semantics (collision-pair generation distance, rest separation gap) are</span>
+<span class="sd">    universal physics: PhysX consumes them natively, Newton&#39;s importer consumes them</span>
+<span class="sd">    via the PhysX bridge resolver and populates ``Model.shape_collision_radius`` /</span>
+<span class="sd">    ``Model.shape_collision_thickness`` from the ``gap`` and ``margin`` keys (see</span>
+<span class="sd">    ``import_usd.py:2104, 2111``). For PhysX-only collision properties (e.g. torsional</span>
+<span class="sd">    patch friction), use :class:`~isaaclab_physx.sim.schemas.PhysxCollisionPropertiesCfg`.</span>
 
 <span class="sd">    See :meth:`modify_collision_properties` for more information.</span>
 
 <span class="sd">    .. note::</span>
 <span class="sd">        If the values are None, they are not modified. This is useful when you want to set only a subset of</span>
 <span class="sd">        the properties and leave the rest as-is.</span>
+
+<span class="sd">    .. _UsdPhysics.CollisionAPI: https://openusd.org/dev/api/class_usd_physics_collision_a_p_i.html</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="c1"># -- Class metadata (not dataclass fields) --</span>
+    <span class="c1"># ``collision_enabled`` writes to ``physics:collisionEnabled`` (UsdPhysics standard).</span>
+    <span class="c1"># The helper&#39;s per-declaring-class routing keeps it under ``physics:*`` even when</span>
+    <span class="c1"># the cfg is a PhysX subclass instance. ``contact_offset`` / ``rest_offset`` are</span>
+    <span class="c1"># routed via ``_usd_field_exceptions`` to ``physxCollision:*``.</span>
+    <span class="n">_usd_namespace</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;physics&quot;</span>
+    <span class="n">_usd_applied_schema</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_usd_field_exceptions</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;PhysxCollisionAPI&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;physxCollision&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;contact_offset&quot;</span><span class="p">,</span> <span class="s2">&quot;rest_offset&quot;</span><span class="p">]),</span>
+    <span class="p">}</span>
+
     <span class="n">collision_enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether to enable or disable collisions.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether to enable or disable collisions.</span>
+
+<span class="sd">    Writes ``physics:collisionEnabled`` via :class:`UsdPhysics.CollisionAPI`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">contact_offset</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Contact offset for the collision shape (in m).</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Contact offset for the collision shape [m].</span>
 
 <span class="sd">    The collision detector generates contact points as soon as two shapes get closer than the sum of their</span>
 <span class="sd">    contact offsets. This quantity should be non-negative which means that contact generation can potentially start</span>
 <span class="sd">    before the shapes actually penetrate.</span>
+
+<span class="sd">    Writes ``physxCollision:contactOffset``. Newton&#39;s USD importer consumes the same</span>
+<span class="sd">    attribute via its PhysX-bridge resolver.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">rest_offset</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Rest offset for the collision shape (in m).</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Rest offset for the collision shape [m].</span>
 
 <span class="sd">    The rest offset quantifies how close a shape gets to others at rest, At rest, the distance between two</span>
 <span class="sd">    vertically stacked objects is the sum of their rest offsets. If a pair of shapes have a positive rest</span>
 <span class="sd">    offset, the shapes will be separated at rest by an air gap.</span>
+
+<span class="sd">    Writes ``physxCollision:restOffset``. Newton&#39;s USD importer consumes the same</span>
+<span class="sd">    attribute via its PhysX-bridge resolver.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">torsional_patch_radius</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Radius of the contact patch for applying torsional friction (in m).</span>
-
-<span class="sd">    It is used to approximate rotational friction introduced by the compression of contacting surfaces.</span>
-<span class="sd">    If the radius is zero, no torsional friction is applied.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">min_torsional_patch_radius</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Minimum radius of the contact patch for applying torsional friction (in m).&quot;&quot;&quot;</span></div>
-
 
 
 <div class="viewcode-block" id="MassPropertiesCfg">
@@ -845,6 +955,13 @@
 <span class="sd">        If the values are None, they are not modified. This is useful when you want to set only a subset of</span>
 <span class="sd">        the properties and leave the rest as-is.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -- Class metadata (not dataclass fields) --</span>
+    <span class="c1"># ``mass`` / ``density`` write to ``physics:*`` (UsdPhysics standard attributes).</span>
+    <span class="c1"># The ``UsdPhysics.MassAPI`` schema is applied upstream by ``define_mass_properties``.</span>
+    <span class="n">_usd_namespace</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;physics&quot;</span>
+    <span class="n">_usd_applied_schema</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_usd_field_exceptions</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="n">mass</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;The mass of the rigid body (in kg).</span>
@@ -862,18 +979,43 @@
 
 
 
-<div class="viewcode-block" id="JointDrivePropertiesCfg">
-<a class="viewcode-back" href="../../../../source/api/lab/isaaclab.sim.schemas.html#isaaclab.sim.schemas.JointDrivePropertiesCfg">[docs]</a>
 <span class="nd">@configclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">JointDrivePropertiesCfg</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Properties to define the drive mechanism of a joint.</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">JointDriveBaseCfg</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Solver-common properties to define the drive mechanism of a joint.</span>
+
+<span class="sd">    Contains properties from the `UsdPhysics.DriveAPI`_ that are common across all</span>
+<span class="sd">    simulation backends, plus :attr:`max_joint_velocity` whose USD attribute today is</span>
+<span class="sd">    PhysX-namespaced but whose semantics (per-DOF velocity limit) are universal:</span>
+<span class="sd">    Newton&#39;s importer consumes ``physxJoint:maxJointVelocity`` and populates</span>
+<span class="sd">    ``Model.joint_velocity_limit``; PhysX consumes it natively. For PhysX-only</span>
+<span class="sd">    drive properties, use :class:`PhysxJointDrivePropertiesCfg`.</span>
 
 <span class="sd">    See :meth:`modify_joint_drive_properties` for more information.</span>
 
 <span class="sd">    .. note::</span>
 <span class="sd">        If the values are None, they are not modified. This is useful when you want to set only a subset of</span>
 <span class="sd">        the properties and leave the rest as-is.</span>
+
+<span class="sd">    .. _UsdPhysics.DriveAPI: https://openusd.org/dev/api/class_usd_physics_drive_a_p_i.html</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -- Class metadata (not dataclass fields) --</span>
+    <span class="c1"># No base-native namespace today: drive-type / max-effort / stiffness / damping are</span>
+    <span class="c1"># written via the typed ``UsdPhysics.DriveAPI``; ``max_joint_velocity`` is routed</span>
+    <span class="c1"># through ``_usd_field_exceptions`` to ``physxJoint:maxJointVelocity`` (the only</span>
+    <span class="c1"># USD path to ``Model.joint_velocity_limit`` today).</span>
+    <span class="n">_usd_namespace</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_usd_applied_schema</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_usd_field_exceptions</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;PhysxJointAPI&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;physxJoint&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;max_joint_velocity&quot;</span><span class="p">]),</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Deprecation aliases: project convention is that python ``snake_case`` cfg field</span>
+        <span class="c1"># names map identity-style to USD ``camelCase`` attrs. Legacy short names that</span>
+        <span class="c1"># diverged are forwarded here.</span>
+        <span class="n">_deprecate_field_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;max_velocity&quot;</span><span class="p">,</span> <span class="s2">&quot;max_joint_velocity&quot;</span><span class="p">)</span>
+        <span class="n">_deprecate_field_alias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;max_effort&quot;</span><span class="p">,</span> <span class="s2">&quot;max_force&quot;</span><span class="p">)</span>
 
     <span class="n">drive_type</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;force&quot;</span><span class="p">,</span> <span class="s2">&quot;acceleration&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Joint drive type to apply.</span>
@@ -882,16 +1024,20 @@
 <span class="sd">    then the joint is driven by an acceleration (usually used for kinematic joints).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="n">max_force</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum force/torque that can be applied to the joint [N for linear joints, N-m for angular joints].</span>
+
+<span class="sd">    Writes ``drive:&lt;linear|angular&gt;:physics:maxForce`` via :class:`UsdPhysics.DriveAPI`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="n">max_effort</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum effort that can be applied to the joint (in kg-m^2/s^2).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Deprecated alias for :attr:`max_force`.</span>
 
-    <span class="n">max_velocity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum velocity of the joint.</span>
-
-<span class="sd">    The unit depends on the joint model:</span>
-
-<span class="sd">    * For linear joints, the unit is m/s.</span>
-<span class="sd">    * For angular joints, the unit is rad/s.</span>
+<span class="sd">    .. deprecated:: 4.6.25</span>
+<span class="sd">        Use :attr:`max_force` instead. The cfg field is renamed so its</span>
+<span class="sd">        snake_case name maps identity-style to the USD camelCase attribute</span>
+<span class="sd">        (``maxForce`` on ``UsdPhysics.DriveAPI``). The alias is forwarded to</span>
+<span class="sd">        :attr:`max_force` in :meth:`__post_init__` and will be removed in 5.0.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">stiffness</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
@@ -922,316 +1068,127 @@
 <span class="sd">    stiffness *and* damping are both zero, guaranteeing that the backend</span>
 <span class="sd">    recognises the drive as active.  The actual gains are expected to be</span>
 <span class="sd">    overridden later by the actuator model.</span>
-<span class="sd">    &quot;&quot;&quot;</span></div>
-
-
-
-<div class="viewcode-block" id="FixedTendonPropertiesCfg">
-<a class="viewcode-back" href="../../../../source/api/lab/isaaclab.sim.schemas.html#isaaclab.sim.schemas.FixedTendonPropertiesCfg">[docs]</a>
-<span class="nd">@configclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">FixedTendonPropertiesCfg</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Properties to define fixed tendons of an articulation.</span>
-
-<span class="sd">    See :meth:`modify_fixed_tendon_properties` for more information.</span>
-
-<span class="sd">    .. note::</span>
-<span class="sd">        If the values are None, they are not modified. This is useful when you want to set only a subset of</span>
-<span class="sd">        the properties and leave the rest as-is.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">tendon_enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether to enable or disable the tendon.&quot;&quot;&quot;</span>
+    <span class="n">max_joint_velocity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum velocity of the joint [m/s for linear joints, rad/s for angular joints].</span>
 
-    <span class="n">stiffness</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Spring stiffness term acting on the tendon&#39;s length.&quot;&quot;&quot;</span>
-
-    <span class="n">damping</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The damping term acting on both the tendon length and the tendon-length limits.&quot;&quot;&quot;</span>
-
-    <span class="n">limit_stiffness</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Limit stiffness term acting on the tendon&#39;s length limits.&quot;&quot;&quot;</span>
-
-    <span class="n">offset</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Length offset term for the tendon.</span>
-
-<span class="sd">    It defines an amount to be added to the accumulated length computed for the tendon. This allows the application</span>
-<span class="sd">    to actuate the tendon by shortening or lengthening it.</span>
+<span class="sd">    Notes:</span>
+<span class="sd">        Today this writes ``physxJoint:maxJointVelocity`` (a PhysX add-on schema attribute).</span>
+<span class="sd">        Newton&#39;s USD importer consumes the same attribute via its PhysX-bridge resolver and</span>
+<span class="sd">        populates ``Model.joint_velocity_limit``; the PhysX engine consumes it natively. The</span>
+<span class="sd">        Kamino solver honors the limit at the simulation step. The XPBD, Featherstone, and</span>
+<span class="sd">        Semi-implicit Newton solvers import the value but do not consume it in their kernels;</span>
+<span class="sd">        the MuJoCo (MJC) solver explicitly drops it. When Newton ships ``newton:maxJointVelocity``</span>
+<span class="sd">        as a registered applied API, the writer namespace will switch transparently and this</span>
+<span class="sd">        docstring caveat will be removed.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">rest_length</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Spring rest length of the tendon.&quot;&quot;&quot;</span></div>
+    <span class="n">max_velocity</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Deprecated alias for :attr:`max_joint_velocity`.</span>
 
-
-
-<span class="nd">@configclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">SpatialTendonPropertiesCfg</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Properties to define spatial tendons of an articulation.</span>
-
-<span class="sd">    See :meth:`modify_spatial_tendon_properties` for more information.</span>
-
-<span class="sd">    .. note::</span>
-<span class="sd">        If the values are None, they are not modified. This is useful when you want to set only a subset of</span>
-<span class="sd">        the properties and leave the rest as-is.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">tendon_enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether to enable or disable the tendon.&quot;&quot;&quot;</span>
-
-    <span class="n">stiffness</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Spring stiffness term acting on the tendon&#39;s length.&quot;&quot;&quot;</span>
-
-    <span class="n">damping</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The damping term acting on both the tendon length and the tendon-length limits.&quot;&quot;&quot;</span>
-
-    <span class="n">limit_stiffness</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Limit stiffness term acting on the tendon&#39;s length limits.&quot;&quot;&quot;</span>
-
-    <span class="n">offset</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Length offset term for the tendon.</span>
-
-<span class="sd">    It defines an amount to be added to the accumulated length computed for the tendon. This allows the application</span>
-<span class="sd">    to actuate the tendon by shortening or lengthening it.</span>
+<span class="sd">    .. deprecated:: 4.6.25</span>
+<span class="sd">        Use :attr:`max_joint_velocity` instead. The cfg field is renamed so its</span>
+<span class="sd">        snake_case name maps identity-style to the USD camelCase attribute</span>
+<span class="sd">        (``physxJoint:maxJointVelocity``). The alias is forwarded to</span>
+<span class="sd">        :attr:`max_joint_velocity` in :meth:`__post_init__` and will be removed in 5.0.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
 
 <span class="nd">@configclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">MeshCollisionPropertiesCfg</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Properties to apply to a mesh in regards to collision.</span>
-<span class="sd">    See :meth:`set_mesh_collision_properties` for more information.</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MeshCollisionBaseCfg</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Solver-common properties to apply to a mesh in regards to collision.</span>
+
+<span class="sd">    Carries only the standard ``UsdPhysics:MeshCollisionAPI`` token</span>
+<span class="sd">    (:attr:`mesh_approximation_name` -&gt; ``physics:approximation``). For PhysX-cooking</span>
+<span class="sd">    tunables (convex hull / decomposition / triangle mesh / SDF), use the</span>
+<span class="sd">    ``Physx*PropertiesCfg`` subclasses in :mod:`isaaclab_physx.sim.schemas`.</span>
+
+<span class="sd">    See :meth:`modify_mesh_collision_properties` for more information.</span>
 
 <span class="sd">    .. note::</span>
-<span class="sd">        If the values are None, they are not modified. This is useful when you want to set only a subset of</span>
-<span class="sd">        the properties and leave the rest as-is.</span>
+<span class="sd">        If the values are None, they are not modified. This is useful when you want to</span>
+<span class="sd">        set only a subset of the properties and leave the rest as-is.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">usd_api</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;USD API name for mesh collision (e.g. &#39;MeshCollisionAPI&#39;).&quot;&quot;&quot;</span>
-
-    <span class="n">physx_api</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;PhysX schema name for mesh collision (e.g. &#39;PhysxConvexDecompositionCollisionAPI&#39;).&quot;&quot;&quot;</span>
+    <span class="c1"># -- Class metadata (not dataclass fields) --</span>
+    <span class="c1"># The standard ``UsdPhysics.MeshCollisionAPI`` is always applied by the writer when a</span>
+    <span class="c1"># mesh-collision cfg is supplied; ``_usd_applied_schema`` here records the standard</span>
+    <span class="c1"># API name so subclasses that author no PhysX namespace can rely on the writer&#39;s</span>
+    <span class="c1"># standard-vs-PhysX gating logic. PhysX-cooking subclasses override this.</span>
+    <span class="n">_usd_applied_schema</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;MeshCollisionAPI&quot;</span>
+    <span class="c1"># Base class authors no PhysX-namespaced fields, so no namespace is defined.</span>
+    <span class="n">_usd_namespace</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_usd_attr_name_map</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_usd_field_exceptions</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="n">mesh_approximation_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Name of mesh collision approximation method. Default: &quot;none&quot;.</span>
+
+<span class="sd">    Writes ``physics:approximation`` via :class:`UsdPhysics.MeshCollisionAPI`.</span>
 <span class="sd">    Refer to :const:`schemas.MESH_APPROXIMATION_TOKENS` for available options.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Deprecated read-only access to the legacy ``usd_api`` / ``physx_api`` instance attrs.</span>
+
+<span class="sd">        Falls back here only when the attribute is not found on the dataclass instance.</span>
+<span class="sd">        Returns the legacy-mapped string value derived from the class-level</span>
+<span class="sd">        ``_usd_applied_schema`` metadata and emits a ``DeprecationWarning``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;usd_api&quot;</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;&#39;usd_api&#39; attribute is deprecated and will be removed in 5.0. Use class-level&quot;</span>
+                <span class="s2">&quot; metadata via getattr(cfg, &#39;_usd_applied_schema&#39;).&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">schema</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;_usd_applied_schema&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="c1"># Every PhysX cooking subclass legacy-mapped to ``&quot;MeshCollisionAPI&quot;``; the base</span>
+            <span class="c1"># class also wrote that token. Return ``None`` only when no schema is declared.</span>
+            <span class="k">return</span> <span class="s2">&quot;MeshCollisionAPI&quot;</span> <span class="k">if</span> <span class="n">schema</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;physx_api&quot;</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;&#39;physx_api&#39; attribute is deprecated and will be removed in 5.0. Use class-level&quot;</span>
+                <span class="s2">&quot; metadata via getattr(cfg, &#39;_usd_applied_schema&#39;).&quot;</span><span class="p">,</span>
+                <span class="ne">DeprecationWarning</span><span class="p">,</span>
+                <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">schema</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;_usd_applied_schema&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">schema</span> <span class="ow">and</span> <span class="n">schema</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;Physx&quot;</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">schema</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">!r}</span><span class="s2"> object has no attribute </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+
 
 <span class="nd">@configclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">BoundingCubePropertiesCfg</span><span class="p">(</span><span class="n">MeshCollisionPropertiesCfg</span><span class="p">):</span>
-    <span class="n">usd_api</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;MeshCollisionAPI&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Original USD Documentation:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BoundingCubePropertiesCfg</span><span class="p">(</span><span class="n">MeshCollisionBaseCfg</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Bounding-cube mesh collision approximation. USD-only; authors no PhysX schema.</span>
+
+<span class="sd">    Writes the ``boundingCube`` token to ``physics:approximation`` via</span>
+<span class="sd">    :class:`UsdPhysics.MeshCollisionAPI`.</span>
+
+<span class="sd">    Original USD Documentation:</span>
 <span class="sd">    https://docs.omniverse.nvidia.com/kit/docs/omni_usd_schema_physics/latest/class_usd_physics_mesh_collision_a_p_i.html</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">mesh_approximation_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;boundingCube&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Name of mesh collision approximation method. Default: &quot;boundingCube&quot;.</span>
-<span class="sd">    Refer to :const:`schemas.MESH_APPROXIMATION_TOKENS` for available options.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Name of mesh collision approximation method. Default: &quot;boundingCube&quot;.&quot;&quot;&quot;</span>
 
 
 <span class="nd">@configclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">BoundingSpherePropertiesCfg</span><span class="p">(</span><span class="n">MeshCollisionPropertiesCfg</span><span class="p">):</span>
-    <span class="n">usd_api</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;MeshCollisionAPI&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Original USD Documentation:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BoundingSpherePropertiesCfg</span><span class="p">(</span><span class="n">MeshCollisionBaseCfg</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Bounding-sphere mesh collision approximation. USD-only; authors no PhysX schema.</span>
+
+<span class="sd">    Writes the ``boundingSphere`` token to ``physics:approximation`` via</span>
+<span class="sd">    :class:`UsdPhysics.MeshCollisionAPI`.</span>
+
+<span class="sd">    Original USD Documentation:</span>
 <span class="sd">    https://docs.omniverse.nvidia.com/kit/docs/omni_usd_schema_physics/latest/class_usd_physics_mesh_collision_a_p_i.html</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">mesh_approximation_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;boundingSphere&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Name of mesh collision approximation method. Default: &quot;boundingSphere&quot;.</span>
-<span class="sd">    Refer to :const:`schemas.MESH_APPROXIMATION_TOKENS` for available options.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-
-<span class="nd">@configclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">ConvexDecompositionPropertiesCfg</span><span class="p">(</span><span class="n">MeshCollisionPropertiesCfg</span><span class="p">):</span>
-    <span class="n">usd_api</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;MeshCollisionAPI&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Original USD Documentation:</span>
-<span class="sd">    https://docs.omniverse.nvidia.com/kit/docs/omni_usd_schema_physics/latest/class_usd_physics_mesh_collision_a_p_i.html</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">physx_api</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;PhysxConvexDecompositionCollisionAPI&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Original PhysX Documentation:</span>
-<span class="sd">    https://docs.omniverse.nvidia.com/kit/docs/omni_usd_schema_physics/latest/class_physx_schema_physx_convex_decomposition_collision_a_p_i.html</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">mesh_approximation_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;convexDecomposition&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Name of mesh collision approximation method. Default: &quot;convexDecomposition&quot;.</span>
-<span class="sd">    Refer to :const:`schemas.MESH_APPROXIMATION_TOKENS` for available options.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">hull_vertex_limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convex hull vertex limit used for convex hull cooking.</span>
-
-<span class="sd">    Defaults to 64.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">max_convex_hulls</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum of convex hulls created during convex decomposition.</span>
-<span class="sd">    Default value is 32.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">min_thickness</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convex hull min thickness.</span>
-
-<span class="sd">    Range: [0, inf). Units are distance. Default value is 0.001.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">voxel_resolution</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Voxel resolution used for convex decomposition.</span>
-
-<span class="sd">    Defaults to 500,000 voxels.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">error_percentage</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convex decomposition error percentage parameter.</span>
-
-<span class="sd">    Defaults to 10 percent. Units are percent.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">shrink_wrap</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Attempts to adjust the convex hull points so that they are projected onto the surface of the original graphics</span>
-<span class="sd">    mesh.</span>
-
-<span class="sd">    Defaults to False.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-
-<span class="nd">@configclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">ConvexHullPropertiesCfg</span><span class="p">(</span><span class="n">MeshCollisionPropertiesCfg</span><span class="p">):</span>
-    <span class="n">usd_api</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;MeshCollisionAPI&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Original USD Documentation:</span>
-<span class="sd">    https://docs.omniverse.nvidia.com/kit/docs/omni_usd_schema_physics/latest/class_usd_physics_mesh_collision_a_p_i.html</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">physx_api</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;PhysxConvexHullCollisionAPI&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Original PhysX Documentation:</span>
-<span class="sd">    https://docs.omniverse.nvidia.com/kit/docs/omni_usd_schema_physics/latest/class_physx_schema_physx_convex_hull_collision_a_p_i.html</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">mesh_approximation_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;convexHull&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Name of mesh collision approximation method. Default: &quot;convexHull&quot;.</span>
-<span class="sd">    Refer to :const:`schemas.MESH_APPROXIMATION_TOKENS` for available options.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">hull_vertex_limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convex hull vertex limit used for convex hull cooking.</span>
-
-<span class="sd">    Defaults to 64.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">min_thickness</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convex hull min thickness.</span>
-
-<span class="sd">    Range: [0, inf). Units are distance. Default value is 0.001.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-
-<span class="nd">@configclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">TriangleMeshPropertiesCfg</span><span class="p">(</span><span class="n">MeshCollisionPropertiesCfg</span><span class="p">):</span>
-    <span class="n">physx_api</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;PhysxTriangleMeshCollisionAPI&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Triangle mesh is only supported by PhysX API.</span>
-
-<span class="sd">    Original PhysX Documentation:</span>
-<span class="sd">    https://docs.omniverse.nvidia.com/kit/docs/omni_usd_schema_physics/latest/class_physx_schema_physx_triangle_mesh_collision_a_p_i.html</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">mesh_approximation_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Name of mesh collision approximation method. Default: &quot;none&quot; (uses triangle mesh).</span>
-<span class="sd">    Refer to :const:`schemas.MESH_APPROXIMATION_TOKENS` for available options.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">weld_tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mesh weld tolerance, controls the distance at which vertices are welded.</span>
-
-<span class="sd">    Default -inf will autocompute the welding tolerance based on the mesh size. Zero value will disable welding.</span>
-<span class="sd">    Range: [0, inf) Units: distance</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-
-<span class="nd">@configclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">TriangleMeshSimplificationPropertiesCfg</span><span class="p">(</span><span class="n">MeshCollisionPropertiesCfg</span><span class="p">):</span>
-    <span class="n">usd_api</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;MeshCollisionAPI&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Original USD Documentation:</span>
-<span class="sd">    https://docs.omniverse.nvidia.com/kit/docs/omni_usd_schema_physics/latest/class_usd_physics_mesh_collision_a_p_i.html</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">physx_api</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;PhysxTriangleMeshSimplificationCollisionAPI&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Original PhysX Documentation:</span>
-<span class="sd">    https://docs.omniverse.nvidia.com/kit/docs/omni_usd_schema_physics/latest/class_physx_schema_physx_triangle_mesh_simplification_collision_a_p_i.html</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">mesh_approximation_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;meshSimplification&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Name of mesh collision approximation method. Default: &quot;meshSimplification&quot;.</span>
-<span class="sd">    Refer to :const:`schemas.MESH_APPROXIMATION_TOKENS` for available options.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">simplification_metric</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mesh simplification accuracy.</span>
-
-<span class="sd">    Defaults to 0.55.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">weld_tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Mesh weld tolerance, controls the distance at which vertices are welded.</span>
-
-<span class="sd">    Default -inf will autocompute the welding tolerance based on the mesh size. Zero value will disable welding.</span>
-<span class="sd">    Range: [0, inf) Units: distance</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-
-<span class="nd">@configclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">SDFMeshPropertiesCfg</span><span class="p">(</span><span class="n">MeshCollisionPropertiesCfg</span><span class="p">):</span>
-    <span class="n">physx_api</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;PhysxSDFMeshCollisionAPI&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;SDF mesh is only supported by PhysX API.</span>
-
-<span class="sd">    Original PhysX documentation:</span>
-<span class="sd">    https://docs.omniverse.nvidia.com/kit/docs/omni_usd_schema_physics/latest/class_physx_schema_physx_s_d_f_mesh_collision_a_p_i.html</span>
-
-<span class="sd">    More details and steps for optimizing SDF results can be found here:</span>
-<span class="sd">    https://nvidia-omniverse.github.io/PhysX/physx/5.2.1/docs/RigidBodyCollision.html#dynamic-triangle-meshes-with-sdfs</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">mesh_approximation_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;sdf&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Name of mesh collision approximation method. Default: &quot;sdf&quot;.</span>
-<span class="sd">    Refer to :const:`schemas.MESH_APPROXIMATION_TOKENS` for available options.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">sdf_margin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Margin to increase the size of the SDF relative to the bounding box diagonal length of the mesh.</span>
-
-
-<span class="sd">    A sdf margin value of 0.01 means the sdf boundary will be enlarged in any direction by 1% of the mesh&#39;s bounding</span>
-<span class="sd">    box diagonal length. Representing the margin relative to the bounding box diagonal length ensures that it is scale</span>
-<span class="sd">    independent. Margins allow for precise distance queries in a region slightly outside of the mesh&#39;s bounding box.</span>
-
-<span class="sd">    Default value is 0.01.</span>
-<span class="sd">    Range: [0, inf) Units: dimensionless</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">sdf_narrow_band_thickness</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Size of the narrow band around the mesh surface where high resolution SDF samples are available.</span>
-
-<span class="sd">    Outside of the narrow band, only low resolution samples are stored. Representing the narrow band thickness as a</span>
-<span class="sd">    fraction of the mesh&#39;s bounding box diagonal length ensures that it is scale independent. A value of 0.01 is</span>
-<span class="sd">    usually large enough. The smaller the narrow band thickness, the smaller the memory consumption of the sparse SDF.</span>
-
-<span class="sd">    Default value is 0.01.</span>
-<span class="sd">    Range: [0, 1] Units: dimensionless</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">sdf_resolution</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The spacing of the uniformly sampled SDF is equal to the largest AABB extent of the mesh,</span>
-<span class="sd">    divided by the resolution.</span>
-
-<span class="sd">    Choose the lowest possible resolution that provides acceptable performance; very high resolution results in large</span>
-<span class="sd">    memory consumption, and slower cooking and simulation performance.</span>
-
-<span class="sd">    Default value is 256.</span>
-<span class="sd">    Range: (1, inf)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">sdf_subgrid_resolution</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A positive subgrid resolution enables sparsity on signed-distance-fields (SDF) while a value of 0 leads to the</span>
-<span class="sd">    usage of a dense SDF.</span>
-
-<span class="sd">    A value in the range of 4 to 8 is a reasonable compromise between block size and the overhead introduced by block</span>
-<span class="sd">    addressing. The smaller a block, the more memory is spent on the address table. The bigger a block, the less</span>
-<span class="sd">    precisely the sparse SDF can adapt to the mesh&#39;s surface. In most cases sparsity reduces the memory consumption of</span>
-<span class="sd">    a SDF significantly.</span>
-
-<span class="sd">    Default value is 6.</span>
-<span class="sd">    Range: [0, inf)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Name of mesh collision approximation method. Default: &quot;boundingSphere&quot;.&quot;&quot;&quot;</span>
 </pre></div>
 
                 </article>

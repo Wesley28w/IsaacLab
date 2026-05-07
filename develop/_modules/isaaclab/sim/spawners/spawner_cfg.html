@@ -757,10 +757,10 @@
     <span class="n">mass_props</span><span class="p">:</span> <span class="n">schemas</span><span class="o">.</span><span class="n">MassPropertiesCfg</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Mass properties.&quot;&quot;&quot;</span>
 
-    <span class="n">rigid_props</span><span class="p">:</span> <span class="n">schemas</span><span class="o">.</span><span class="n">RigidBodyPropertiesCfg</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">rigid_props</span><span class="p">:</span> <span class="n">schemas</span><span class="o">.</span><span class="n">RigidBodyBaseCfg</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Rigid body properties.</span>
 
-<span class="sd">    For making a rigid object static, set the :attr:`schemas.RigidBodyPropertiesCfg.kinematic_enabled`</span>
+<span class="sd">    For making a rigid object static, set the :attr:`schemas.RigidBodyBaseCfg.kinematic_enabled`</span>
 <span class="sd">    as True. This will make the object static and will not be affected by gravity or other forces.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 

@@ -1122,9 +1122,13 @@
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">ann</span><span class="p">:</span>
         <span class="c1"># find matching field in class</span>
         <span class="n">value</span> <span class="o">=</span> <span class="n">class_members</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">MISSING</span><span class="p">)</span>
-        <span class="c1"># check if key belongs to ClassVar</span>
-        <span class="c1"># in that case, we cannot use default_factory!</span>
-        <span class="n">origin</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ann</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="s2">&quot;__origin__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="c1"># check if key belongs to ClassVar -- in that case, we cannot use default_factory!</span>
+        <span class="c1"># ``from __future__ import annotations`` turns annotations into strings, so we</span>
+        <span class="c1"># also detect the string form (``&quot;ClassVar[...]&quot;``) for files using PEP 563.</span>
+        <span class="n">ann_value</span> <span class="o">=</span> <span class="n">ann</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ann_value</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">ann_value</span><span class="o">.</span><span class="n">startswith</span><span class="p">((</span><span class="s2">&quot;ClassVar&quot;</span><span class="p">,</span> <span class="s2">&quot;typing.ClassVar&quot;</span><span class="p">)):</span>
+            <span class="k">continue</span>
+        <span class="n">origin</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ann_value</span><span class="p">,</span> <span class="s2">&quot;__origin__&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">origin</span> <span class="ow">is</span> <span class="n">ClassVar</span><span class="p">:</span>
             <span class="k">continue</span>
         <span class="c1"># check if f is MISSING</span>

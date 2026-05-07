@@ -673,9 +673,12 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">dataclasses</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClassVar</span><span class="p">,</span> <span class="n">Literal</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.sim.spawners.materials</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhysicsMaterialCfg</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.sim.spawners.materials.physics_materials_cfg</span><span class="w"> </span><span class="kn">import</span> <span class="n">RigidBodyMaterialBaseCfg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">configclass</span>
 
 
@@ -757,7 +760,7 @@
 
 
 <div class="viewcode-block" id="DeformableBodyMaterialCfg">
-<a class="viewcode-back" href="../../../../../source/api/lab_physx/isaaclab_physx.sim.spawners.html#isaaclab_physx.sim.spawners.materials.DeformableBodyMaterialCfg">[docs]</a>
+<a class="viewcode-back" href="../../../../../source/api/lab_physx/isaaclab_physx.sim.spawners.html#isaaclab.sim.spawners.materials.DeformableBodyMaterialCfg">[docs]</a>
 <span class="nd">@configclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">DeformableBodyMaterialCfg</span><span class="p">(</span><span class="n">PhysicsMaterialCfg</span><span class="p">,</span> <span class="n">OmniPhysicsDeformableMaterialCfg</span><span class="p">,</span> <span class="n">PhysXDeformableMaterialCfg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Physics material parameters for deformable bodies.</span>
@@ -776,7 +779,7 @@
 
 
 <div class="viewcode-block" id="SurfaceDeformableBodyMaterialCfg">
-<a class="viewcode-back" href="../../../../../source/api/lab_physx/isaaclab_physx.sim.spawners.html#isaaclab_physx.sim.spawners.materials.SurfaceDeformableBodyMaterialCfg">[docs]</a>
+<a class="viewcode-back" href="../../../../../source/api/lab_physx/isaaclab_physx.sim.spawners.html#isaaclab.sim.spawners.materials.SurfaceDeformableBodyMaterialCfg">[docs]</a>
 <span class="nd">@configclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">SurfaceDeformableBodyMaterialCfg</span><span class="p">(</span><span class="n">DeformableBodyMaterialCfg</span><span class="p">,</span> <span class="n">OmniPhysicsSurfaceDeformableMaterialCfg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Physics material parameters for surface deformable bodies,</span>
@@ -792,6 +795,89 @@
         <span class="s2">&quot;physxDeformableBody&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">fields</span><span class="p">(</span><span class="n">PhysXDeformableMaterialCfg</span><span class="p">)],</span>
     <span class="p">}</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Extend DeformableBodyMaterialCfg properties under each prefix.&quot;&quot;&quot;</span></div>
+
+
+
+<span class="nd">@configclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">PhysxRigidBodyMaterialCfg</span><span class="p">(</span><span class="n">RigidBodyMaterialBaseCfg</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;PhysX-specific physics-material parameters for rigid bodies.</span>
+
+<span class="sd">    Extends :class:`~isaaclab.sim.spawners.materials.RigidBodyMaterialBaseCfg` with the</span>
+<span class="sd">    `PhysxMaterialAPI`_ schema fields: compliant-contact spring (stiffness/damping) and the</span>
+<span class="sd">    friction/restitution combine-mode tokens. None of these fields have a Newton consumer</span>
+<span class="sd">    today; they are PhysX-engine-only knobs.</span>
+
+<span class="sd">    See :meth:`~isaaclab.sim.spawners.materials.spawn_rigid_body_material` for more information.</span>
+
+<span class="sd">    .. _PhysxMaterialAPI: https://docs.omniverse.nvidia.com/kit/docs/omni_usd_schema_physics/104.2/class_physx_schema_physx_material_a_p_i.html</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -- Class metadata (not dataclass fields) --</span>
+    <span class="c1"># USD applied schema written when at least one PhysX-namespaced field is set.</span>
+    <span class="n">_usd_applied_schema</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;PhysxMaterialAPI&quot;</span>
+    <span class="c1"># Prim attribute namespace for PhysX-specific fields.</span>
+    <span class="n">_usd_namespace</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;physxMaterial&quot;</span>
+
+    <span class="n">compliant_contact_stiffness</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Spring stiffness for a compliant contact model using implicit springs.</span>
+
+<span class="sd">    A higher stiffness results in behavior closer to a rigid contact. The compliant contact model</span>
+<span class="sd">    is only enabled if the stiffness is larger than 0. PhysX-only; not consumed by Newton.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">compliant_contact_damping</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Damping coefficient for a compliant contact model using implicit springs.</span>
+
+<span class="sd">    Irrelevant if compliant contacts are disabled when :attr:`compliant_contact_stiffness` is set</span>
+<span class="sd">    to zero and rigid contacts are active. PhysX-only; not consumed by Newton.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">friction_combine_mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;average&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;multiply&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Determines the way friction will be combined during collisions.</span>
+
+<span class="sd">    .. attention::</span>
+
+<span class="sd">        When two physics materials with different combine modes collide, the combine mode with</span>
+<span class="sd">        the higher priority will be used. The priority order is provided `here</span>
+<span class="sd">        &lt;https://nvidia-omniverse.github.io/PhysX/physx/5.4.1/_api_build/structPxCombineMode.html&gt;`__.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">restitution_combine_mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;average&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;multiply&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Determines the way restitution coefficient will be combined during collisions.</span>
+
+<span class="sd">    .. attention::</span>
+
+<span class="sd">        When two physics materials with different combine modes collide, the combine mode with</span>
+<span class="sd">        the higher priority will be used. The priority order is provided `here</span>
+<span class="sd">        &lt;https://nvidia-omniverse.github.io/PhysX/physx/5.4.1/_api_build/structPxCombineMode.html&gt;`__.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="RigidBodyMaterialCfg">
+<a class="viewcode-back" href="../../../../../source/api/lab/isaaclab.sim.spawners.html#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg">[docs]</a>
+<span class="nd">@configclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RigidBodyMaterialCfg</span><span class="p">(</span><span class="n">PhysxRigidBodyMaterialCfg</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Deprecated: use :class:`PhysxRigidBodyMaterialCfg` or</span>
+<span class="sd">    :class:`~isaaclab.sim.spawners.materials.RigidBodyMaterialBaseCfg`.</span>
+
+<span class="sd">    .. deprecated:: 4.6.22</span>
+<span class="sd">        ``RigidBodyMaterialCfg`` has been split into</span>
+<span class="sd">        :class:`~isaaclab.sim.spawners.materials.RigidBodyMaterialBaseCfg` (solver-common) and</span>
+<span class="sd">        :class:`PhysxRigidBodyMaterialCfg` (PhysX-specific) and relocated to</span>
+<span class="sd">        :mod:`isaaclab_physx.sim.spawners.materials`. This alias preserves backwards compatibility</span>
+<span class="sd">        and is scheduled for removal in 5.0.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;&#39;RigidBodyMaterialCfg&#39; is deprecated and will be removed in 5.0. Use&quot;</span>
+            <span class="s2">&quot; &#39;isaaclab_physx.sim.spawners.materials.PhysxRigidBodyMaterialCfg&#39; for PhysX&quot;</span>
+            <span class="s2">&quot; properties, or &#39;isaaclab.sim.spawners.materials.RigidBodyMaterialBaseCfg&#39; for&quot;</span>
+            <span class="s2">&quot; solver-common properties only.&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__post_init__</span><span class="p">()</span></div>
 
 </pre></div>
 

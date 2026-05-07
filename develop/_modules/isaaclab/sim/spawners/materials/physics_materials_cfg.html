@@ -674,9 +674,30 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Callable</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">MISSING</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClassVar</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">configclass</span>
+
+<span class="c1"># Names that moved out of this submodule into ``isaaclab_physx.sim.spawners.materials.physics_materials_cfg``.</span>
+<span class="c1"># Resolved lazily so callers using ``from isaaclab.sim.spawners.materials.physics_materials_cfg</span>
+<span class="c1"># import RigidBodyMaterialCfg`` continue to work without importing ``isaaclab_physx`` at module</span>
+<span class="c1"># load time.</span>
+<span class="n">_PHYSX_FORWARDS</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">({</span><span class="s2">&quot;RigidBodyMaterialCfg&quot;</span><span class="p">,</span> <span class="s2">&quot;PhysxRigidBodyMaterialCfg&quot;</span><span class="p">})</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="fm">__getattr__</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">_PHYSX_FORWARDS</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab_physx.sim.spawners.materials</span><span class="w"> </span><span class="kn">import</span> <span class="n">physics_materials_cfg</span> <span class="k">as</span> <span class="n">_physx_mat_cfg</span>
+        <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&#39;isaaclab.sim.spawners.materials.physics_materials_cfg.</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; has moved to&quot;</span>
+                <span class="s2">&quot; &#39;isaaclab_physx.sim.spawners.materials.physics_materials_cfg&#39;. Install the&quot;</span>
+                <span class="s2">&quot; isaaclab_physx extension or update your import. This forwarding shim is scheduled&quot;</span>
+                <span class="s2">&quot; for removal in 5.0.&quot;</span>
+            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">_physx_mat_cfg</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;module &#39;isaaclab.sim.spawners.materials.physics_materials_cfg&#39; has no attribute </span><span class="si">{</span><span class="n">name</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="PhysicsMaterialCfg">
@@ -696,14 +717,26 @@
 
 
 
-<div class="viewcode-block" id="RigidBodyMaterialCfg">
-<a class="viewcode-back" href="../../../../../source/api/lab/isaaclab.sim.spawners.html#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg">[docs]</a>
 <span class="nd">@configclass</span>
-<span class="k">class</span><span class="w"> </span><span class="nc">RigidBodyMaterialCfg</span><span class="p">(</span><span class="n">PhysicsMaterialCfg</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Physics material parameters for rigid bodies.</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">RigidBodyMaterialBaseCfg</span><span class="p">(</span><span class="n">PhysicsMaterialCfg</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Solver-common physics-material parameters for rigid bodies.</span>
+
+<span class="sd">    Contains the friction and restitution fields from the `UsdPhysics.MaterialAPI`_ that are common</span>
+<span class="sd">    across all simulation backends. For PhysX-only material properties (compliant-contact spring,</span>
+<span class="sd">    combine modes), use :class:`~isaaclab_physx.sim.spawners.materials.PhysxRigidBodyMaterialCfg`.</span>
 
 <span class="sd">    See :meth:`spawn_rigid_body_material` for more information.</span>
+
+<span class="sd">    .. _UsdPhysics.MaterialAPI: https://openusd.org/dev/api/class_usd_physics_material_a_p_i.html</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># -- Class metadata (not dataclass fields) --</span>
+    <span class="c1"># ``static_friction`` / ``dynamic_friction`` / ``restitution`` write to ``physics:*``</span>
+    <span class="c1"># (UsdPhysics standard attributes). The helper&#39;s per-declaring-class routing keeps</span>
+    <span class="c1"># them under the base namespace even when the cfg is a PhysX subclass instance.</span>
+    <span class="n">_usd_namespace</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;physics&quot;</span>
+    <span class="n">_usd_applied_schema</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_usd_field_exceptions</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="n">func</span><span class="p">:</span> <span class="n">Callable</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{DIR}</span><span class="s2">.physics_materials:spawn_rigid_body_material&quot;</span>
 
@@ -715,41 +748,6 @@
 
     <span class="n">restitution</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;The restitution coefficient. Defaults to 0.0.&quot;&quot;&quot;</span>
-
-    <span class="n">friction_combine_mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;average&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;multiply&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;average&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Determines the way friction will be combined during collisions. Defaults to `&quot;average&quot;`.</span>
-
-<span class="sd">    .. attention::</span>
-
-<span class="sd">        When two physics materials with different combine modes collide, the combine mode with the higher</span>
-<span class="sd">        priority will be used. The priority order is provided `here</span>
-<span class="sd">        &lt;https://nvidia-omniverse.github.io/PhysX/physx/5.4.1/_api_build/structPxCombineMode.html&gt;`__.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">restitution_combine_mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;average&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">,</span> <span class="s2">&quot;multiply&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;average&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Determines the way restitution coefficient will be combined during collisions. Defaults to `&quot;average&quot;`.</span>
-
-<span class="sd">    .. attention::</span>
-
-<span class="sd">        When two physics materials with different combine modes collide, the combine mode with the higher</span>
-<span class="sd">        priority will be used. The priority order is provided `here</span>
-<span class="sd">        &lt;https://nvidia-omniverse.github.io/PhysX/physx/5.4.1/_api_build/structPxCombineMode.html&gt;`__.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">compliant_contact_stiffness</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Spring stiffness for a compliant contact model using implicit springs. Defaults to 0.0.</span>
-
-<span class="sd">    A higher stiffness results in behavior closer to a rigid contact. The compliant contact model is only enabled</span>
-<span class="sd">    if the stiffness is larger than 0.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">compliant_contact_damping</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Damping coefficient for a compliant contact model using implicit springs. Defaults to 0.0.</span>
-
-<span class="sd">    Irrelevant if compliant contacts are disabled when :obj:`compliant_contact_stiffness` is set to zero and</span>
-<span class="sd">    rigid contacts are active.</span>
-<span class="sd">    &quot;&quot;&quot;</span></div>
-
 </pre></div>
 
                 </article>

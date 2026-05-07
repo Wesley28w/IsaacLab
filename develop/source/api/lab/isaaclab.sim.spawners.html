@@ -1239,10 +1239,10 @@
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.static_friction"><code class="docutils literal notranslate"><span class="pre">RigidBodyMaterialCfg.static_friction</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.dynamic_friction"><code class="docutils literal notranslate"><span class="pre">RigidBodyMaterialCfg.dynamic_friction</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.restitution"><code class="docutils literal notranslate"><span class="pre">RigidBodyMaterialCfg.restitution</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.friction_combine_mode"><code class="docutils literal notranslate"><span class="pre">RigidBodyMaterialCfg.friction_combine_mode</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.restitution_combine_mode"><code class="docutils literal notranslate"><span class="pre">RigidBodyMaterialCfg.restitution_combine_mode</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.compliant_contact_stiffness"><code class="docutils literal notranslate"><span class="pre">RigidBodyMaterialCfg.compliant_contact_stiffness</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.compliant_contact_damping"><code class="docutils literal notranslate"><span class="pre">RigidBodyMaterialCfg.compliant_contact_damping</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.friction_combine_mode"><code class="docutils literal notranslate"><span class="pre">RigidBodyMaterialCfg.friction_combine_mode</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.restitution_combine_mode"><code class="docutils literal notranslate"><span class="pre">RigidBodyMaterialCfg.restitution_combine_mode</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -1568,9 +1568,9 @@ the source prim, i.e. all USD changes to the source prim will be reflected in th
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="isaaclab.sim.spawners.RigidObjectSpawnerCfg.rigid_props">
-<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="isaaclab.sim.schemas.html#isaaclab.sim.schemas.RigidBodyPropertiesCfg" title="isaaclab.sim.schemas.RigidBodyPropertiesCfg"><span class="pre">schemas.RigidBodyPropertiesCfg</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.RigidObjectSpawnerCfg.rigid_props" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">schemas.RigidBodyBaseCfg</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.RigidObjectSpawnerCfg.rigid_props" title="Link to this definition">#</a></dt>
 <dd><p>Rigid body properties.</p>
-<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyPropertiesCfg.kinematic_enabled</span></code>
+<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyBaseCfg.kinematic_enabled</span></code>
 as True. This will make the object static and will not be affected by gravity or other forces.</p>
 </dd></dl>
 
@@ -1758,9 +1758,9 @@ the source prim, i.e. all USD changes to the source prim will be reflected in th
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="isaaclab.sim.spawners.shapes.ShapeCfg.rigid_props">
-<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="isaaclab.sim.schemas.html#isaaclab.sim.schemas.RigidBodyPropertiesCfg" title="isaaclab.sim.schemas.RigidBodyPropertiesCfg"><span class="pre">schemas.RigidBodyPropertiesCfg</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.shapes.ShapeCfg.rigid_props" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">schemas.RigidBodyBaseCfg</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.shapes.ShapeCfg.rigid_props" title="Link to this definition">#</a></dt>
 <dd><p>Rigid body properties.</p>
-<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyPropertiesCfg.kinematic_enabled</span></code>
+<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyBaseCfg.kinematic_enabled</span></code>
 as True. This will make the object static and will not be affected by gravity or other forces.</p>
 </dd></dl>
 
@@ -1915,9 +1915,9 @@ the source prim, i.e. all USD changes to the source prim will be reflected in th
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="isaaclab.sim.spawners.shapes.CapsuleCfg.rigid_props">
-<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="isaaclab.sim.schemas.html#isaaclab.sim.schemas.RigidBodyPropertiesCfg" title="isaaclab.sim.schemas.RigidBodyPropertiesCfg"><span class="pre">schemas.RigidBodyPropertiesCfg</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.shapes.CapsuleCfg.rigid_props" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">schemas.RigidBodyBaseCfg</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.shapes.CapsuleCfg.rigid_props" title="Link to this definition">#</a></dt>
 <dd><p>Rigid body properties.</p>
-<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyPropertiesCfg.kinematic_enabled</span></code>
+<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyBaseCfg.kinematic_enabled</span></code>
 as True. This will make the object static and will not be affected by gravity or other forces.</p>
 </dd></dl>
 
@@ -2126,9 +2126,9 @@ the source prim, i.e. all USD changes to the source prim will be reflected in th
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="isaaclab.sim.spawners.shapes.ConeCfg.rigid_props">
-<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="isaaclab.sim.schemas.html#isaaclab.sim.schemas.RigidBodyPropertiesCfg" title="isaaclab.sim.schemas.RigidBodyPropertiesCfg"><span class="pre">schemas.RigidBodyPropertiesCfg</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.shapes.ConeCfg.rigid_props" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">schemas.RigidBodyBaseCfg</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.shapes.ConeCfg.rigid_props" title="Link to this definition">#</a></dt>
 <dd><p>Rigid body properties.</p>
-<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyPropertiesCfg.kinematic_enabled</span></code>
+<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyBaseCfg.kinematic_enabled</span></code>
 as True. This will make the object static and will not be affected by gravity or other forces.</p>
 </dd></dl>
 
@@ -2342,9 +2342,9 @@ the source prim, i.e. all USD changes to the source prim will be reflected in th
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="isaaclab.sim.spawners.shapes.CuboidCfg.rigid_props">
-<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="isaaclab.sim.schemas.html#isaaclab.sim.schemas.RigidBodyPropertiesCfg" title="isaaclab.sim.schemas.RigidBodyPropertiesCfg"><span class="pre">schemas.RigidBodyPropertiesCfg</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.shapes.CuboidCfg.rigid_props" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">schemas.RigidBodyBaseCfg</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.shapes.CuboidCfg.rigid_props" title="Link to this definition">#</a></dt>
 <dd><p>Rigid body properties.</p>
-<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyPropertiesCfg.kinematic_enabled</span></code>
+<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyBaseCfg.kinematic_enabled</span></code>
 as True. This will make the object static and will not be affected by gravity or other forces.</p>
 </dd></dl>
 
@@ -2553,9 +2553,9 @@ the source prim, i.e. all USD changes to the source prim will be reflected in th
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="isaaclab.sim.spawners.shapes.CylinderCfg.rigid_props">
-<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="isaaclab.sim.schemas.html#isaaclab.sim.schemas.RigidBodyPropertiesCfg" title="isaaclab.sim.schemas.RigidBodyPropertiesCfg"><span class="pre">schemas.RigidBodyPropertiesCfg</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.shapes.CylinderCfg.rigid_props" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">schemas.RigidBodyBaseCfg</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.shapes.CylinderCfg.rigid_props" title="Link to this definition">#</a></dt>
 <dd><p>Rigid body properties.</p>
-<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyPropertiesCfg.kinematic_enabled</span></code>
+<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyBaseCfg.kinematic_enabled</span></code>
 as True. This will make the object static and will not be affected by gravity or other forces.</p>
 </dd></dl>
 
@@ -2746,9 +2746,9 @@ the source prim, i.e. all USD changes to the source prim will be reflected in th
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="isaaclab.sim.spawners.shapes.SphereCfg.rigid_props">
-<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="isaaclab.sim.schemas.html#isaaclab.sim.schemas.RigidBodyPropertiesCfg" title="isaaclab.sim.schemas.RigidBodyPropertiesCfg"><span class="pre">schemas.RigidBodyPropertiesCfg</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.shapes.SphereCfg.rigid_props" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">schemas.RigidBodyBaseCfg</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.shapes.SphereCfg.rigid_props" title="Link to this definition">#</a></dt>
 <dd><p>Rigid body properties.</p>
-<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyPropertiesCfg.kinematic_enabled</span></code>
+<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyBaseCfg.kinematic_enabled</span></code>
 as True. This will make the object static and will not be affected by gravity or other forces.</p>
 </dd></dl>
 
@@ -2996,9 +2996,9 @@ the source prim, i.e. all USD changes to the source prim will be reflected in th
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="isaaclab.sim.spawners.meshes.MeshCfg.rigid_props">
-<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="isaaclab.sim.schemas.html#isaaclab.sim.schemas.RigidBodyPropertiesCfg" title="isaaclab.sim.schemas.RigidBodyPropertiesCfg"><span class="pre">schemas.RigidBodyPropertiesCfg</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.meshes.MeshCfg.rigid_props" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">schemas.RigidBodyBaseCfg</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.meshes.MeshCfg.rigid_props" title="Link to this definition">#</a></dt>
 <dd><p>Rigid body properties.</p>
-<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyPropertiesCfg.kinematic_enabled</span></code>
+<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyBaseCfg.kinematic_enabled</span></code>
 as True. This will make the object static and will not be affected by gravity or other forces.</p>
 </dd></dl>
 
@@ -3167,9 +3167,9 @@ the source prim, i.e. all USD changes to the source prim will be reflected in th
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="isaaclab.sim.spawners.meshes.MeshCapsuleCfg.rigid_props">
-<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="isaaclab.sim.schemas.html#isaaclab.sim.schemas.RigidBodyPropertiesCfg" title="isaaclab.sim.schemas.RigidBodyPropertiesCfg"><span class="pre">schemas.RigidBodyPropertiesCfg</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.meshes.MeshCapsuleCfg.rigid_props" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">schemas.RigidBodyBaseCfg</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.meshes.MeshCapsuleCfg.rigid_props" title="Link to this definition">#</a></dt>
 <dd><p>Rigid body properties.</p>
-<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyPropertiesCfg.kinematic_enabled</span></code>
+<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyBaseCfg.kinematic_enabled</span></code>
 as True. This will make the object static and will not be affected by gravity or other forces.</p>
 </dd></dl>
 
@@ -3380,9 +3380,9 @@ the source prim, i.e. all USD changes to the source prim will be reflected in th
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="isaaclab.sim.spawners.meshes.MeshConeCfg.rigid_props">
-<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="isaaclab.sim.schemas.html#isaaclab.sim.schemas.RigidBodyPropertiesCfg" title="isaaclab.sim.schemas.RigidBodyPropertiesCfg"><span class="pre">schemas.RigidBodyPropertiesCfg</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.meshes.MeshConeCfg.rigid_props" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">schemas.RigidBodyBaseCfg</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.meshes.MeshConeCfg.rigid_props" title="Link to this definition">#</a></dt>
 <dd><p>Rigid body properties.</p>
-<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyPropertiesCfg.kinematic_enabled</span></code>
+<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyBaseCfg.kinematic_enabled</span></code>
 as True. This will make the object static and will not be affected by gravity or other forces.</p>
 </dd></dl>
 
@@ -3599,9 +3599,9 @@ the source prim, i.e. all USD changes to the source prim will be reflected in th
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="isaaclab.sim.spawners.meshes.MeshCuboidCfg.rigid_props">
-<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="isaaclab.sim.schemas.html#isaaclab.sim.schemas.RigidBodyPropertiesCfg" title="isaaclab.sim.schemas.RigidBodyPropertiesCfg"><span class="pre">schemas.RigidBodyPropertiesCfg</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.meshes.MeshCuboidCfg.rigid_props" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">schemas.RigidBodyBaseCfg</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.meshes.MeshCuboidCfg.rigid_props" title="Link to this definition">#</a></dt>
 <dd><p>Rigid body properties.</p>
-<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyPropertiesCfg.kinematic_enabled</span></code>
+<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyBaseCfg.kinematic_enabled</span></code>
 as True. This will make the object static and will not be affected by gravity or other forces.</p>
 </dd></dl>
 
@@ -3818,9 +3818,9 @@ the source prim, i.e. all USD changes to the source prim will be reflected in th
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="isaaclab.sim.spawners.meshes.MeshCylinderCfg.rigid_props">
-<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="isaaclab.sim.schemas.html#isaaclab.sim.schemas.RigidBodyPropertiesCfg" title="isaaclab.sim.schemas.RigidBodyPropertiesCfg"><span class="pre">schemas.RigidBodyPropertiesCfg</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.meshes.MeshCylinderCfg.rigid_props" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">schemas.RigidBodyBaseCfg</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.meshes.MeshCylinderCfg.rigid_props" title="Link to this definition">#</a></dt>
 <dd><p>Rigid body properties.</p>
-<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyPropertiesCfg.kinematic_enabled</span></code>
+<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyBaseCfg.kinematic_enabled</span></code>
 as True. This will make the object static and will not be affected by gravity or other forces.</p>
 </dd></dl>
 
@@ -4019,9 +4019,9 @@ the source prim, i.e. all USD changes to the source prim will be reflected in th
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="isaaclab.sim.spawners.meshes.MeshSphereCfg.rigid_props">
-<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="isaaclab.sim.schemas.html#isaaclab.sim.schemas.RigidBodyPropertiesCfg" title="isaaclab.sim.schemas.RigidBodyPropertiesCfg"><span class="pre">schemas.RigidBodyPropertiesCfg</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.meshes.MeshSphereCfg.rigid_props" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">schemas.RigidBodyBaseCfg</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.meshes.MeshSphereCfg.rigid_props" title="Link to this definition">#</a></dt>
 <dd><p>Rigid body properties.</p>
-<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyPropertiesCfg.kinematic_enabled</span></code>
+<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyBaseCfg.kinematic_enabled</span></code>
 as True. This will make the object static and will not be affected by gravity or other forces.</p>
 </dd></dl>
 
@@ -6014,9 +6014,9 @@ the source prim, i.e. all USD changes to the source prim will be reflected in th
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="isaaclab.sim.spawners.from_files.UrdfFileCfg.rigid_props">
-<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="isaaclab.sim.schemas.html#isaaclab.sim.schemas.RigidBodyPropertiesCfg" title="isaaclab.sim.schemas.RigidBodyPropertiesCfg"><span class="pre">schemas.RigidBodyPropertiesCfg</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.from_files.UrdfFileCfg.rigid_props" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">schemas.RigidBodyBaseCfg</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.from_files.UrdfFileCfg.rigid_props" title="Link to this definition">#</a></dt>
 <dd><p>Rigid body properties.</p>
-<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyPropertiesCfg.kinematic_enabled</span></code>
+<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyBaseCfg.kinematic_enabled</span></code>
 as True. This will make the object static and will not be affected by gravity or other forces.</p>
 </dd></dl>
 
@@ -6059,7 +6059,7 @@ as True. This will make the object static and will not be affected by gravity or
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="isaaclab.sim.spawners.from_files.UrdfFileCfg.joint_drive_props">
-<span class="sig-name descname"><span class="pre">joint_drive_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="isaaclab.sim.schemas.html#isaaclab.sim.schemas.JointDrivePropertiesCfg" title="isaaclab.sim.schemas.JointDrivePropertiesCfg"><span class="pre">schemas.JointDrivePropertiesCfg</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.from_files.UrdfFileCfg.joint_drive_props" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">joint_drive_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">schemas.JointDriveBaseCfg</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.from_files.UrdfFileCfg.joint_drive_props" title="Link to this definition">#</a></dt>
 <dd><p>Properties to apply to a joint.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -6301,9 +6301,9 @@ the source prim, i.e. all USD changes to the source prim will be reflected in th
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="isaaclab.sim.spawners.from_files.UsdFileCfg.rigid_props">
-<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="isaaclab.sim.schemas.html#isaaclab.sim.schemas.RigidBodyPropertiesCfg" title="isaaclab.sim.schemas.RigidBodyPropertiesCfg"><span class="pre">schemas.RigidBodyPropertiesCfg</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.from_files.UsdFileCfg.rigid_props" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">schemas.RigidBodyBaseCfg</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.from_files.UsdFileCfg.rigid_props" title="Link to this definition">#</a></dt>
 <dd><p>Rigid body properties.</p>
-<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyPropertiesCfg.kinematic_enabled</span></code>
+<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyBaseCfg.kinematic_enabled</span></code>
 as True. This will make the object static and will not be affected by gravity or other forces.</p>
 </dd></dl>
 
@@ -6346,7 +6346,7 @@ as True. This will make the object static and will not be affected by gravity or
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="isaaclab.sim.spawners.from_files.UsdFileCfg.joint_drive_props">
-<span class="sig-name descname"><span class="pre">joint_drive_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="isaaclab.sim.schemas.html#isaaclab.sim.schemas.JointDrivePropertiesCfg" title="isaaclab.sim.schemas.JointDrivePropertiesCfg"><span class="pre">schemas.JointDrivePropertiesCfg</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.from_files.UsdFileCfg.joint_drive_props" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">joint_drive_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">schemas.JointDriveBaseCfg</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.from_files.UsdFileCfg.joint_drive_props" title="Link to this definition">#</a></dt>
 <dd><p>Properties to apply to a joint.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -6588,7 +6588,7 @@ When parsing physics material properties on an object, the following priority is
 <td><p>Configuration parameters for creating a physics material.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg" title="isaaclab.sim.spawners.materials.RigidBodyMaterialCfg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RigidBodyMaterialCfg</span></code></a></p></td>
-<td><p>Physics material parameters for rigid bodies.</p></td>
+<td><p>Deprecated: use <code class="xref py py-class docutils literal notranslate"><span class="pre">PhysxRigidBodyMaterialCfg</span></code> or <code class="xref py py-class docutils literal notranslate"><span class="pre">RigidBodyMaterialBaseCfg</span></code>.</p></td>
 </tr>
 </tbody>
 </table>
@@ -6865,11 +6865,17 @@ coefficient, etc. For more information on physics material, please refer to the
 
 <dl class="py function">
 <dt class="sig sig-object py" id="isaaclab.sim.spawners.materials.spawn_rigid_body_material">
-<span class="sig-prename descclassname"><span class="pre">isaaclab.sim.spawners.materials.</span></span><span class="sig-name descname"><span class="pre">spawn_rigid_body_material</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prim_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg" title="isaaclab.sim.spawners.materials.physics_materials_cfg.RigidBodyMaterialCfg"><span class="pre">physics_materials_cfg.RigidBodyMaterialCfg</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Usd.Prim</span></span></span><a class="reference internal" href="../../../_modules/isaaclab/sim/spawners/materials/physics_materials.html#spawn_rigid_body_material"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#isaaclab.sim.spawners.materials.spawn_rigid_body_material" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">isaaclab.sim.spawners.materials.</span></span><span class="sig-name descname"><span class="pre">spawn_rigid_body_material</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prim_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cfg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">physics_materials_cfg.RigidBodyMaterialBaseCfg</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Usd.Prim</span></span></span><a class="reference internal" href="../../../_modules/isaaclab/sim/spawners/materials/physics_materials.html#spawn_rigid_body_material"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#isaaclab.sim.spawners.materials.spawn_rigid_body_material" title="Link to this definition">#</a></dt>
 <dd><p>Create material with rigid-body physics properties.</p>
 <p>Rigid body materials are used to define the physical properties to meshes of a rigid body. These
-include the friction, restitution, and their respective combination modes. For more information on
-rigid body material, please refer to the <a class="reference external" href="https://nvidia-omniverse.github.io/PhysX/physx/5.4.1/_api_build/classPxBaseMaterial.html">documentation on PxMaterial</a>.</p>
+include the friction, restitution, and (PhysX-only) compliant-contact spring and combine-mode
+tokens. For more information on rigid body material, please refer to the <a class="reference external" href="https://nvidia-omniverse.github.io/PhysX/physx/5.4.1/_api_build/classPxBaseMaterial.html">documentation on
+PxMaterial</a>.</p>
+<p>The writer is metadata-driven: it always applies the standard <code class="docutils literal notranslate"><span class="pre">UsdPhysics.MaterialAPI</span></code> and
+writes the friction/restitution fields, then reads <code class="docutils literal notranslate"><span class="pre">_usd_applied_schema</span></code>, <code class="docutils literal notranslate"><span class="pre">_usd_namespace</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">_usd_attr_name_map</span></code> from the cfg to author solver-specific attributes. The applied
+schema (e.g. <code class="docutils literal notranslate"><span class="pre">PhysxMaterialAPI</span></code>) is added only when at least one solver-specific field has a
+non-<code class="docutils literal notranslate"><span class="pre">None</span></code> value at the instance level.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This function is decorated with <code class="xref py py-func docutils literal notranslate"><span class="pre">clone()</span></code> that resolves prim path into list of paths
@@ -6888,16 +6894,26 @@ then the asset is spawned at all the matching prim paths.</p></li>
 <dd class="field-even"><p>The spawned rigid body material prim.</p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – When a prim already exists at the specified prim path and is not a material.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – When a prim already exists at the specified prim path and is not a material.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – When the cfg defines solver-specific fields but does not define <code class="docutils literal notranslate"><span class="pre">_usd_namespace</span></code>.</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="isaaclab.sim.spawners.materials.RigidBodyMaterialCfg">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">isaaclab.sim.spawners.materials.</span></span><span class="sig-name descname"><span class="pre">RigidBodyMaterialCfg</span></span><a class="reference internal" href="../../../_modules/isaaclab/sim/spawners/materials/physics_materials_cfg.html#RigidBodyMaterialCfg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg" title="Link to this definition">#</a></dt>
-<dd><p>Physics material parameters for rigid bodies.</p>
-<p>See <a class="reference internal" href="#isaaclab.sim.spawners.materials.spawn_rigid_body_material" title="isaaclab.sim.spawners.materials.spawn_rigid_body_material"><code class="xref py py-meth docutils literal notranslate"><span class="pre">spawn_rigid_body_material()</span></code></a> for more information.</p>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">isaaclab.sim.spawners.materials.</span></span><span class="sig-name descname"><span class="pre">RigidBodyMaterialCfg</span></span><a class="reference internal" href="../../../_modules/isaaclab_physx/sim/spawners/materials/physics_materials_cfg.html#RigidBodyMaterialCfg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg" title="Link to this definition">#</a></dt>
+<dd><p>Deprecated: use <code class="xref py py-class docutils literal notranslate"><span class="pre">PhysxRigidBodyMaterialCfg</span></code> or
+<code class="xref py py-class docutils literal notranslate"><span class="pre">RigidBodyMaterialBaseCfg</span></code>.</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 4.6.22: </span><code class="docutils literal notranslate"><span class="pre">RigidBodyMaterialCfg</span></code> has been split into
+<code class="xref py py-class docutils literal notranslate"><span class="pre">RigidBodyMaterialBaseCfg</span></code> (solver-common) and
+<code class="xref py py-class docutils literal notranslate"><span class="pre">PhysxRigidBodyMaterialCfg</span></code> (PhysX-specific) and relocated to
+<a class="reference internal" href="../lab_physx/isaaclab_physx.sim.spawners.html#module-isaaclab_physx.sim.spawners.materials" title="isaaclab_physx.sim.spawners.materials"><code class="xref py py-mod docutils literal notranslate"><span class="pre">isaaclab_physx.sim.spawners.materials</span></code></a>. This alias preserves backwards compatibility
+and is scheduled for removal in 5.0.</p>
+</div>
 <p><strong>Attributes:</strong></p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
@@ -6910,17 +6926,17 @@ then the asset is spawned at all the matching prim paths.</p></li>
 <tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.restitution" title="isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.restitution"><code class="xref py py-obj docutils literal notranslate"><span class="pre">restitution</span></code></a></p></td>
 <td><p>The restitution coefficient.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.friction_combine_mode" title="isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.friction_combine_mode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">friction_combine_mode</span></code></a></p></td>
-<td><p>Determines the way friction will be combined during collisions.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.restitution_combine_mode" title="isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.restitution_combine_mode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">restitution_combine_mode</span></code></a></p></td>
-<td><p>Determines the way restitution coefficient will be combined during collisions.</p></td>
-</tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.compliant_contact_stiffness" title="isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.compliant_contact_stiffness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compliant_contact_stiffness</span></code></a></p></td>
 <td><p>Spring stiffness for a compliant contact model using implicit springs.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.compliant_contact_damping" title="isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.compliant_contact_damping"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compliant_contact_damping</span></code></a></p></td>
 <td><p>Damping coefficient for a compliant contact model using implicit springs.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.friction_combine_mode" title="isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.friction_combine_mode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">friction_combine_mode</span></code></a></p></td>
+<td><p>Determines the way friction will be combined during collisions.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.restitution_combine_mode" title="isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.restitution_combine_mode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">restitution_combine_mode</span></code></a></p></td>
+<td><p>Determines the way restitution coefficient will be combined during collisions.</p></td>
 </tr>
 </tbody>
 </table>
@@ -6944,41 +6960,41 @@ then the asset is spawned at all the matching prim paths.</p></li>
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.compliant_contact_stiffness">
+<span class="sig-name descname"><span class="pre">compliant_contact_stiffness</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.compliant_contact_stiffness" title="Link to this definition">#</a></dt>
+<dd><p>Spring stiffness for a compliant contact model using implicit springs.</p>
+<p>A higher stiffness results in behavior closer to a rigid contact. The compliant contact model
+is only enabled if the stiffness is larger than 0. PhysX-only; not consumed by Newton.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.compliant_contact_damping">
+<span class="sig-name descname"><span class="pre">compliant_contact_damping</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.compliant_contact_damping" title="Link to this definition">#</a></dt>
+<dd><p>Damping coefficient for a compliant contact model using implicit springs.</p>
+<p>Irrelevant if compliant contacts are disabled when <a class="reference internal" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.compliant_contact_stiffness" title="isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.compliant_contact_stiffness"><code class="xref py py-attr docutils literal notranslate"><span class="pre">compliant_contact_stiffness</span></code></a> is set
+to zero and rigid contacts are active. PhysX-only; not consumed by Newton.</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.friction_combine_mode">
-<span class="sig-name descname"><span class="pre">friction_combine_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'average'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'min'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'multiply'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'max'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.friction_combine_mode" title="Link to this definition">#</a></dt>
-<dd><p>Determines the way friction will be combined during collisions. Defaults to <cite>“average”</cite>.</p>
+<span class="sig-name descname"><span class="pre">friction_combine_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'average'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'min'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'multiply'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'max'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.friction_combine_mode" title="Link to this definition">#</a></dt>
+<dd><p>Determines the way friction will be combined during collisions.</p>
 <div class="admonition attention">
 <p class="admonition-title">Attention</p>
-<p>When two physics materials with different combine modes collide, the combine mode with the higher
-priority will be used. The priority order is provided <a class="reference external" href="https://nvidia-omniverse.github.io/PhysX/physx/5.4.1/_api_build/structPxCombineMode.html">here</a>.</p>
+<p>When two physics materials with different combine modes collide, the combine mode with
+the higher priority will be used. The priority order is provided <a class="reference external" href="https://nvidia-omniverse.github.io/PhysX/physx/5.4.1/_api_build/structPxCombineMode.html">here</a>.</p>
 </div>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.restitution_combine_mode">
-<span class="sig-name descname"><span class="pre">restitution_combine_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'average'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'min'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'multiply'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'max'</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.restitution_combine_mode" title="Link to this definition">#</a></dt>
-<dd><p>Determines the way restitution coefficient will be combined during collisions. Defaults to <cite>“average”</cite>.</p>
+<span class="sig-name descname"><span class="pre">restitution_combine_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.14)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'average'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'min'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'multiply'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'max'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.restitution_combine_mode" title="Link to this definition">#</a></dt>
+<dd><p>Determines the way restitution coefficient will be combined during collisions.</p>
 <div class="admonition attention">
 <p class="admonition-title">Attention</p>
-<p>When two physics materials with different combine modes collide, the combine mode with the higher
-priority will be used. The priority order is provided <a class="reference external" href="https://nvidia-omniverse.github.io/PhysX/physx/5.4.1/_api_build/structPxCombineMode.html">here</a>.</p>
+<p>When two physics materials with different combine modes collide, the combine mode with
+the higher priority will be used. The priority order is provided <a class="reference external" href="https://nvidia-omniverse.github.io/PhysX/physx/5.4.1/_api_build/structPxCombineMode.html">here</a>.</p>
 </div>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.compliant_contact_stiffness">
-<span class="sig-name descname"><span class="pre">compliant_contact_stiffness</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.compliant_contact_stiffness" title="Link to this definition">#</a></dt>
-<dd><p>Spring stiffness for a compliant contact model using implicit springs. Defaults to 0.0.</p>
-<p>A higher stiffness results in behavior closer to a rigid contact. The compliant contact model is only enabled
-if the stiffness is larger than 0.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.compliant_contact_damping">
-<span class="sig-name descname"><span class="pre">compliant_contact_damping</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.compliant_contact_damping" title="Link to this definition">#</a></dt>
-<dd><p>Damping coefficient for a compliant contact model using implicit springs. Defaults to 0.0.</p>
-<p>Irrelevant if compliant contacts are disabled when <a class="reference internal" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.compliant_contact_stiffness" title="isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.compliant_contact_stiffness"><code class="xref py py-obj docutils literal notranslate"><span class="pre">compliant_contact_stiffness</span></code></a> is set to zero and
-rigid contacts are active.</p>
 </dd></dl>
 
 </dd></dl>
@@ -7161,9 +7177,9 @@ the source prim, i.e. all USD changes to the source prim will be reflected in th
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="isaaclab.sim.spawners.wrappers.MultiAssetSpawnerCfg.rigid_props">
-<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="isaaclab.sim.schemas.html#isaaclab.sim.schemas.RigidBodyPropertiesCfg" title="isaaclab.sim.schemas.RigidBodyPropertiesCfg"><span class="pre">schemas.RigidBodyPropertiesCfg</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.wrappers.MultiAssetSpawnerCfg.rigid_props" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">schemas.RigidBodyBaseCfg</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.wrappers.MultiAssetSpawnerCfg.rigid_props" title="Link to this definition">#</a></dt>
 <dd><p>Rigid body properties.</p>
-<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyPropertiesCfg.kinematic_enabled</span></code>
+<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyBaseCfg.kinematic_enabled</span></code>
 as True. This will make the object static and will not be affected by gravity or other forces.</p>
 </dd></dl>
 
@@ -7336,9 +7352,9 @@ the source prim, i.e. all USD changes to the source prim will be reflected in th
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="isaaclab.sim.spawners.wrappers.MultiUsdFileCfg.rigid_props">
-<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="isaaclab.sim.schemas.html#isaaclab.sim.schemas.RigidBodyPropertiesCfg" title="isaaclab.sim.schemas.RigidBodyPropertiesCfg"><span class="pre">schemas.RigidBodyPropertiesCfg</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.wrappers.MultiUsdFileCfg.rigid_props" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">rigid_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">schemas.RigidBodyBaseCfg</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.wrappers.MultiUsdFileCfg.rigid_props" title="Link to this definition">#</a></dt>
 <dd><p>Rigid body properties.</p>
-<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyPropertiesCfg.kinematic_enabled</span></code>
+<p>For making a rigid object static, set the <code class="xref py py-attr docutils literal notranslate"><span class="pre">schemas.RigidBodyBaseCfg.kinematic_enabled</span></code>
 as True. This will make the object static and will not be affected by gravity or other forces.</p>
 </dd></dl>
 
@@ -7381,7 +7397,7 @@ as True. This will make the object static and will not be affected by gravity or
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="isaaclab.sim.spawners.wrappers.MultiUsdFileCfg.joint_drive_props">
-<span class="sig-name descname"><span class="pre">joint_drive_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="isaaclab.sim.schemas.html#isaaclab.sim.schemas.JointDrivePropertiesCfg" title="isaaclab.sim.schemas.JointDrivePropertiesCfg"><span class="pre">schemas.JointDrivePropertiesCfg</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.wrappers.MultiUsdFileCfg.joint_drive_props" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">joint_drive_props</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">schemas.JointDriveBaseCfg</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sim.spawners.wrappers.MultiUsdFileCfg.joint_drive_props" title="Link to this definition">#</a></dt>
 <dd><p>Properties to apply to a joint.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -8017,10 +8033,10 @@ If True, a random asset configuration is selected for each spawn.</p>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.static_friction"><code class="docutils literal notranslate"><span class="pre">RigidBodyMaterialCfg.static_friction</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.dynamic_friction"><code class="docutils literal notranslate"><span class="pre">RigidBodyMaterialCfg.dynamic_friction</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.restitution"><code class="docutils literal notranslate"><span class="pre">RigidBodyMaterialCfg.restitution</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.friction_combine_mode"><code class="docutils literal notranslate"><span class="pre">RigidBodyMaterialCfg.friction_combine_mode</span></code></a></li>
-<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.restitution_combine_mode"><code class="docutils literal notranslate"><span class="pre">RigidBodyMaterialCfg.restitution_combine_mode</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.compliant_contact_stiffness"><code class="docutils literal notranslate"><span class="pre">RigidBodyMaterialCfg.compliant_contact_stiffness</span></code></a></li>
 <li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.compliant_contact_damping"><code class="docutils literal notranslate"><span class="pre">RigidBodyMaterialCfg.compliant_contact_damping</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.friction_combine_mode"><code class="docutils literal notranslate"><span class="pre">RigidBodyMaterialCfg.friction_combine_mode</span></code></a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.spawners.materials.RigidBodyMaterialCfg.restitution_combine_mode"><code class="docutils literal notranslate"><span class="pre">RigidBodyMaterialCfg.restitution_combine_mode</span></code></a></li>
 </ul>
 </li>
 </ul>
