@@ -65,7 +65,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="3.0.0" />
-    <meta name="docbuild:last-update" content="May 07, 2026"/>
+    <meta name="docbuild:last-update" content="May 08, 2026"/>
   </head>
   
   
@@ -5092,7 +5092,7 @@ the default might be <code class="docutils literal notranslate"><span class="pre
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.applied_torque">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">applied_torque</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.applied_torque" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">applied_torque</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.applied_torque" title="Link to this definition">#</a></dt>
 <dd><p>Joint torques applied from the actuator model (after clipping).</p>
 <p>Shape is (num_instances, num_joints), dtype = wp.float32. In torch this resolves to (num_instances, num_joints).</p>
 <p>These torques are set into the simulation, after clipping the <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.computed_torque" title="isaaclab_contrib.assets.MultirotorData.computed_torque"><code class="xref py py-attr docutils literal notranslate"><span class="pre">computed_torque</span></code></a> based on the
@@ -5101,19 +5101,19 @@ actuator model.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_acc_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_acc_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_acc_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_acc_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_acc_w" title="Link to this definition">#</a></dt>
 <dd><p>Shorthand for <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.body_com_acc_w" title="isaaclab_contrib.assets.MultirotorData.body_com_acc_w"><code class="xref py py-attr docutils literal notranslate"><span class="pre">body_com_acc_w</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_ang_acc_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_ang_acc_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_ang_acc_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_ang_acc_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_ang_acc_w" title="Link to this definition">#</a></dt>
 <dd><p>Shorthand for <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.body_com_ang_acc_w" title="isaaclab_contrib.assets.MultirotorData.body_com_ang_acc_w"><code class="xref py py-attr docutils literal notranslate"><span class="pre">body_com_ang_acc_w</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_ang_vel_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_ang_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_ang_vel_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_ang_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_ang_vel_w" title="Link to this definition">#</a></dt>
 <dd><p>Shorthand for <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.body_com_ang_vel_w" title="isaaclab_contrib.assets.MultirotorData.body_com_ang_vel_w"><code class="xref py py-attr docutils literal notranslate"><span class="pre">body_com_ang_vel_w</span></code></a>.</p>
 </dd></dl>
 
@@ -5128,7 +5128,7 @@ Shape is (num_instances, num_bodies), dtype = wp.spatial_vectorf. In torch this 
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_com_ang_acc_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_com_ang_acc_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_com_ang_acc_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_com_ang_acc_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_com_ang_acc_w" title="Link to this definition">#</a></dt>
 <dd><p>Angular acceleration of all bodies in simulation world frame.
 Shape is (num_instances, num_bodies), dtype = wp.vec3f. In torch this resolves to
 (num_instances, num_bodies, 3).</p>
@@ -5137,7 +5137,7 @@ Shape is (num_instances, num_bodies), dtype = wp.vec3f. In torch this resolves t
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_com_ang_vel_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_com_ang_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_com_ang_vel_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_com_ang_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_com_ang_vel_w" title="Link to this definition">#</a></dt>
 <dd><p>Angular velocity of all bodies in simulation world frame.
 Shape is (num_instances, num_bodies), dtype = wp.vec3f. In torch this resolves to
 (num_instances, num_bodies, 3).</p>
@@ -5146,7 +5146,7 @@ Shape is (num_instances, num_bodies), dtype = wp.vec3f. In torch this resolves t
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_com_lin_acc_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_com_lin_acc_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_com_lin_acc_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_com_lin_acc_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_com_lin_acc_w" title="Link to this definition">#</a></dt>
 <dd><p>Linear acceleration of all bodies in simulation world frame.
 Shape is (num_instances, num_bodies), dtype = wp.vec3f. In torch this resolves to
 (num_instances, num_bodies, 3).</p>
@@ -5155,7 +5155,7 @@ Shape is (num_instances, num_bodies), dtype = wp.vec3f. In torch this resolves t
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_com_lin_vel_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_com_lin_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_com_lin_vel_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_com_lin_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_com_lin_vel_w" title="Link to this definition">#</a></dt>
 <dd><p>Linear velocity of all bodies in simulation world frame.
 Shape is (num_instances, num_bodies), dtype = wp.vec3f. In torch this resolves to
 (num_instances, num_bodies, 3).</p>
@@ -5164,7 +5164,7 @@ Shape is (num_instances, num_bodies), dtype = wp.vec3f. In torch this resolves t
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_com_pos_b">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_com_pos_b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_com_pos_b" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_com_pos_b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_com_pos_b" title="Link to this definition">#</a></dt>
 <dd><p>Center of mass position of all of the bodies in their respective link frames.
 Shape is (num_instances, num_bodies), dtype = wp.vec3f. In torch this resolves to
 (num_instances, num_bodies, 3).</p>
@@ -5173,7 +5173,7 @@ Shape is (num_instances, num_bodies), dtype = wp.vec3f. In torch this resolves t
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_com_pos_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_com_pos_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_com_pos_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_com_pos_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_com_pos_w" title="Link to this definition">#</a></dt>
 <dd><p>Positions of all bodies’ center of mass in simulation world frame.
 Shape is (num_instances, num_bodies), dtype = wp.vec3f. In torch this resolves to
 (num_instances, num_bodies, 3).</p>
@@ -5182,7 +5182,7 @@ Shape is (num_instances, num_bodies), dtype = wp.vec3f. In torch this resolves t
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_com_pose_b">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_com_pose_b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_com_pose_b" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_com_pose_b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_com_pose_b" title="Link to this definition">#</a></dt>
 <dd><p>Center of mass pose <code class="docutils literal notranslate"><span class="pre">[pos,</span> <span class="pre">quat]</span></code> of all bodies in their respective body’s link frames.
 Shape is (num_instances, num_bodies), dtype = wp.transformf. In torch this resolves to
 (num_instances, num_bodies, 7).</p>
@@ -5192,7 +5192,7 @@ The orientation is provided in (x, y, z, w) format.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_com_pose_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_com_pose_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_com_pose_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_com_pose_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_com_pose_w" title="Link to this definition">#</a></dt>
 <dd><p>Body center of mass pose <code class="docutils literal notranslate"><span class="pre">[pos,</span> <span class="pre">quat]</span></code> in simulation world frame.
 Shape is (num_instances, num_bodies), dtype = wp.transformf. In torch this resolves to
 (num_instances, num_bodies, 7).</p>
@@ -5202,7 +5202,7 @@ The orientation is provided in (x, y, z, w) format.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_com_quat_b">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_com_quat_b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_com_quat_b" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_com_quat_b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_com_quat_b" title="Link to this definition">#</a></dt>
 <dd><p>Orientation (x, y, z, w) of the principal axes of inertia of all of the bodies in their
 respective link frames.
 Shape is (num_instances, num_bodies), dtype = wp.quatf. In torch this resolves to
@@ -5212,7 +5212,7 @@ Shape is (num_instances, num_bodies), dtype = wp.quatf. In torch this resolves t
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_com_quat_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_com_quat_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_com_quat_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_com_quat_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_com_quat_w" title="Link to this definition">#</a></dt>
 <dd><p>Orientation (x, y, z, w) of the principal axes of inertia of all bodies in simulation world frame.
 Shape is (num_instances, num_bodies), dtype = wp.quatf. In torch this resolves to
 (num_instances, num_bodies, 4).</p>
@@ -5231,7 +5231,7 @@ principal inertia.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_com_vel_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_com_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_com_vel_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_com_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_com_vel_w" title="Link to this definition">#</a></dt>
 <dd><p>Body center of mass velocity <code class="docutils literal notranslate"><span class="pre">[lin_vel,</span> <span class="pre">ang_vel]</span></code> in simulation world frame.
 Shape is (num_instances, num_bodies), dtype = wp.spatial_vectorf. In torch this resolves to
 (num_instances, num_bodies, 6).</p>
@@ -5241,7 +5241,7 @@ relative to the world.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_incoming_joint_wrench_b">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_incoming_joint_wrench_b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_incoming_joint_wrench_b" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_incoming_joint_wrench_b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_incoming_joint_wrench_b" title="Link to this definition">#</a></dt>
 <dd><p>Joint reaction wrench applied from body parent to child body in parent body frame.</p>
 <p>Shape is (num_instances, num_bodies, 6). All body reaction wrenches are provided including the root body to the
 world of an articulation.</p>
@@ -5251,7 +5251,7 @@ world of an articulation.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_inertia">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_inertia</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_inertia" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_inertia</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_inertia" title="Link to this definition">#</a></dt>
 <dd><p>Flattened body inertia in the world frame.</p>
 <p>Shape is (num_instances, num_bodies, 9), dtype = wp.float32. In torch this resolves to
 (num_instances, num_bodies, 9).</p>
@@ -5259,19 +5259,19 @@ world of an articulation.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_lin_acc_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_lin_acc_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_lin_acc_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_lin_acc_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_lin_acc_w" title="Link to this definition">#</a></dt>
 <dd><p>Shorthand for <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.body_com_lin_acc_w" title="isaaclab_contrib.assets.MultirotorData.body_com_lin_acc_w"><code class="xref py py-attr docutils literal notranslate"><span class="pre">body_com_lin_acc_w</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_lin_vel_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_lin_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_lin_vel_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_lin_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_lin_vel_w" title="Link to this definition">#</a></dt>
 <dd><p>Shorthand for <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.body_com_lin_vel_w" title="isaaclab_contrib.assets.MultirotorData.body_com_lin_vel_w"><code class="xref py py-attr docutils literal notranslate"><span class="pre">body_com_lin_vel_w</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_link_ang_vel_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_link_ang_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_link_ang_vel_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_link_ang_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_link_ang_vel_w" title="Link to this definition">#</a></dt>
 <dd><p>Angular velocity of all bodies in simulation world frame.
 Shape is (num_instances, num_bodies), dtype = wp.vec3f. In torch this resolves to
 (num_instances, num_bodies, 3).</p>
@@ -5280,7 +5280,7 @@ Shape is (num_instances, num_bodies), dtype = wp.vec3f. In torch this resolves t
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_link_lin_vel_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_link_lin_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_link_lin_vel_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_link_lin_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_link_lin_vel_w" title="Link to this definition">#</a></dt>
 <dd><p>Linear velocity of all bodies in simulation world frame.
 Shape is (num_instances, num_bodies), dtype = wp.vec3f. In torch this resolves to
 (num_instances, num_bodies, 3).</p>
@@ -5289,7 +5289,7 @@ Shape is (num_instances, num_bodies), dtype = wp.vec3f. In torch this resolves t
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_link_pos_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_link_pos_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_link_pos_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_link_pos_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_link_pos_w" title="Link to this definition">#</a></dt>
 <dd><p>Positions of all bodies in simulation world frame.
 Shape is (num_instances, num_bodies), dtype = wp.vec3f. In torch this resolves to
 (num_instances, num_bodies, 3).</p>
@@ -5298,7 +5298,7 @@ Shape is (num_instances, num_bodies), dtype = wp.vec3f. In torch this resolves t
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_link_pose_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_link_pose_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_link_pose_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_link_pose_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_link_pose_w" title="Link to this definition">#</a></dt>
 <dd><p>Body link pose <code class="docutils literal notranslate"><span class="pre">[pos,</span> <span class="pre">quat]</span></code> in simulation world frame.
 Shape is (num_instances, num_bodies), dtype = wp.transformf. In torch this resolves to
 (num_instances, num_bodies, 7).</p>
@@ -5308,7 +5308,7 @@ The orientation is provided in (x, y, z, w) format.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_link_quat_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_link_quat_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_link_quat_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_link_quat_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_link_quat_w" title="Link to this definition">#</a></dt>
 <dd><p>Orientation (x, y, z, w) of all bodies in simulation world frame.
 Shape is (num_instances, num_bodies), dtype = wp.quatf. In torch this resolves to
 (num_instances, num_bodies, 4).</p>
@@ -5325,7 +5325,7 @@ Shape is (num_instances, num_bodies, 13).</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_link_vel_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_link_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_link_vel_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_link_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_link_vel_w" title="Link to this definition">#</a></dt>
 <dd><p>Body link velocity <code class="docutils literal notranslate"><span class="pre">[lin_vel,</span> <span class="pre">ang_vel]</span></code> in simulation world frame.
 Shape is (num_instances, num_bodies), dtype = wp.spatial_vectorf. In torch this resolves to
 (num_instances, num_bodies, 6).</p>
@@ -5335,7 +5335,7 @@ relative to the world.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_mass">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_mass</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_mass" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_mass</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_mass" title="Link to this definition">#</a></dt>
 <dd><p>Body mass in the world frame.</p>
 <p>Shape is (num_instances, num_bodies), dtype = wp.float32. In torch this resolves to (num_instances, num_bodies).</p>
 </dd></dl>
@@ -5348,19 +5348,19 @@ relative to the world.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_pos_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_pos_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_pos_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_pos_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_pos_w" title="Link to this definition">#</a></dt>
 <dd><p>Shorthand for <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.body_link_pos_w" title="isaaclab_contrib.assets.MultirotorData.body_link_pos_w"><code class="xref py py-attr docutils literal notranslate"><span class="pre">body_link_pos_w</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_pose_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_pose_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_pose_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_pose_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_pose_w" title="Link to this definition">#</a></dt>
 <dd><p>Shorthand for <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.body_link_pose_w" title="isaaclab_contrib.assets.MultirotorData.body_link_pose_w"><code class="xref py py-attr docutils literal notranslate"><span class="pre">body_link_pose_w</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_quat_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_quat_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_quat_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_quat_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_quat_w" title="Link to this definition">#</a></dt>
 <dd><p>Shorthand for <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.body_link_quat_w" title="isaaclab_contrib.assets.MultirotorData.body_link_quat_w"><code class="xref py py-attr docutils literal notranslate"><span class="pre">body_link_quat_w</span></code></a>.</p>
 </dd></dl>
 
@@ -5375,25 +5375,25 @@ velocities are of the articulation links’ center of mass frame.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.body_vel_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_vel_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.body_vel_w" title="Link to this definition">#</a></dt>
 <dd><p>Shorthand for <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.body_com_vel_w" title="isaaclab_contrib.assets.MultirotorData.body_com_vel_w"><code class="xref py py-attr docutils literal notranslate"><span class="pre">body_com_vel_w</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.com_pos_b">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">com_pos_b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.com_pos_b" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">com_pos_b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.com_pos_b" title="Link to this definition">#</a></dt>
 <dd><p>Shorthand for <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.body_com_pos_b" title="isaaclab_contrib.assets.MultirotorData.body_com_pos_b"><code class="xref py py-attr docutils literal notranslate"><span class="pre">body_com_pos_b</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.com_quat_b">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">com_quat_b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.com_quat_b" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">com_quat_b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.com_quat_b" title="Link to this definition">#</a></dt>
 <dd><p>Shorthand for <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.body_com_quat_b" title="isaaclab_contrib.assets.MultirotorData.body_com_quat_b"><code class="xref py py-attr docutils literal notranslate"><span class="pre">body_com_quat_b</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.computed_torque">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">computed_torque</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.computed_torque" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">computed_torque</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.computed_torque" title="Link to this definition">#</a></dt>
 <dd><p>Joint torques computed from the actuator model (before clipping).</p>
 <p>Shape is (num_instances, num_joints), dtype = wp.float32. In torch this resolves to (num_instances, num_joints).</p>
 <p>This quantity is the raw torque output from the actuator mode, before any clipping is applied.
@@ -5403,94 +5403,94 @@ For instance, to penalize the learning agent for a difference between the comput
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.default_fixed_tendon_damping">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_fixed_tendon_damping</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_fixed_tendon_damping" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_fixed_tendon_damping</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_fixed_tendon_damping" title="Link to this definition">#</a></dt>
 <dd><p>Deprecated property. Please use <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.fixed_tendon_damping" title="isaaclab_contrib.assets.MultirotorData.fixed_tendon_damping"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fixed_tendon_damping</span></code></a> instead and manage the default fixed tendon
 damping manually.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.default_fixed_tendon_limit">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_fixed_tendon_limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_fixed_tendon_limit" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_fixed_tendon_limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_fixed_tendon_limit" title="Link to this definition">#</a></dt>
 <dd><p>Deprecated property. Please use <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.default_fixed_tendon_pos_limits" title="isaaclab_contrib.assets.MultirotorData.default_fixed_tendon_pos_limits"><code class="xref py py-attr docutils literal notranslate"><span class="pre">default_fixed_tendon_pos_limits</span></code></a> instead.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.default_fixed_tendon_limit_stiffness">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_fixed_tendon_limit_stiffness</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_fixed_tendon_limit_stiffness" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_fixed_tendon_limit_stiffness</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_fixed_tendon_limit_stiffness" title="Link to this definition">#</a></dt>
 <dd><p>Deprecated property. Please use <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.fixed_tendon_limit_stiffness" title="isaaclab_contrib.assets.MultirotorData.fixed_tendon_limit_stiffness"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fixed_tendon_limit_stiffness</span></code></a> instead and manage the default fixed
 tendon limit stiffness manually.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.default_fixed_tendon_offset">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_fixed_tendon_offset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_fixed_tendon_offset" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_fixed_tendon_offset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_fixed_tendon_offset" title="Link to this definition">#</a></dt>
 <dd><p>Deprecated property. Please use <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.fixed_tendon_offset" title="isaaclab_contrib.assets.MultirotorData.fixed_tendon_offset"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fixed_tendon_offset</span></code></a> instead and manage the default fixed tendon
 offset manually.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.default_fixed_tendon_pos_limits">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_fixed_tendon_pos_limits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_fixed_tendon_pos_limits" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_fixed_tendon_pos_limits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_fixed_tendon_pos_limits" title="Link to this definition">#</a></dt>
 <dd><p>Deprecated property. Please use <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.fixed_tendon_pos_limits" title="isaaclab_contrib.assets.MultirotorData.fixed_tendon_pos_limits"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fixed_tendon_pos_limits</span></code></a> instead and manage the default fixed tendon
 position limits manually.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.default_fixed_tendon_rest_length">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_fixed_tendon_rest_length</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_fixed_tendon_rest_length" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_fixed_tendon_rest_length</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_fixed_tendon_rest_length" title="Link to this definition">#</a></dt>
 <dd><p>Deprecated property. Please use <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.fixed_tendon_rest_length" title="isaaclab_contrib.assets.MultirotorData.fixed_tendon_rest_length"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fixed_tendon_rest_length</span></code></a> instead and manage the default fixed tendon
 rest length manually.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.default_fixed_tendon_stiffness">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_fixed_tendon_stiffness</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_fixed_tendon_stiffness" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_fixed_tendon_stiffness</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_fixed_tendon_stiffness" title="Link to this definition">#</a></dt>
 <dd><p>Deprecated property. Please use <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.fixed_tendon_stiffness" title="isaaclab_contrib.assets.MultirotorData.fixed_tendon_stiffness"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fixed_tendon_stiffness</span></code></a> instead and manage the default fixed tendon
 stiffness manually.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.default_inertia">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_inertia</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_inertia" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_inertia</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_inertia" title="Link to this definition">#</a></dt>
 <dd><p>Deprecated property. Please use <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.body_inertia" title="isaaclab_contrib.assets.MultirotorData.body_inertia"><code class="xref py py-attr docutils literal notranslate"><span class="pre">body_inertia</span></code></a> instead and manage the default inertia manually.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.default_joint_armature">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_joint_armature</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_joint_armature" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_joint_armature</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_joint_armature" title="Link to this definition">#</a></dt>
 <dd><p>Deprecated property. Please use <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.joint_armature" title="isaaclab_contrib.assets.MultirotorData.joint_armature"><code class="xref py py-attr docutils literal notranslate"><span class="pre">joint_armature</span></code></a> instead and manage the default joint armature
 manually.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.default_joint_damping">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_joint_damping</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_joint_damping" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_joint_damping</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_joint_damping" title="Link to this definition">#</a></dt>
 <dd><p>Deprecated property. Please use <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.joint_damping" title="isaaclab_contrib.assets.MultirotorData.joint_damping"><code class="xref py py-attr docutils literal notranslate"><span class="pre">joint_damping</span></code></a> instead and manage the default joint damping
 manually.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.default_joint_friction">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_joint_friction</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_joint_friction" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_joint_friction</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_joint_friction" title="Link to this definition">#</a></dt>
 <dd><p>Deprecated property. Please use <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.default_joint_friction_coeff" title="isaaclab_contrib.assets.MultirotorData.default_joint_friction_coeff"><code class="xref py py-attr docutils literal notranslate"><span class="pre">default_joint_friction_coeff</span></code></a> instead.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.default_joint_friction_coeff">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_joint_friction_coeff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_joint_friction_coeff" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_joint_friction_coeff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_joint_friction_coeff" title="Link to this definition">#</a></dt>
 <dd><p>Deprecated property. Please use <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.joint_friction_coeff" title="isaaclab_contrib.assets.MultirotorData.joint_friction_coeff"><code class="xref py py-attr docutils literal notranslate"><span class="pre">joint_friction_coeff</span></code></a> instead and manage the default joint friction
 coefficient manually.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.default_joint_limits">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_joint_limits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_joint_limits" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_joint_limits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_joint_limits" title="Link to this definition">#</a></dt>
 <dd><p>Shorthand for <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.default_joint_pos_limits" title="isaaclab_contrib.assets.MultirotorData.default_joint_pos_limits"><code class="xref py py-attr docutils literal notranslate"><span class="pre">default_joint_pos_limits</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.default_joint_pos">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_joint_pos</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_joint_pos" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_joint_pos</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_joint_pos" title="Link to this definition">#</a></dt>
 <dd><p>Default joint positions of all joints.</p>
 <p>Shape is (num_instances, num_joints), dtype = wp.float32. In torch this resolves to (num_instances, num_joints).</p>
 <p>This quantity is configured through the <a class="reference internal" href="../lab/isaaclab.assets.html#isaaclab.assets.ArticulationCfg.init_state" title="isaaclab.assets.ArticulationCfg.init_state"><code class="xref py py-attr docutils literal notranslate"><span class="pre">isaaclab.assets.ArticulationCfg.init_state</span></code></a> parameter.</p>
@@ -5498,21 +5498,21 @@ coefficient manually.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.default_joint_pos_limits">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_joint_pos_limits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_joint_pos_limits" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_joint_pos_limits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_joint_pos_limits" title="Link to this definition">#</a></dt>
 <dd><p>Deprecated property. Please use <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.joint_pos_limits" title="isaaclab_contrib.assets.MultirotorData.joint_pos_limits"><code class="xref py py-attr docutils literal notranslate"><span class="pre">joint_pos_limits</span></code></a> instead and manage the default joint position
 limits manually.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.default_joint_stiffness">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_joint_stiffness</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_joint_stiffness" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_joint_stiffness</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_joint_stiffness" title="Link to this definition">#</a></dt>
 <dd><p>Deprecated property. Please use <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.joint_stiffness" title="isaaclab_contrib.assets.MultirotorData.joint_stiffness"><code class="xref py py-attr docutils literal notranslate"><span class="pre">joint_stiffness</span></code></a> instead and manage the default joint stiffness
 manually.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.default_joint_vel">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_joint_vel</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_joint_vel" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_joint_vel</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_joint_vel" title="Link to this definition">#</a></dt>
 <dd><p>Default joint velocities of all joints.</p>
 <p>Shape is (num_instances, num_joints), dtype = wp.float32. In torch this resolves to (num_instances, num_joints).</p>
 <p>This quantity is configured through the <a class="reference internal" href="../lab/isaaclab.assets.html#isaaclab.assets.ArticulationCfg.init_state" title="isaaclab.assets.ArticulationCfg.init_state"><code class="xref py py-attr docutils literal notranslate"><span class="pre">isaaclab.assets.ArticulationCfg.init_state</span></code></a> parameter.</p>
@@ -5520,20 +5520,20 @@ manually.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.default_joint_viscous_friction_coeff">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_joint_viscous_friction_coeff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_joint_viscous_friction_coeff" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_joint_viscous_friction_coeff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_joint_viscous_friction_coeff" title="Link to this definition">#</a></dt>
 <dd><p>Deprecated property. Please use <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.joint_viscous_friction_coeff" title="isaaclab_contrib.assets.MultirotorData.joint_viscous_friction_coeff"><code class="xref py py-attr docutils literal notranslate"><span class="pre">joint_viscous_friction_coeff</span></code></a> instead and manage the default joint
 viscous friction coefficient manually.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.default_mass">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_mass</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_mass" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_mass</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_mass" title="Link to this definition">#</a></dt>
 <dd><p>Deprecated property. Please use <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.body_mass" title="isaaclab_contrib.assets.MultirotorData.body_mass"><code class="xref py py-attr docutils literal notranslate"><span class="pre">body_mass</span></code></a> instead and manage the default mass manually.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.default_root_pose">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_root_pose</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_root_pose" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_root_pose</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_root_pose" title="Link to this definition">#</a></dt>
 <dd><p>Default root pose <code class="docutils literal notranslate"><span class="pre">[pos,</span> <span class="pre">quat]</span></code> in the local environment frame.</p>
 <p>The position and quaternion are of the articulation root’s actor frame.
 Shape is (num_instances,), dtype = wp.transformf. In torch this resolves to (num_instances, 7).</p>
@@ -5541,7 +5541,7 @@ Shape is (num_instances,), dtype = wp.transformf. In torch this resolves to (num
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.default_root_state">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_root_state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_root_state" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_root_state</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_root_state" title="Link to this definition">#</a></dt>
 <dd><p>Default root state <code class="docutils literal notranslate"><span class="pre">[pos,</span> <span class="pre">quat,</span> <span class="pre">lin_vel,</span> <span class="pre">ang_vel]</span></code> in the local environment frame.</p>
 <p>The position and quaternion are of the articulation root’s actor frame. Meanwhile, the linear and angular
 velocities are of its center of mass frame. Shape is (num_instances, 13).</p>
@@ -5550,7 +5550,7 @@ velocities are of its center of mass frame. Shape is (num_instances, 13).</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.default_root_vel">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_root_vel</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_root_vel" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_root_vel</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_root_vel" title="Link to this definition">#</a></dt>
 <dd><p>Default root velocity <code class="docutils literal notranslate"><span class="pre">[lin_vel,</span> <span class="pre">ang_vel]</span></code> in the local environment frame.</p>
 <p>The linear and angular velocities are of the articulation root’s center of mass frame.
 Shape is (num_instances,), dtype = wp.spatial_vectorf. In torch this resolves to (num_instances, 6).</p>
@@ -5558,35 +5558,35 @@ Shape is (num_instances,), dtype = wp.spatial_vectorf. In torch this resolves to
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.default_spatial_tendon_damping">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_spatial_tendon_damping</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_spatial_tendon_damping" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_spatial_tendon_damping</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_spatial_tendon_damping" title="Link to this definition">#</a></dt>
 <dd><p>Deprecated property. Please use <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.spatial_tendon_damping" title="isaaclab_contrib.assets.MultirotorData.spatial_tendon_damping"><code class="xref py py-attr docutils literal notranslate"><span class="pre">spatial_tendon_damping</span></code></a> instead and manage the default spatial tendon
 damping manually.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.default_spatial_tendon_limit_stiffness">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_spatial_tendon_limit_stiffness</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_spatial_tendon_limit_stiffness" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_spatial_tendon_limit_stiffness</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_spatial_tendon_limit_stiffness" title="Link to this definition">#</a></dt>
 <dd><p>Deprecated property. Please use <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.spatial_tendon_limit_stiffness" title="isaaclab_contrib.assets.MultirotorData.spatial_tendon_limit_stiffness"><code class="xref py py-attr docutils literal notranslate"><span class="pre">spatial_tendon_limit_stiffness</span></code></a> instead and manage the default
 spatial tendon limit stiffness manually.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.default_spatial_tendon_offset">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_spatial_tendon_offset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_spatial_tendon_offset" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_spatial_tendon_offset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_spatial_tendon_offset" title="Link to this definition">#</a></dt>
 <dd><p>Deprecated property. Please use <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.spatial_tendon_offset" title="isaaclab_contrib.assets.MultirotorData.spatial_tendon_offset"><code class="xref py py-attr docutils literal notranslate"><span class="pre">spatial_tendon_offset</span></code></a> instead and manage the default spatial tendon
 offset manually.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.default_spatial_tendon_stiffness">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_spatial_tendon_stiffness</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_spatial_tendon_stiffness" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">default_spatial_tendon_stiffness</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.default_spatial_tendon_stiffness" title="Link to this definition">#</a></dt>
 <dd><p>Deprecated property. Please use <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.spatial_tendon_stiffness" title="isaaclab_contrib.assets.MultirotorData.spatial_tendon_stiffness"><code class="xref py py-attr docutils literal notranslate"><span class="pre">spatial_tendon_stiffness</span></code></a> instead and manage the default spatial
 tendon stiffness manually.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.fixed_tendon_damping">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fixed_tendon_damping</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.fixed_tendon_damping" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fixed_tendon_damping</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.fixed_tendon_damping" title="Link to this definition">#</a></dt>
 <dd><p>Fixed tendon damping provided to the simulation.</p>
 <p>Shape is (num_instances, num_fixed_tendons), dtype = wp.float32. In torch this resolves to
 (num_instances, num_fixed_tendons).</p>
@@ -5594,13 +5594,13 @@ tendon stiffness manually.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.fixed_tendon_limit">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fixed_tendon_limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.fixed_tendon_limit" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fixed_tendon_limit</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.fixed_tendon_limit" title="Link to this definition">#</a></dt>
 <dd><p>Shorthand for <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.fixed_tendon_pos_limits" title="isaaclab_contrib.assets.MultirotorData.fixed_tendon_pos_limits"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fixed_tendon_pos_limits</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.fixed_tendon_limit_stiffness">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fixed_tendon_limit_stiffness</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.fixed_tendon_limit_stiffness" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fixed_tendon_limit_stiffness</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.fixed_tendon_limit_stiffness" title="Link to this definition">#</a></dt>
 <dd><p>Fixed tendon limit stiffness provided to the simulation.</p>
 <p>Shape is (num_instances, num_fixed_tendons), dtype = wp.float32. In torch this resolves to
 (num_instances, num_fixed_tendons).</p>
@@ -5614,7 +5614,7 @@ tendon stiffness manually.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.fixed_tendon_offset">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fixed_tendon_offset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.fixed_tendon_offset" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fixed_tendon_offset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.fixed_tendon_offset" title="Link to this definition">#</a></dt>
 <dd><p>Fixed tendon offset provided to the simulation.</p>
 <p>Shape is (num_instances, num_fixed_tendons), dtype = wp.float32. In torch this resolves to
 (num_instances, num_fixed_tendons).</p>
@@ -5622,7 +5622,7 @@ tendon stiffness manually.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.fixed_tendon_pos_limits">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fixed_tendon_pos_limits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.fixed_tendon_pos_limits" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fixed_tendon_pos_limits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.fixed_tendon_pos_limits" title="Link to this definition">#</a></dt>
 <dd><p>Fixed tendon position limits provided to the simulation.</p>
 <p>Shape is (num_instances, num_fixed_tendons), dtype = wp.vec2f. In torch this resolves to
 (num_instances, num_fixed_tendons, 2).</p>
@@ -5630,7 +5630,7 @@ tendon stiffness manually.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.fixed_tendon_rest_length">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fixed_tendon_rest_length</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.fixed_tendon_rest_length" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fixed_tendon_rest_length</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.fixed_tendon_rest_length" title="Link to this definition">#</a></dt>
 <dd><p>Fixed tendon rest length provided to the simulation.</p>
 <p>Shape is (num_instances, num_fixed_tendons), dtype = wp.float32. In torch this resolves to
 (num_instances, num_fixed_tendons).</p>
@@ -5638,7 +5638,7 @@ tendon stiffness manually.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.fixed_tendon_stiffness">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fixed_tendon_stiffness</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.fixed_tendon_stiffness" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fixed_tendon_stiffness</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.fixed_tendon_stiffness" title="Link to this definition">#</a></dt>
 <dd><p>Fixed tendon stiffness provided to the simulation.</p>
 <p>Shape is (num_instances, num_fixed_tendons), dtype = wp.float32. In torch this resolves to
 (num_instances, num_fixed_tendons).</p>
@@ -5646,7 +5646,7 @@ tendon stiffness manually.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.gear_ratio">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gear_ratio</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.gear_ratio" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gear_ratio</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.gear_ratio" title="Link to this definition">#</a></dt>
 <dd><p>Gear ratio for relating motor torques to applied Joint torques.</p>
 <p>Shape is (num_instances, num_joints), dtype = wp.float32. In torch this resolves to (num_instances, num_joints).</p>
 </dd></dl>
@@ -5670,21 +5670,21 @@ frame is along x-direction, i.e. <span class="math notranslate nohighlight">\((1
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.joint_acc">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_acc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_acc" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_acc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_acc" title="Link to this definition">#</a></dt>
 <dd><p>Joint acceleration of all joints.</p>
 <p>Shape is (num_instances, num_joints), dtype = wp.float32. In torch this resolves to (num_instances, num_joints).</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.joint_armature">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_armature</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_armature" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_armature</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_armature" title="Link to this definition">#</a></dt>
 <dd><p>Joint armature provided to the simulation.</p>
 <p>Shape is (num_instances, num_joints), dtype = wp.float32. In torch this resolves to (num_instances, num_joints).</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.joint_damping">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_damping</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_damping" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_damping</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_damping" title="Link to this definition">#</a></dt>
 <dd><p>Joint damping provided to the simulation.</p>
 <p>Shape is (num_instances, num_joints), dtype = wp.float32. In torch this resolves to (num_instances, num_joints).</p>
 <p>In the case of explicit actuators, the value for the corresponding joints is zero.</p>
@@ -5692,21 +5692,21 @@ frame is along x-direction, i.e. <span class="math notranslate nohighlight">\((1
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.joint_dynamic_friction_coeff">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_dynamic_friction_coeff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_dynamic_friction_coeff" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_dynamic_friction_coeff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_dynamic_friction_coeff" title="Link to this definition">#</a></dt>
 <dd><p>Joint dynamic friction coefficient provided to the simulation.</p>
 <p>Shape is (num_instances, num_joints), dtype = wp.float32. In torch this resolves to (num_instances, num_joints).</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.joint_effort_limits">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_effort_limits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_effort_limits" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_effort_limits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_effort_limits" title="Link to this definition">#</a></dt>
 <dd><p>Joint maximum effort provided to the simulation.</p>
 <p>Shape is (num_instances, num_joints), dtype = wp.float32. In torch this resolves to (num_instances, num_joints).</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.joint_effort_target">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_effort_target</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_effort_target" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_effort_target</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_effort_target" title="Link to this definition">#</a></dt>
 <dd><p>Joint effort targets commanded by the user.</p>
 <p>Shape is (num_instances, num_joints), dtype = wp.float32. In torch this resolves to (num_instances, num_joints).</p>
 <p>For an implicit actuator model, the targets are directly set into the simulation.
@@ -5716,20 +5716,20 @@ which are then set into the simulation.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.joint_friction">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_friction</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_friction" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_friction</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_friction" title="Link to this definition">#</a></dt>
 <dd><p>Shorthand for <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.joint_friction_coeff" title="isaaclab_contrib.assets.MultirotorData.joint_friction_coeff"><code class="xref py py-attr docutils literal notranslate"><span class="pre">joint_friction_coeff</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.joint_friction_coeff">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_friction_coeff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_friction_coeff" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_friction_coeff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_friction_coeff" title="Link to this definition">#</a></dt>
 <dd><p>Joint static friction coefficient provided to the simulation.</p>
 <p>Shape is (num_instances, num_joints), dtype = wp.float32. In torch this resolves to (num_instances, num_joints).</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.joint_limits">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_limits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_limits" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_limits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_limits" title="Link to this definition">#</a></dt>
 <dd><p>Shorthand for <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.joint_pos_limits" title="isaaclab_contrib.assets.MultirotorData.joint_pos_limits"><code class="xref py py-attr docutils literal notranslate"><span class="pre">joint_pos_limits</span></code></a>.</p>
 </dd></dl>
 
@@ -5741,14 +5741,14 @@ which are then set into the simulation.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.joint_pos">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_pos</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_pos" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_pos</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_pos" title="Link to this definition">#</a></dt>
 <dd><p>Joint positions of all joints.</p>
 <p>Shape is (num_instances, num_joints), dtype = wp.float32. In torch this resolves to (num_instances, num_joints).</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.joint_pos_limits">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_pos_limits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_pos_limits" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_pos_limits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_pos_limits" title="Link to this definition">#</a></dt>
 <dd><p>Joint position limits provided to the simulation.</p>
 <p>Shape is (num_instances, num_joints), dtype = wp.vec2f. In torch this resolves to
 (num_instances, num_joints, 2).</p>
@@ -5757,7 +5757,7 @@ which are then set into the simulation.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.joint_pos_target">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_pos_target</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_pos_target" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_pos_target</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_pos_target" title="Link to this definition">#</a></dt>
 <dd><p>Joint position targets commanded by the user.</p>
 <p>Shape is (num_instances, num_joints), dtype = wp.float32. In torch this resolves to (num_instances, num_joints).</p>
 <p>For an implicit actuator model, the targets are directly set into the simulation.
@@ -5767,7 +5767,7 @@ which are then set into the simulation.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.joint_stiffness">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_stiffness</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_stiffness" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_stiffness</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_stiffness" title="Link to this definition">#</a></dt>
 <dd><p>Joint stiffness provided to the simulation.</p>
 <p>Shape is (num_instances, num_joints), dtype = wp.float32. In torch this resolves to (num_instances, num_joints).</p>
 <p>In the case of explicit actuators, the value for the corresponding joints is zero.</p>
@@ -5775,21 +5775,21 @@ which are then set into the simulation.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.joint_vel">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_vel</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_vel" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_vel</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_vel" title="Link to this definition">#</a></dt>
 <dd><p>Joint velocities of all joints.</p>
 <p>Shape is (num_instances, num_joints), dtype = wp.float32. In torch this resolves to (num_instances, num_joints).</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.joint_vel_limits">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_vel_limits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_vel_limits" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_vel_limits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_vel_limits" title="Link to this definition">#</a></dt>
 <dd><p>Joint maximum velocity provided to the simulation.</p>
 <p>Shape is (num_instances, num_joints), dtype = wp.float32. In torch this resolves to (num_instances, num_joints).</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.joint_vel_target">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_vel_target</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_vel_target" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_vel_target</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_vel_target" title="Link to this definition">#</a></dt>
 <dd><p>Joint velocity targets commanded by the user.</p>
 <p>Shape is (num_instances, num_joints), dtype = wp.float32. In torch this resolves to (num_instances, num_joints).</p>
 <p>For an implicit actuator model, the targets are directly set into the simulation.
@@ -5799,13 +5799,13 @@ which are then set into the simulation.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.joint_velocity_limits">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_velocity_limits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_velocity_limits" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_velocity_limits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_velocity_limits" title="Link to this definition">#</a></dt>
 <dd><p>Shorthand for <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.joint_vel_limits" title="isaaclab_contrib.assets.MultirotorData.joint_vel_limits"><code class="xref py py-attr docutils literal notranslate"><span class="pre">joint_vel_limits</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.joint_viscous_friction_coeff">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_viscous_friction_coeff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_viscous_friction_coeff" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_viscous_friction_coeff</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.joint_viscous_friction_coeff" title="Link to this definition">#</a></dt>
 <dd><p>Joint viscous friction coefficient provided to the simulation.</p>
 <p>Shape is (num_instances, num_joints), dtype = wp.float32. In torch this resolves to (num_instances, num_joints).</p>
 </dd></dl>
@@ -5819,19 +5819,19 @@ Shape is (num_instances,), dtype = wp.vec3f. In torch this resolves to (num_inst
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_ang_vel_b">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_ang_vel_b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_ang_vel_b" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_ang_vel_b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_ang_vel_b" title="Link to this definition">#</a></dt>
 <dd><p>Shorthand for <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.root_com_ang_vel_b" title="isaaclab_contrib.assets.MultirotorData.root_com_ang_vel_b"><code class="xref py py-attr docutils literal notranslate"><span class="pre">root_com_ang_vel_b</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_ang_vel_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_ang_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_ang_vel_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_ang_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_ang_vel_w" title="Link to this definition">#</a></dt>
 <dd><p>Shorthand for <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.root_com_ang_vel_w" title="isaaclab_contrib.assets.MultirotorData.root_com_ang_vel_w"><code class="xref py py-attr docutils literal notranslate"><span class="pre">root_com_ang_vel_w</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_com_ang_vel_b">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_com_ang_vel_b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_com_ang_vel_b" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_com_ang_vel_b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_com_ang_vel_b" title="Link to this definition">#</a></dt>
 <dd><p>Root center of mass angular velocity in base frame.
 Shape is (num_instances,), dtype = wp.vec3f. In torch this resolves to (num_instances, 3).</p>
 <p>This quantity is the angular velocity of the articulation root’s center of mass frame
@@ -5840,7 +5840,7 @@ with respect to its actor frame.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_com_ang_vel_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_com_ang_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_com_ang_vel_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_com_ang_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_com_ang_vel_w" title="Link to this definition">#</a></dt>
 <dd><p>Root center of mass angular velocity in simulation world frame.
 Shape is (num_instances,), dtype = wp.vec3f. In torch this resolves to (num_instances, 3).</p>
 <p>This quantity is the angular velocity of the root rigid body’s center of mass frame relative to the world.</p>
@@ -5848,7 +5848,7 @@ Shape is (num_instances,), dtype = wp.vec3f. In torch this resolves to (num_inst
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_com_lin_vel_b">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_com_lin_vel_b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_com_lin_vel_b" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_com_lin_vel_b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_com_lin_vel_b" title="Link to this definition">#</a></dt>
 <dd><p>Root center of mass linear velocity in base frame.
 Shape is (num_instances,), dtype = wp.vec3f. In torch this resolves to (num_instances, 3).</p>
 <p>This quantity is the linear velocity of the articulation root’s center of mass frame
@@ -5857,7 +5857,7 @@ with respect to its actor frame.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_com_lin_vel_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_com_lin_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_com_lin_vel_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_com_lin_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_com_lin_vel_w" title="Link to this definition">#</a></dt>
 <dd><p>Root center of mass linear velocity in simulation world frame.
 Shape is (num_instances,), dtype = wp.vec3f. In torch this resolves to (num_instances, 3).</p>
 <p>This quantity is the linear velocity of the root rigid body’s center of mass frame relative to the world.</p>
@@ -5865,7 +5865,7 @@ Shape is (num_instances,), dtype = wp.vec3f. In torch this resolves to (num_inst
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_com_pos_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_com_pos_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_com_pos_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_com_pos_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_com_pos_w" title="Link to this definition">#</a></dt>
 <dd><p>Root center of mass position in simulation world frame.
 Shape is (num_instances,), dtype = wp.vec3f. In torch this resolves to (num_instances, 3).</p>
 <p>This quantity is the position of the center of mass frame of the root rigid body relative to the world.</p>
@@ -5873,7 +5873,7 @@ Shape is (num_instances,), dtype = wp.vec3f. In torch this resolves to (num_inst
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_com_pose_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_com_pose_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_com_pose_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_com_pose_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_com_pose_w" title="Link to this definition">#</a></dt>
 <dd><p>Root center of mass pose <code class="docutils literal notranslate"><span class="pre">[pos,</span> <span class="pre">quat]</span></code> in simulation world frame.
 Shape is (num_instances,), dtype = wp.transformf. In torch this resolves to (num_instances, 7).</p>
 <p>This quantity is the pose of the articulation root’s center of mass frame relative to the world.
@@ -5882,7 +5882,7 @@ The orientation is provided in (x, y, z, w) format.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_com_quat_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_com_quat_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_com_quat_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_com_quat_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_com_quat_w" title="Link to this definition">#</a></dt>
 <dd><p>Root center of mass orientation (x, y, z, w) in simulation world frame.
 Shape is (num_instances,), dtype = wp.quatf. In torch this resolves to (num_instances, 4).</p>
 <p>This quantity is the orientation of the principal axes of inertia of the root rigid body relative to the world.</p>
@@ -5890,13 +5890,13 @@ Shape is (num_instances,), dtype = wp.quatf. In torch this resolves to (num_inst
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_com_state_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_com_state_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_com_state_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_com_state_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_com_state_w" title="Link to this definition">#</a></dt>
 <dd><p>Deprecated, same as <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.root_com_pose_w" title="isaaclab_contrib.assets.MultirotorData.root_com_pose_w"><code class="xref py py-attr docutils literal notranslate"><span class="pre">root_com_pose_w</span></code></a> and <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.root_com_vel_w" title="isaaclab_contrib.assets.MultirotorData.root_com_vel_w"><code class="xref py py-attr docutils literal notranslate"><span class="pre">root_com_vel_w</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_com_vel_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_com_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_com_vel_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_com_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_com_vel_w" title="Link to this definition">#</a></dt>
 <dd><p>Root center of mass velocity <code class="docutils literal notranslate"><span class="pre">[lin_vel,</span> <span class="pre">ang_vel]</span></code> in simulation world frame.
 Shape is (num_instances,), dtype = wp.spatial_vectorf. In torch this resolves to (num_instances, 6).</p>
 <p>This quantity contains the linear and angular velocities of the articulation root’s center of mass frame
@@ -5905,19 +5905,19 @@ relative to the world.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_lin_vel_b">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_lin_vel_b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_lin_vel_b" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_lin_vel_b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_lin_vel_b" title="Link to this definition">#</a></dt>
 <dd><p>Shorthand for <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.root_com_lin_vel_b" title="isaaclab_contrib.assets.MultirotorData.root_com_lin_vel_b"><code class="xref py py-attr docutils literal notranslate"><span class="pre">root_com_lin_vel_b</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_lin_vel_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_lin_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_lin_vel_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_lin_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_lin_vel_w" title="Link to this definition">#</a></dt>
 <dd><p>Shorthand for <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.root_com_lin_vel_w" title="isaaclab_contrib.assets.MultirotorData.root_com_lin_vel_w"><code class="xref py py-attr docutils literal notranslate"><span class="pre">root_com_lin_vel_w</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_link_ang_vel_b">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_link_ang_vel_b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_link_ang_vel_b" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_link_ang_vel_b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_link_ang_vel_b" title="Link to this definition">#</a></dt>
 <dd><p>Root link angular velocity in base frame.
 Shape is (num_instances,), dtype = wp.vec3f. In torch this resolves to (num_instances, 3).</p>
 <p>This quantity is the angular velocity of the articulation root’s actor frame with respect to its actor frame.</p>
@@ -5925,7 +5925,7 @@ Shape is (num_instances,), dtype = wp.vec3f. In torch this resolves to (num_inst
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_link_ang_vel_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_link_ang_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_link_ang_vel_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_link_ang_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_link_ang_vel_w" title="Link to this definition">#</a></dt>
 <dd><p>Root link angular velocity in simulation world frame.
 Shape is (num_instances,), dtype = wp.vec3f. In torch this resolves to (num_instances, 3).</p>
 <p>This quantity is the angular velocity of the actor frame of the root rigid body relative to the world.</p>
@@ -5933,7 +5933,7 @@ Shape is (num_instances,), dtype = wp.vec3f. In torch this resolves to (num_inst
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_link_lin_vel_b">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_link_lin_vel_b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_link_lin_vel_b" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_link_lin_vel_b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_link_lin_vel_b" title="Link to this definition">#</a></dt>
 <dd><p>Root link linear velocity in base frame.
 Shape is (num_instances,), dtype = wp.vec3f. In torch this resolves to (num_instances, 3).</p>
 <p>This quantity is the linear velocity of the articulation root’s actor frame with respect to its actor frame.</p>
@@ -5941,7 +5941,7 @@ Shape is (num_instances,), dtype = wp.vec3f. In torch this resolves to (num_inst
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_link_lin_vel_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_link_lin_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_link_lin_vel_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_link_lin_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_link_lin_vel_w" title="Link to this definition">#</a></dt>
 <dd><p>Root linear velocity in simulation world frame.
 Shape is (num_instances,), dtype = wp.vec3f. In torch this resolves to (num_instances, 3).</p>
 <p>This quantity is the linear velocity of the root rigid body’s actor frame relative to the world.</p>
@@ -5949,7 +5949,7 @@ Shape is (num_instances,), dtype = wp.vec3f. In torch this resolves to (num_inst
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_link_pos_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_link_pos_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_link_pos_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_link_pos_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_link_pos_w" title="Link to this definition">#</a></dt>
 <dd><p>Root link position in simulation world frame.
 Shape is (num_instances,), dtype = wp.vec3f. In torch this resolves to (num_instances, 3).</p>
 <p>This quantity is the position of the actor frame of the root rigid body relative to the world.</p>
@@ -5957,7 +5957,7 @@ Shape is (num_instances,), dtype = wp.vec3f. In torch this resolves to (num_inst
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_link_pose_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_link_pose_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_link_pose_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_link_pose_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_link_pose_w" title="Link to this definition">#</a></dt>
 <dd><p>Root link pose <code class="docutils literal notranslate"><span class="pre">[pos,</span> <span class="pre">quat]</span></code> in simulation world frame.
 Shape is (num_instances,), dtype = wp.transformf. In torch this resolves to (num_instances, 7).</p>
 <p>This quantity is the pose of the articulation root’s actor frame relative to the world.
@@ -5966,7 +5966,7 @@ The orientation is provided in (x, y, z, w) format.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_link_quat_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_link_quat_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_link_quat_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_link_quat_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_link_quat_w" title="Link to this definition">#</a></dt>
 <dd><p>Root link orientation (x, y, z, w) in simulation world frame.
 Shape is (num_instances,), dtype = wp.quatf. In torch this resolves to (num_instances, 4).</p>
 <p>This quantity is the orientation of the actor frame of the root rigid body.</p>
@@ -5974,13 +5974,13 @@ Shape is (num_instances,), dtype = wp.quatf. In torch this resolves to (num_inst
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_link_state_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_link_state_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_link_state_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_link_state_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_link_state_w" title="Link to this definition">#</a></dt>
 <dd><p>Deprecated, same as <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.root_link_pose_w" title="isaaclab_contrib.assets.MultirotorData.root_link_pose_w"><code class="xref py py-attr docutils literal notranslate"><span class="pre">root_link_pose_w</span></code></a> and <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.root_link_vel_w" title="isaaclab_contrib.assets.MultirotorData.root_link_vel_w"><code class="xref py py-attr docutils literal notranslate"><span class="pre">root_link_vel_w</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_link_vel_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_link_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_link_vel_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_link_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_link_vel_w" title="Link to this definition">#</a></dt>
 <dd><p>Root link velocity <code class="docutils literal notranslate"><span class="pre">[lin_vel,</span> <span class="pre">ang_vel]</span></code> in simulation world frame.
 Shape is (num_instances,), dtype = wp.spatial_vectorf. In torch this resolves to (num_instances, 6).</p>
 <p>This quantity contains the linear and angular velocities of the articulation root’s actor frame
@@ -5989,37 +5989,37 @@ relative to the world.</p>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_pos_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_pos_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_pos_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_pos_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_pos_w" title="Link to this definition">#</a></dt>
 <dd><p>Shorthand for <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.root_link_pos_w" title="isaaclab_contrib.assets.MultirotorData.root_link_pos_w"><code class="xref py py-attr docutils literal notranslate"><span class="pre">root_link_pos_w</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_pose_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_pose_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_pose_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_pose_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_pose_w" title="Link to this definition">#</a></dt>
 <dd><p>Shorthand for <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.root_link_pose_w" title="isaaclab_contrib.assets.MultirotorData.root_link_pose_w"><code class="xref py py-attr docutils literal notranslate"><span class="pre">root_link_pose_w</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_quat_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_quat_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_quat_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_quat_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_quat_w" title="Link to this definition">#</a></dt>
 <dd><p>Shorthand for <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.root_link_quat_w" title="isaaclab_contrib.assets.MultirotorData.root_link_quat_w"><code class="xref py py-attr docutils literal notranslate"><span class="pre">root_link_quat_w</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_state_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_state_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_state_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_state_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_state_w" title="Link to this definition">#</a></dt>
 <dd><p>Deprecated, same as <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.root_link_pose_w" title="isaaclab_contrib.assets.MultirotorData.root_link_pose_w"><code class="xref py py-attr docutils literal notranslate"><span class="pre">root_link_pose_w</span></code></a> and <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.root_com_vel_w" title="isaaclab_contrib.assets.MultirotorData.root_com_vel_w"><code class="xref py py-attr docutils literal notranslate"><span class="pre">root_com_vel_w</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.root_vel_w">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_vel_w" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">root_vel_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.root_vel_w" title="Link to this definition">#</a></dt>
 <dd><p>Shorthand for <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.root_com_vel_w" title="isaaclab_contrib.assets.MultirotorData.root_com_vel_w"><code class="xref py py-attr docutils literal notranslate"><span class="pre">root_com_vel_w</span></code></a>.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.soft_joint_pos_limits">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">soft_joint_pos_limits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.soft_joint_pos_limits" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">soft_joint_pos_limits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.soft_joint_pos_limits" title="Link to this definition">#</a></dt>
 <dd><p>Soft joint positions limits for all joints.</p>
 <p>Shape is (num_instances, num_joints), dtype = wp.vec2f. In torch this resolves to
 (num_instances, num_joints, 2).</p>
@@ -6037,7 +6037,7 @@ simulation, but is useful for learning agents to prevent the joint positions fro
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.soft_joint_vel_limits">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">soft_joint_vel_limits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.soft_joint_vel_limits" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">soft_joint_vel_limits</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.soft_joint_vel_limits" title="Link to this definition">#</a></dt>
 <dd><p>Soft joint velocity limits for all joints.</p>
 <p>Shape is (num_instances, num_joints), dtype = wp.float32. In torch this resolves to (num_instances, num_joints).</p>
 <p>These are obtained from the actuator model. It may differ from <a class="reference internal" href="#isaaclab_contrib.assets.MultirotorData.joint_vel_limits" title="isaaclab_contrib.assets.MultirotorData.joint_vel_limits"><code class="xref py py-attr docutils literal notranslate"><span class="pre">joint_vel_limits</span></code></a> if the actuator model
@@ -6046,7 +6046,7 @@ has a variable velocity limit model. For instance, in a variable gear ratio actu
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.spatial_tendon_damping">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">spatial_tendon_damping</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.spatial_tendon_damping" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">spatial_tendon_damping</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.spatial_tendon_damping" title="Link to this definition">#</a></dt>
 <dd><p>Spatial tendon damping provided to the simulation.</p>
 <p>Shape is (num_instances, num_spatial_tendons), dtype = wp.float32. In torch this resolves to
 (num_instances, num_spatial_tendons).</p>
@@ -6054,7 +6054,7 @@ has a variable velocity limit model. For instance, in a variable gear ratio actu
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.spatial_tendon_limit_stiffness">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">spatial_tendon_limit_stiffness</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.spatial_tendon_limit_stiffness" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">spatial_tendon_limit_stiffness</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.spatial_tendon_limit_stiffness" title="Link to this definition">#</a></dt>
 <dd><p>Spatial tendon limit stiffness provided to the simulation.</p>
 <p>Shape is (num_instances, num_spatial_tendons), dtype = wp.float32. In torch this resolves to
 (num_instances, num_spatial_tendons).</p>
@@ -6068,7 +6068,7 @@ has a variable velocity limit model. For instance, in a variable gear ratio actu
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.spatial_tendon_offset">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">spatial_tendon_offset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.spatial_tendon_offset" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">spatial_tendon_offset</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.spatial_tendon_offset" title="Link to this definition">#</a></dt>
 <dd><p>Spatial tendon offset provided to the simulation.</p>
 <p>Shape is (num_instances, num_spatial_tendons), dtype = wp.float32. In torch this resolves to
 (num_instances, num_spatial_tendons).</p>
@@ -6076,7 +6076,7 @@ has a variable velocity limit model. For instance, in a variable gear ratio actu
 
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab_contrib.assets.MultirotorData.spatial_tendon_stiffness">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">spatial_tendon_stiffness</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://nvidia.github.io/warp/api_reference/_generated/warp.array.html#warp.array" title="(in Warp v1.13.0)"><span class="pre">warp.array</span></a></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.spatial_tendon_stiffness" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">spatial_tendon_stiffness</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">warp.array</span></em><a class="headerlink" href="#isaaclab_contrib.assets.MultirotorData.spatial_tendon_stiffness" title="Link to this definition">#</a></dt>
 <dd><p>Spatial tendon stiffness provided to the simulation.</p>
 <p>Shape is (num_instances, num_spatial_tendons), dtype = wp.float32. In torch this resolves to
 (num_instances, num_spatial_tendons).</p>
@@ -6544,7 +6544,7 @@ By The Isaac Lab Project Developers.
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on May 07, 2026.
+  Last updated on May 08, 2026.
   <br/>
 </p>
   </div>
