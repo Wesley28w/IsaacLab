@@ -691,6 +691,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pink</span><span class="w"> </span><span class="kn">import</span> <span class="n">solve_ik</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pink.tasks</span><span class="w"> </span><span class="kn">import</span> <span class="n">Task</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">qpsolvers.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">SolverNotFound</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.assets</span><span class="w"> </span><span class="kn">import</span> <span class="n">ArticulationCfg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.controllers</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span> <span class="k">as</span> <span class="n">controller_utils</span>
@@ -703,6 +704,9 @@
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">.pink_ik_cfg</span><span class="w"> </span><span class="kn">import</span> <span class="n">PinkIKControllerCfg</span>
+
+
+<span class="n">_QP_SOLVER</span> <span class="o">=</span> <span class="s2">&quot;daqp&quot;</span>
 
 
 <div class="viewcode-block" id="PinkIKController">
@@ -921,30 +925,45 @@
         <span class="c1"># Update Pink&#39;s robot configuration with the current joint positions</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pink_configuration</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">joint_positions_pink</span><span class="p">)</span>
 
+        <span class="k">def</span><span class="w"> </span><span class="nf">_return_current_joint_positions</span><span class="p">(</span><span class="n">error</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">show_ik_warnings</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;Warning: IK quadratic solver could not find a solution! Did not update the target joint&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot; positions.</span><span class="se">\n</span><span class="s2">Error: </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">xr_enabled</span><span class="p">:</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.ui.xr_widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">XRVisualization</span>
+
+                <span class="n">XRVisualization</span><span class="o">.</span><span class="n">push_event</span><span class="p">(</span><span class="s2">&quot;ik_error&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="n">error</span><span class="p">})</span>
+            <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">curr_controlled_joint_pos</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
         <span class="c1"># Solve IK using Pink&#39;s solver</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">velocity</span> <span class="o">=</span> <span class="n">solve_ik</span><span class="p">(</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">pink_configuration</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_variable_input_tasks</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fixed_input_tasks</span><span class="p">,</span>
                 <span class="n">dt</span><span class="p">,</span>
-                <span class="n">solver</span><span class="o">=</span><span class="s2">&quot;daqp&quot;</span><span class="p">,</span>
+                <span class="n">solver</span><span class="o">=</span><span class="n">_QP_SOLVER</span><span class="p">,</span>
                 <span class="n">safety_break</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">fail_on_joint_limit_violation</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="k">assert</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">velocity</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">(),</span> <span class="s2">&quot;Solution to IK contains NaN.&quot;</span>
             <span class="n">joint_angle_changes</span> <span class="o">=</span> <span class="n">velocity</span> <span class="o">*</span> <span class="n">dt</span>
+        <span class="k">except</span> <span class="n">SolverNotFound</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Pink IK requires the &#39;</span><span class="si">{</span><span class="n">_QP_SOLVER</span><span class="si">}</span><span class="s2">&#39; QP solver. Install the Pink IK stack with &quot;</span>
+                <span class="s2">&quot;``./isaaclab.sh -i`` or manually install ``pin pin-pink==3.1.0 daqp==0.8.5``.&quot;</span>
+            <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+        <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;primal_start&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
+                    <span class="s2">&quot;Pink IK requires a DAQP version compatible with qpsolvers warm-start arguments. &quot;</span>
+                    <span class="s2">&quot;Install the Pink IK stack with ``./isaaclab.sh -i`` or manually install &quot;</span>
+                    <span class="s2">&quot;``pin pin-pink==3.1.0 daqp==0.8.5``.&quot;</span>
+                <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+            <span class="k">return</span> <span class="n">_return_current_joint_positions</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">AssertionError</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="c1"># Print warning and return the current joint positions as the target</span>
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">show_ik_warnings</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span>
-                    <span class="s2">&quot;Warning: IK quadratic solver could not find a solution! Did not update the target joint&quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot; positions.</span><span class="se">\n</span><span class="s2">Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="p">)</span>
-
-            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">xr_enabled</span><span class="p">:</span>
-                <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.ui.xr_widgets</span><span class="w"> </span><span class="kn">import</span> <span class="n">XRVisualization</span>
-
-                <span class="n">XRVisualization</span><span class="o">.</span><span class="n">push_event</span><span class="p">(</span><span class="s2">&quot;ik_error&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="n">e</span><span class="p">})</span>
-            <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">curr_controlled_joint_pos</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">_return_current_joint_positions</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
 
         <span class="c1"># Reorder the joint angle changes back to Isaac Lab conventions</span>
         <span class="n">joint_vel_isaac_lab</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span>
