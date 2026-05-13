@@ -845,6 +845,7 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.Articulation.device"><code class="docutils literal notranslate"><span class="pre">Articulation.device</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.Articulation.has_debug_vis_implementation"><code class="docutils literal notranslate"><span class="pre">Articulation.has_debug_vis_implementation</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.Articulation.is_initialized"><code class="docutils literal notranslate"><span class="pre">Articulation.is_initialized</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.Articulation.num_base_dofs"><code class="docutils literal notranslate"><span class="pre">Articulation.num_base_dofs</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.Articulation.set_coms"><code class="docutils literal notranslate"><span class="pre">Articulation.set_coms()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.Articulation.set_debug_vis"><code class="docutils literal notranslate"><span class="pre">Articulation.set_debug_vis()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.Articulation.set_external_force_and_torque"><code class="docutils literal notranslate"><span class="pre">Articulation.set_external_force_and_torque()</span></code></a></li>
@@ -938,6 +939,10 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.ArticulationData.body_com_vel_w"><code class="docutils literal notranslate"><span class="pre">ArticulationData.body_com_vel_w</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.ArticulationData.body_com_acc_w"><code class="docutils literal notranslate"><span class="pre">ArticulationData.body_com_acc_w</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.ArticulationData.body_com_pose_b"><code class="docutils literal notranslate"><span class="pre">ArticulationData.body_com_pose_b</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.ArticulationData.body_com_jacobian_w"><code class="docutils literal notranslate"><span class="pre">ArticulationData.body_com_jacobian_w</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.ArticulationData.body_link_jacobian_w"><code class="docutils literal notranslate"><span class="pre">ArticulationData.body_link_jacobian_w</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.ArticulationData.mass_matrix"><code class="docutils literal notranslate"><span class="pre">ArticulationData.mass_matrix</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.ArticulationData.gravity_compensation_forces"><code class="docutils literal notranslate"><span class="pre">ArticulationData.gravity_compensation_forces</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.ArticulationData.joint_pos"><code class="docutils literal notranslate"><span class="pre">ArticulationData.joint_pos</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.ArticulationData.joint_vel"><code class="docutils literal notranslate"><span class="pre">ArticulationData.joint_vel</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.ArticulationData.joint_acc"><code class="docutils literal notranslate"><span class="pre">ArticulationData.joint_acc</span></code></a></li>
@@ -1610,6 +1615,9 @@ As an example, the following snippet shows how this can be used for position com
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#isaaclab_physx.assets.Articulation.is_initialized" title="isaaclab_physx.assets.Articulation.is_initialized"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_initialized</span></code></a></p></td>
 <td><p>Whether the asset is initialized.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab_physx.assets.Articulation.num_base_dofs" title="isaaclab_physx.assets.Articulation.num_base_dofs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_base_dofs</span></code></a></p></td>
+<td><p>Number of free DoFs of the floating base.</p></td>
 </tr>
 </tbody>
 </table>
@@ -4274,6 +4282,17 @@ disabled this method is a no-op.</p>
 <p>Returns True if the asset is initialized, False otherwise.</p>
 </dd></dl>
 
+<dl class="py property">
+<dt class="sig sig-object py" id="isaaclab_physx.assets.Articulation.num_base_dofs">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_base_dofs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#isaaclab_physx.assets.Articulation.num_base_dofs" title="Link to this definition">#</a></dt>
+<dd><p>Number of free DoFs of the floating base.</p>
+<p>A floating-base articulation can translate and rotate freely in space, so
+its base contributes 6 DoFs (3 linear, 3 angular). A fixed-base articulation
+is bolted to the world and contributes 0.</p>
+<p>Use this to map an actuated-joint index <code class="docutils literal notranslate"><span class="pre">j</span></code> to its column in the Jacobian
+/ mass matrix / gravity vector: <code class="docutils literal notranslate"><span class="pre">column</span> <span class="pre">=</span> <span class="pre">j</span> <span class="pre">+</span> <span class="pre">num_base_dofs</span></code>.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="isaaclab_physx.assets.Articulation.set_coms">
 <span class="sig-name descname"><span class="pre">set_coms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">coms</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.pytorch.org/docs/2.11/tensors.html#torch.Tensor" title="(in PyTorch v2.11)"><span class="pre">torch.Tensor</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">wp.array</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">body_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Sequence</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.pytorch.org/docs/2.11/tensors.html#torch.Tensor" title="(in PyTorch v2.11)"><span class="pre">torch.Tensor</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">wp.array</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#isaaclab_physx.assets.Articulation.set_coms" title="Link to this definition">#</a></dt>
@@ -4738,6 +4757,18 @@ pointer offsets into these stable buffers and are therefore also safe to cache.<
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#isaaclab_physx.assets.ArticulationData.body_com_pose_b" title="isaaclab_physx.assets.ArticulationData.body_com_pose_b"><code class="xref py py-obj docutils literal notranslate"><span class="pre">body_com_pose_b</span></code></a></p></td>
 <td><p>Center of mass pose <code class="docutils literal notranslate"><span class="pre">[pos,</span> <span class="pre">quat]</span></code> of all bodies in their respective body's link frames.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab_physx.assets.ArticulationData.body_com_jacobian_w" title="isaaclab_physx.assets.ArticulationData.body_com_jacobian_w"><code class="xref py py-obj docutils literal notranslate"><span class="pre">body_com_jacobian_w</span></code></a></p></td>
+<td><p>See <code class="xref py py-attr docutils literal notranslate"><span class="pre">isaaclab.assets.BaseArticulationData.body_com_jacobian_w</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab_physx.assets.ArticulationData.body_link_jacobian_w" title="isaaclab_physx.assets.ArticulationData.body_link_jacobian_w"><code class="xref py py-obj docutils literal notranslate"><span class="pre">body_link_jacobian_w</span></code></a></p></td>
+<td><p>See <code class="xref py py-attr docutils literal notranslate"><span class="pre">isaaclab.assets.BaseArticulationData.body_link_jacobian_w</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab_physx.assets.ArticulationData.mass_matrix" title="isaaclab_physx.assets.ArticulationData.mass_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mass_matrix</span></code></a></p></td>
+<td><p>See <code class="xref py py-attr docutils literal notranslate"><span class="pre">isaaclab.assets.BaseArticulationData.mass_matrix</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab_physx.assets.ArticulationData.gravity_compensation_forces" title="isaaclab_physx.assets.ArticulationData.gravity_compensation_forces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gravity_compensation_forces</span></code></a></p></td>
+<td><p>See <code class="xref py py-attr docutils literal notranslate"><span class="pre">isaaclab.assets.BaseArticulationData.gravity_compensation_forces</span></code>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab_physx.assets.ArticulationData.joint_pos" title="isaaclab_physx.assets.ArticulationData.joint_pos"><code class="xref py py-obj docutils literal notranslate"><span class="pre">joint_pos</span></code></a></p></td>
 <td><p>Joint positions of all joints.</p></td>
@@ -5406,6 +5437,42 @@ Shape is (num_instances, num_bodies), dtype = wp.transformf. In torch this resol
 (num_instances, num_bodies, 7).</p>
 <p>This quantity is the pose of the center of mass frame of the rigid body relative to the body’s link frame.
 The orientation is provided in (x, y, z, w) format.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="isaaclab_physx.assets.ArticulationData.body_com_jacobian_w">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_com_jacobian_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../lab/isaaclab.utils.html#isaaclab.utils.warp.ProxyArray" title="isaaclab.utils.warp.proxy_array.ProxyArray"><span class="pre">ProxyArray</span></a></em><a class="headerlink" href="#isaaclab_physx.assets.ArticulationData.body_com_jacobian_w" title="Link to this definition">#</a></dt>
+<dd><p>See <code class="xref py py-attr docutils literal notranslate"><span class="pre">isaaclab.assets.BaseArticulationData.body_com_jacobian_w</span></code>.</p>
+<p>PhysX implementation: passthrough of <code class="docutils literal notranslate"><span class="pre">_root_view.get_jacobians()</span></code>, which is
+natively Center-Of-Mass-referenced. Refresh is gated by <code class="docutils literal notranslate"><span class="pre">_sim_timestamp</span></code> and
+invalidated by <code class="docutils literal notranslate"><span class="pre">write_*_to_sim_index</span></code>; the <code class="docutils literal notranslate"><span class="pre">ProxyArray</span></code> wrapper is lazy-init
+once and reused thereafter.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="isaaclab_physx.assets.ArticulationData.body_link_jacobian_w">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">body_link_jacobian_w</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../lab/isaaclab.utils.html#isaaclab.utils.warp.ProxyArray" title="isaaclab.utils.warp.proxy_array.ProxyArray"><span class="pre">ProxyArray</span></a></em><a class="headerlink" href="#isaaclab_physx.assets.ArticulationData.body_link_jacobian_w" title="Link to this definition">#</a></dt>
+<dd><p>See <code class="xref py py-attr docutils literal notranslate"><span class="pre">isaaclab.assets.BaseArticulationData.body_link_jacobian_w</span></code>.</p>
+<p>PhysX implementation: applies the COM→origin shift kernel to
+<a class="reference internal" href="#isaaclab_physx.assets.ArticulationData.body_com_jacobian_w" title="isaaclab_physx.assets.ArticulationData.body_com_jacobian_w"><code class="xref py py-attr docutils literal notranslate"><span class="pre">body_com_jacobian_w</span></code></a> (PhysX’s engine output is COM-referenced).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="isaaclab_physx.assets.ArticulationData.mass_matrix">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mass_matrix</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../lab/isaaclab.utils.html#isaaclab.utils.warp.ProxyArray" title="isaaclab.utils.warp.proxy_array.ProxyArray"><span class="pre">ProxyArray</span></a></em><a class="headerlink" href="#isaaclab_physx.assets.ArticulationData.mass_matrix" title="Link to this definition">#</a></dt>
+<dd><p>See <code class="xref py py-attr docutils literal notranslate"><span class="pre">isaaclab.assets.BaseArticulationData.mass_matrix</span></code>.</p>
+<p>PhysX implementation: passthrough of <code class="docutils literal notranslate"><span class="pre">_root_view.get_generalized_mass_matrices()</span></code>.
+Refresh is gated by <code class="docutils literal notranslate"><span class="pre">_sim_timestamp</span></code> and invalidated by <code class="docutils literal notranslate"><span class="pre">write_*_to_sim_index</span></code>;
+the <code class="docutils literal notranslate"><span class="pre">ProxyArray</span></code> wrapper is lazy-init once and reused thereafter.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="isaaclab_physx.assets.ArticulationData.gravity_compensation_forces">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gravity_compensation_forces</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../lab/isaaclab.utils.html#isaaclab.utils.warp.ProxyArray" title="isaaclab.utils.warp.proxy_array.ProxyArray"><span class="pre">ProxyArray</span></a></em><a class="headerlink" href="#isaaclab_physx.assets.ArticulationData.gravity_compensation_forces" title="Link to this definition">#</a></dt>
+<dd><p>See <code class="xref py py-attr docutils literal notranslate"><span class="pre">isaaclab.assets.BaseArticulationData.gravity_compensation_forces</span></code>.</p>
+<p>PhysX implementation: passthrough of <code class="docutils literal notranslate"><span class="pre">_root_view.get_gravity_compensation_forces()</span></code>.
+Refresh is gated by <code class="docutils literal notranslate"><span class="pre">_sim_timestamp</span></code> and invalidated by <code class="docutils literal notranslate"><span class="pre">write_*_to_sim_index</span></code>;
+the <code class="docutils literal notranslate"><span class="pre">ProxyArray</span></code> wrapper is lazy-init once and reused thereafter.</p>
 </dd></dl>
 
 <dl class="py property">
@@ -11435,6 +11502,7 @@ flag — enabled in normal mode, disabled with <code class="docutils literal not
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.Articulation.device"><code class="docutils literal notranslate"><span class="pre">Articulation.device</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.Articulation.has_debug_vis_implementation"><code class="docutils literal notranslate"><span class="pre">Articulation.has_debug_vis_implementation</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.Articulation.is_initialized"><code class="docutils literal notranslate"><span class="pre">Articulation.is_initialized</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.Articulation.num_base_dofs"><code class="docutils literal notranslate"><span class="pre">Articulation.num_base_dofs</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.Articulation.set_coms"><code class="docutils literal notranslate"><span class="pre">Articulation.set_coms()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.Articulation.set_debug_vis"><code class="docutils literal notranslate"><span class="pre">Articulation.set_debug_vis()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.Articulation.set_external_force_and_torque"><code class="docutils literal notranslate"><span class="pre">Articulation.set_external_force_and_torque()</span></code></a></li>
@@ -11528,6 +11596,10 @@ flag — enabled in normal mode, disabled with <code class="docutils literal not
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.ArticulationData.body_com_vel_w"><code class="docutils literal notranslate"><span class="pre">ArticulationData.body_com_vel_w</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.ArticulationData.body_com_acc_w"><code class="docutils literal notranslate"><span class="pre">ArticulationData.body_com_acc_w</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.ArticulationData.body_com_pose_b"><code class="docutils literal notranslate"><span class="pre">ArticulationData.body_com_pose_b</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.ArticulationData.body_com_jacobian_w"><code class="docutils literal notranslate"><span class="pre">ArticulationData.body_com_jacobian_w</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.ArticulationData.body_link_jacobian_w"><code class="docutils literal notranslate"><span class="pre">ArticulationData.body_link_jacobian_w</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.ArticulationData.mass_matrix"><code class="docutils literal notranslate"><span class="pre">ArticulationData.mass_matrix</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.ArticulationData.gravity_compensation_forces"><code class="docutils literal notranslate"><span class="pre">ArticulationData.gravity_compensation_forces</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.ArticulationData.joint_pos"><code class="docutils literal notranslate"><span class="pre">ArticulationData.joint_pos</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.ArticulationData.joint_vel"><code class="docutils literal notranslate"><span class="pre">ArticulationData.joint_vel</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab_physx.assets.ArticulationData.joint_acc"><code class="docutils literal notranslate"><span class="pre">ArticulationData.joint_acc</span></code></a></li>

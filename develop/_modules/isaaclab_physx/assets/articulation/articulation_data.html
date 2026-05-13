@@ -1537,6 +1537,77 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_body_com_pose_b_ta</span>
 
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Dynamics quantities (task-space controllers).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">body_com_jacobian_w</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ProxyArray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;See :attr:`isaaclab.assets.BaseArticulationData.body_com_jacobian_w`.</span>
+
+<span class="sd">        PhysX implementation: passthrough of ``_root_view.get_jacobians()``, which is</span>
+<span class="sd">        natively Center-Of-Mass-referenced. Refresh is gated by ``_sim_timestamp`` and</span>
+<span class="sd">        invalidated by ``write_*_to_sim_index``; the ``ProxyArray`` wrapper is lazy-init</span>
+<span class="sd">        once and reused thereafter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_body_com_jacobian_w</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sim_timestamp</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_body_com_jacobian_w</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_view</span><span class="o">.</span><span class="n">get_jacobians</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_body_com_jacobian_w</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sim_timestamp</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_body_com_jacobian_w_ta</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_body_com_jacobian_w_ta</span> <span class="o">=</span> <span class="n">ProxyArray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_body_com_jacobian_w</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_body_com_jacobian_w_ta</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">body_link_jacobian_w</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ProxyArray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;See :attr:`isaaclab.assets.BaseArticulationData.body_link_jacobian_w`.</span>
+
+<span class="sd">        PhysX implementation: applies the COM→origin shift kernel to</span>
+<span class="sd">        :attr:`body_com_jacobian_w` (PhysX&#39;s engine output is COM-referenced).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">wp</span><span class="o">.</span><span class="n">launch</span><span class="p">(</span>
+            <span class="n">articulation_kernels</span><span class="o">.</span><span class="n">shift_jacobian_com_to_origin</span><span class="p">,</span>
+            <span class="n">dim</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_body_link_jacobian_w_buf</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_body_link_jacobian_w_buf</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">3</span><span class="p">],),</span>
+            <span class="n">inputs</span><span class="o">=</span><span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">body_link_pose_w</span><span class="o">.</span><span class="n">warp</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">body_com_pos_b</span><span class="o">.</span><span class="n">warp</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_jacobian_link_offset</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">body_com_jacobian_w</span><span class="o">.</span><span class="n">warp</span><span class="p">,</span>
+            <span class="p">],</span>
+            <span class="n">outputs</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_body_link_jacobian_w_buf</span><span class="p">],</span>
+            <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_body_link_jacobian_w_ta</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mass_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ProxyArray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;See :attr:`isaaclab.assets.BaseArticulationData.mass_matrix`.</span>
+
+<span class="sd">        PhysX implementation: passthrough of ``_root_view.get_generalized_mass_matrices()``.</span>
+<span class="sd">        Refresh is gated by ``_sim_timestamp`` and invalidated by ``write_*_to_sim_index``;</span>
+<span class="sd">        the ``ProxyArray`` wrapper is lazy-init once and reused thereafter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mass_matrix</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sim_timestamp</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mass_matrix</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_view</span><span class="o">.</span><span class="n">get_generalized_mass_matrices</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mass_matrix</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sim_timestamp</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mass_matrix_ta</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mass_matrix_ta</span> <span class="o">=</span> <span class="n">ProxyArray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mass_matrix</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mass_matrix_ta</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">gravity_compensation_forces</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ProxyArray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;See :attr:`isaaclab.assets.BaseArticulationData.gravity_compensation_forces`.</span>
+
+<span class="sd">        PhysX implementation: passthrough of ``_root_view.get_gravity_compensation_forces()``.</span>
+<span class="sd">        Refresh is gated by ``_sim_timestamp`` and invalidated by ``write_*_to_sim_index``;</span>
+<span class="sd">        the ``ProxyArray`` wrapper is lazy-init once and reused thereafter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gravity_compensation_forces</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sim_timestamp</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_gravity_compensation_forces</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_view</span><span class="o">.</span><span class="n">get_gravity_compensation_forces</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_gravity_compensation_forces</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sim_timestamp</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gravity_compensation_forces_ta</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_gravity_compensation_forces_ta</span> <span class="o">=</span> <span class="n">ProxyArray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gravity_compensation_forces</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gravity_compensation_forces_ta</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Joint state properties.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -2049,6 +2120,46 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_root_com_lin_vel_b</span> <span class="o">=</span> <span class="n">TimestampedBuffer</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_num_instances</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3f</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_root_com_ang_vel_b</span> <span class="o">=</span> <span class="n">TimestampedBuffer</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_num_instances</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="n">wp</span><span class="o">.</span><span class="n">vec3f</span><span class="p">)</span>
 
+        <span class="c1"># -- dynamics quantities for task-space controllers</span>
+        <span class="c1"># PhysX&#39;s Jacobian rows include the root body for floating-base and exclude only the</span>
+        <span class="c1"># fixed root for fixed-base (``_jacobian_link_offset`` handles the body axis). PhysX&#39;s</span>
+        <span class="c1"># raw Jacobian / mass matrix / gravity-comp prepend 6 base-DoF columns on floating-</span>
+        <span class="c1"># base (the engine&#39;s natural form), matching the industry-standard convention used by</span>
+        <span class="c1"># Pinocchio, Drake, MuJoCo, RBDL, OCS2, and iDynTree. We pass through the full DoF</span>
+        <span class="c1"># axis: shape ``(N, num_jacobi_bodies, 6, num_joints + num_base_dofs)``. Newton wraps</span>
+        <span class="c1"># ``eval_jacobian`` to match the same column layout. ``body_com_jacobian_w`` /</span>
+        <span class="c1"># ``mass_matrix`` / ``gravity_compensation_forces`` pass through the engine buffer on</span>
+        <span class="c1"># every read; we only own a buffer for the link-origin Jacobian (output of the shift</span>
+        <span class="c1"># kernel).</span>
+        <span class="n">is_fixed_base</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_root_view</span><span class="o">.</span><span class="n">shared_metatype</span><span class="o">.</span><span class="n">fixed_base</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_jacobian_link_offset</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">is_fixed_base</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="n">num_jacobi_bodies</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_bodies</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jacobian_link_offset</span>
+        <span class="n">num_base_dofs</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">is_fixed_base</span> <span class="k">else</span> <span class="mi">6</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_body_link_jacobian_w_buf</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_num_instances</span><span class="p">,</span> <span class="n">num_jacobi_bodies</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_joints</span> <span class="o">+</span> <span class="n">num_base_dofs</span><span class="p">),</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="n">wp</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+            <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># ``TimestampedBuffer``s for the three engine-passthrough properties. The placeholder</span>
+        <span class="c1"># ``wp.zeros`` allocation is replaced on first read by the engine view returned from</span>
+        <span class="c1"># ``_root_view.get_*()``; timestamps are advanced on each refresh and invalidated by</span>
+        <span class="c1"># write-paths.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_body_com_jacobian_w</span> <span class="o">=</span> <span class="n">TimestampedBuffer</span><span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_num_instances</span><span class="p">,</span> <span class="n">num_jacobi_bodies</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_joints</span> <span class="o">+</span> <span class="n">num_base_dofs</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+            <span class="n">wp</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mass_matrix</span> <span class="o">=</span> <span class="n">TimestampedBuffer</span><span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_num_instances</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_joints</span> <span class="o">+</span> <span class="n">num_base_dofs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_joints</span> <span class="o">+</span> <span class="n">num_base_dofs</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+            <span class="n">wp</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gravity_compensation_forces</span> <span class="o">=</span> <span class="n">TimestampedBuffer</span><span class="p">(</span>
+            <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_num_instances</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_joints</span> <span class="o">+</span> <span class="n">num_base_dofs</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+            <span class="n">wp</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+        <span class="p">)</span>
+
         <span class="c1"># Default root pose and velocity</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_default_root_pose</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_num_instances</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">wp</span><span class="o">.</span><span class="n">transformf</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_default_root_vel</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_num_instances</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">wp</span><span class="o">.</span><span class="n">spatial_vectorf</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
@@ -2211,6 +2322,16 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_body_com_vel_w_ta</span><span class="p">:</span> <span class="n">ProxyArray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_body_com_acc_w_ta</span><span class="p">:</span> <span class="n">ProxyArray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_body_com_pose_b_ta</span><span class="p">:</span> <span class="n">ProxyArray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># Dynamics quantities (task-space controllers). ``_body_link_jacobian_w`` wraps our</span>
+        <span class="c1"># own pre-allocated buffer (pointer-stable, eager wrap). The three engine-passthrough</span>
+        <span class="c1"># wrappers are lazy-init inside their property bodies on first read, matching the</span>
+        <span class="c1"># ``TimestampedBuffer`` + ``ProxyArray`` cache pattern used by ``body_link_pose_w``,</span>
+        <span class="c1"># ``joint_pos``, and the rest of this file. Refresh is gated by ``_sim_timestamp`` and</span>
+        <span class="c1"># invalidated by ``write_*_to_sim_index`` setting ``timestamp = -1.0``.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_body_link_jacobian_w_ta</span> <span class="o">=</span> <span class="n">ProxyArray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_body_link_jacobian_w_buf</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_body_com_jacobian_w_ta</span><span class="p">:</span> <span class="n">ProxyArray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mass_matrix_ta</span><span class="p">:</span> <span class="n">ProxyArray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gravity_compensation_forces_ta</span><span class="p">:</span> <span class="n">ProxyArray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="c1"># Body properties</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_body_mass_ta</span><span class="p">:</span> <span class="n">ProxyArray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_body_inertia_ta</span><span class="p">:</span> <span class="n">ProxyArray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>

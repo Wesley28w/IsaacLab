@@ -947,6 +947,7 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.assets.Articulation.is_fixed_base"><code class="docutils literal notranslate"><span class="pre">Articulation.is_fixed_base</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.assets.Articulation.is_initialized"><code class="docutils literal notranslate"><span class="pre">Articulation.is_initialized</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.assets.Articulation.joint_names"><code class="docutils literal notranslate"><span class="pre">Articulation.joint_names</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.assets.Articulation.num_base_dofs"><code class="docutils literal notranslate"><span class="pre">Articulation.num_base_dofs</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.assets.Articulation.num_bodies"><code class="docutils literal notranslate"><span class="pre">Articulation.num_bodies</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.assets.Articulation.num_fixed_tendons"><code class="docutils literal notranslate"><span class="pre">Articulation.num_fixed_tendons</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.assets.Articulation.num_instances"><code class="docutils literal notranslate"><span class="pre">Articulation.num_instances</span></code></a></li>
@@ -3874,34 +3875,37 @@ This ensures that the external wrench is applied at every simulation step.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.assets.Articulation.joint_names" title="isaaclab.assets.Articulation.joint_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">joint_names</span></code></a></p></td>
 <td><p>Ordered names of joints in articulation.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.assets.Articulation.num_bodies" title="isaaclab.assets.Articulation.num_bodies"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_bodies</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.assets.Articulation.num_base_dofs" title="isaaclab.assets.Articulation.num_base_dofs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_base_dofs</span></code></a></p></td>
+<td><p>Number of free DoFs of the floating base.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.assets.Articulation.num_bodies" title="isaaclab.assets.Articulation.num_bodies"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_bodies</span></code></a></p></td>
 <td><p>Number of bodies in articulation.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.assets.Articulation.num_fixed_tendons" title="isaaclab.assets.Articulation.num_fixed_tendons"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_fixed_tendons</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.assets.Articulation.num_fixed_tendons" title="isaaclab.assets.Articulation.num_fixed_tendons"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_fixed_tendons</span></code></a></p></td>
 <td><p>Number of fixed tendons in articulation.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.assets.Articulation.num_instances" title="isaaclab.assets.Articulation.num_instances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_instances</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.assets.Articulation.num_instances" title="isaaclab.assets.Articulation.num_instances"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_instances</span></code></a></p></td>
 <td><p>Number of instances of the asset.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.assets.Articulation.num_joints" title="isaaclab.assets.Articulation.num_joints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_joints</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.assets.Articulation.num_joints" title="isaaclab.assets.Articulation.num_joints"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_joints</span></code></a></p></td>
 <td><p>Number of joints in articulation.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.assets.Articulation.num_spatial_tendons" title="isaaclab.assets.Articulation.num_spatial_tendons"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_spatial_tendons</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.assets.Articulation.num_spatial_tendons" title="isaaclab.assets.Articulation.num_spatial_tendons"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_spatial_tendons</span></code></a></p></td>
 <td><p>Number of spatial tendons in articulation.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.assets.Articulation.permanent_wrench_composer" title="isaaclab.assets.Articulation.permanent_wrench_composer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">permanent_wrench_composer</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.assets.Articulation.permanent_wrench_composer" title="isaaclab.assets.Articulation.permanent_wrench_composer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">permanent_wrench_composer</span></code></a></p></td>
 <td><p>Permanent wrench composer.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.assets.Articulation.root_view" title="isaaclab.assets.Articulation.root_view"><code class="xref py py-obj docutils literal notranslate"><span class="pre">root_view</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.assets.Articulation.root_view" title="isaaclab.assets.Articulation.root_view"><code class="xref py py-obj docutils literal notranslate"><span class="pre">root_view</span></code></a></p></td>
 <td><p>Root view for the asset.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.assets.Articulation.spatial_tendon_names" title="isaaclab.assets.Articulation.spatial_tendon_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spatial_tendon_names</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.assets.Articulation.spatial_tendon_names" title="isaaclab.assets.Articulation.spatial_tendon_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spatial_tendon_names</span></code></a></p></td>
 <td><p>Ordered names of spatial tendons in articulation.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.assets.Articulation.cfg" title="isaaclab.assets.Articulation.cfg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cfg</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.assets.Articulation.cfg" title="isaaclab.assets.Articulation.cfg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cfg</span></code></a></p></td>
 <td><p>Configuration instance for the articulations.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.assets.Articulation.actuators" title="isaaclab.assets.Articulation.actuators"><code class="xref py py-obj docutils literal notranslate"><span class="pre">actuators</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.assets.Articulation.actuators" title="isaaclab.assets.Articulation.actuators"><code class="xref py py-obj docutils literal notranslate"><span class="pre">actuators</span></code></a></p></td>
 <td><p>Dictionary of actuator instances for the articulation.</p></td>
 </tr>
 </tbody>
@@ -4483,6 +4487,17 @@ for instance.</p>
 <dt class="sig sig-object py" id="isaaclab.assets.Articulation.joint_names">
 <em class="property"><span class="k"><span class="pre">abstract</span></span><span class="w"> </span><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">joint_names</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#isaaclab.assets.Articulation.joint_names" title="Link to this definition">#</a></dt>
 <dd><p>Ordered names of joints in articulation.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="isaaclab.assets.Articulation.num_base_dofs">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_base_dofs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#isaaclab.assets.Articulation.num_base_dofs" title="Link to this definition">#</a></dt>
+<dd><p>Number of free DoFs of the floating base.</p>
+<p>A floating-base articulation can translate and rotate freely in space, so
+its base contributes 6 DoFs (3 linear, 3 angular). A fixed-base articulation
+is bolted to the world and contributes 0.</p>
+<p>Use this to map an actuated-joint index <code class="docutils literal notranslate"><span class="pre">j</span></code> to its column in the Jacobian
+/ mass matrix / gravity vector: <code class="docutils literal notranslate"><span class="pre">column</span> <span class="pre">=</span> <span class="pre">j</span> <span class="pre">+</span> <span class="pre">num_base_dofs</span></code>.</p>
 </dd></dl>
 
 <dl class="py property">
@@ -7149,6 +7164,7 @@ positions from violating the limits, such as for termination conditions.</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.assets.Articulation.is_fixed_base"><code class="docutils literal notranslate"><span class="pre">Articulation.is_fixed_base</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.assets.Articulation.is_initialized"><code class="docutils literal notranslate"><span class="pre">Articulation.is_initialized</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.assets.Articulation.joint_names"><code class="docutils literal notranslate"><span class="pre">Articulation.joint_names</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.assets.Articulation.num_base_dofs"><code class="docutils literal notranslate"><span class="pre">Articulation.num_base_dofs</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.assets.Articulation.num_bodies"><code class="docutils literal notranslate"><span class="pre">Articulation.num_bodies</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.assets.Articulation.num_fixed_tendons"><code class="docutils literal notranslate"><span class="pre">Articulation.num_fixed_tendons</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.assets.Articulation.num_instances"><code class="docutils literal notranslate"><span class="pre">Articulation.num_instances</span></code></a></li>
