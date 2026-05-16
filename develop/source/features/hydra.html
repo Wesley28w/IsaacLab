@@ -964,7 +964,7 @@ validation after all fields have been resolved. This hook is called automaticall
 resolution and MISSING-field checks succeed, allowing you to catch invalid parameter
 combinations early with clear error messages.</p>
 <p><strong>Defining a validation hook:</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">configclass</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.utils.configclass</span><span class="w"> </span><span class="kn">import</span> <span class="n">configclass</span>
 
 <span class="nd">@configclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">MyEnvCfg</span><span class="p">:</span>
@@ -1058,7 +1058,7 @@ python<span class="w"> </span>train.py<span class="w"> </span>--task<span class=
 <span id="hydra-backend-solver-presets"></span><h3>Backend and Solver Presets<a class="headerlink" href="#backend-and-solver-presets" title="Link to this heading">#</a></h3>
 <p>Physics backend selection uses the same preset system. A task can define a
 <code class="docutils literal notranslate"><span class="pre">PresetCfg</span></code> whose entries replace the complete physics config:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">configclass</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.utils.configclass</span><span class="w"> </span><span class="kn">import</span> <span class="n">configclass</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab_newton.physics</span><span class="w"> </span><span class="kn">import</span> <span class="n">KaminoSolverCfg</span><span class="p">,</span> <span class="n">MJWarpSolverCfg</span><span class="p">,</span> <span class="n">NewtonCfg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab_physx.physics</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhysxCfg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab_tasks.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">PresetCfg</span>

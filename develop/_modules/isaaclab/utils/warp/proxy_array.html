@@ -879,6 +879,24 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_warp</span><span class="o">.</span><span class="n">__array_interface__</span>
 
     <span class="c1"># ------------------------------------------------------------------</span>
+    <span class="c1"># Attribute forwarding (deprecation bridge — delegates to .torch)</span>
+    <span class="c1"># ------------------------------------------------------------------</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Forward unknown attribute access to the torch view (deprecation bridge).</span>
+
+<span class="sd">        Called only when normal attribute lookup fails (i.e. the attribute is not</span>
+<span class="sd">        defined on :class:`ProxyArray` itself), so explicit properties such as</span>
+<span class="sd">        ``shape``, ``dtype``, ``device``, ``warp``, and ``torch`` are unaffected.</span>
+
+<span class="sd">        This allows tensor instance methods (``float()``, ``clone()``, ``cpu()``,</span>
+<span class="sd">        ``permute()``, etc.) to be called on a :class:`ProxyArray` without an</span>
+<span class="sd">        explicit ``.torch`` accessor, emitting a one-time :class:`DeprecationWarning`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_warn_implicit</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">torch</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+
+    <span class="c1"># ------------------------------------------------------------------</span>
     <span class="c1"># Indexing (deprecation bridge — delegates to .torch)</span>
     <span class="c1"># ------------------------------------------------------------------</span>
 

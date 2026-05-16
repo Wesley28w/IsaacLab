@@ -685,9 +685,8 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">.output_contract</span><span class="w"> </span><span class="kn">import</span> <span class="n">RenderBufferKind</span><span class="p">,</span> <span class="n">RenderBufferSpec</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
-
     <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.sensors.camera.camera_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">CameraData</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.utils.warp</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProxyArray</span>
 
 
 <div class="viewcode-block" id="BaseRenderer">
@@ -751,13 +750,15 @@
 <div class="viewcode-block" id="BaseRenderer.set_outputs">
 <a class="viewcode-back" href="../../../source/api/lab/isaaclab.renderers.html#isaaclab.renderers.BaseRenderer.set_outputs">[docs]</a>
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">set_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">render_data</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">output_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_outputs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">render_data</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">output_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ProxyArray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Store reference to output buffers for writing during render.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            render_data: The render data object from :meth:`create_render_data`.</span>
 <span class="sd">            output_data: Dictionary mapping output names (e.g. ``&quot;rgb&quot;``, ``&quot;depth&quot;``)</span>
-<span class="sd">                to pre-allocated tensors where rendered data will be written.</span>
+<span class="sd">                to pre-allocated :class:`~isaaclab.utils.warp.ProxyArray` wrappers where</span>
+<span class="sd">                rendered data will be written. Use ``.warp`` for the underlying warp array</span>
+<span class="sd">                or ``.torch`` for a zero-copy tensor view.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
@@ -777,15 +778,22 @@
 <a class="viewcode-back" href="../../../source/api/lab/isaaclab.renderers.html#isaaclab.renderers.BaseRenderer.update_camera">[docs]</a>
     <span class="nd">@abstractmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">update_camera</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">render_data</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">positions</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">orientations</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">intrinsics</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">render_data</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+        <span class="n">positions</span><span class="p">:</span> <span class="n">ProxyArray</span><span class="p">,</span>
+        <span class="n">orientations</span><span class="p">:</span> <span class="n">ProxyArray</span><span class="p">,</span>
+        <span class="n">intrinsics</span><span class="p">:</span> <span class="n">ProxyArray</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update camera poses and intrinsics for the next render.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            render_data: The render data object from :meth:`create_render_data`.</span>
-<span class="sd">            positions: Camera positions in world frame, shape ``(N, 3)``.</span>
-<span class="sd">            orientations: Camera orientations as quaternions (x, y, z, w), shape ``(N, 4)``.</span>
-<span class="sd">            intrinsics: Camera intrinsic matrices, shape ``(N, 3, 3)``.</span>
+<span class="sd">            positions: Camera positions in world frame. Shape ``(N,)``, dtype ``wp.vec3f``.</span>
+<span class="sd">                Use ``.torch`` for a ``(N, 3)`` tensor view.</span>
+<span class="sd">            orientations: Camera orientations as quaternions ``(x, y, z, w)``. Shape ``(N,)``,</span>
+<span class="sd">                dtype ``wp.quatf``. Use ``.torch`` for a ``(N, 4)`` tensor view.</span>
+<span class="sd">            intrinsics: Camera intrinsic matrices. Shape ``(N,)``, dtype ``wp.mat33f``.</span>
+<span class="sd">                Use ``.torch`` for a ``(N, 3, 3)`` tensor view.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 

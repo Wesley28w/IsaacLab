@@ -886,7 +886,7 @@ instantiations automatically use the selected backend.</p>
 <section id="multi-backend-environments-with-presets">
 <h2>Multi-Backend Environments with Presets<a class="headerlink" href="#multi-backend-environments-with-presets" title="Link to this heading">#</a></h2>
 <p>Environments can support multiple backends simultaneously using the <a class="reference internal" href="../../features/hydra.html"><span class="doc">preset system</span></a>. Each backend gets its own configuration variant:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">configclass</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.utils.configclass</span><span class="w"> </span><span class="kn">import</span> <span class="n">configclass</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab_tasks.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">PresetCfg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab_physx.physics</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhysxCfg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab_newton.physics</span><span class="w"> </span><span class="kn">import</span> <span class="n">NewtonCfg</span><span class="p">,</span> <span class="n">MJWarpSolverCfg</span>
@@ -1064,7 +1064,7 @@ transforms in a Warp-native format that renderers and visualizers consume direct
 <p><strong>3. Create the physics config:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># isaaclab_mybackend/physics/mybackend_manager_cfg.py</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.physics</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhysicsCfg</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">configclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.utils.configclass</span><span class="w"> </span><span class="kn">import</span> <span class="n">configclass</span>
 
 <span class="nd">@configclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">MyBackendCfg</span><span class="p">(</span><span class="n">PhysicsCfg</span><span class="p">):</span>

@@ -964,7 +964,7 @@ environment config. The RL base classes automatically copy <code class="docutils
 uses the same configured viewpoint as the interactive viewport:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.envs</span><span class="w"> </span><span class="kn">import</span> <span class="n">ManagerBasedRLEnvCfg</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.envs.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">ViewerCfg</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">configclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.utils.configclass</span><span class="w"> </span><span class="kn">import</span> <span class="n">configclass</span>
 
 <span class="nd">@configclass</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">MyTaskCfg</span><span class="p">(</span><span class="n">ManagerBasedRLEnvCfg</span><span class="p">):</span>
