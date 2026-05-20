@@ -705,6 +705,24 @@
         <span class="k">return</span></div>
 
 
+<div class="viewcode-block" id="BaseRenderer.prepare_cameras">
+<a class="viewcode-back" href="../../../source/api/lab/isaaclab.renderers.html#isaaclab.renderers.BaseRenderer.prepare_cameras">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">prepare_cameras</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stage</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">spec</span><span class="p">:</span> <span class="n">CameraRenderSpec</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Pre-render per-camera setup the backend needs.</span>
+
+<span class="sd">        The default implementation is a no-op. Renderer subclasses override</span>
+<span class="sd">        to perform whatever per-camera initialization their backend requires</span>
+<span class="sd">        — e.g. authoring stage attributes on the resolved camera prims,</span>
+<span class="sd">        configuring per-tile GPU buffers, or any other state setup.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            stage: Scene stage the camera prims live on, or ``None``</span>
+<span class="sd">                when no stage context applies. Stage-less backends ignore it.</span>
+<span class="sd">            spec: Immutable description of the tiled camera bundle.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span></div>
+
+
 <div class="viewcode-block" id="BaseRenderer.supported_output_types">
 <a class="viewcode-back" href="../../../source/api/lab/isaaclab.renderers.html#isaaclab.renderers.BaseRenderer.supported_output_types">[docs]</a>
     <span class="nd">@abstractmethod</span>

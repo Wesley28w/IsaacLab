@@ -692,7 +692,6 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">isaaclab.sim</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sim_utils</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">isaaclab.utils.sensors</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sensor_utils</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.app.settings_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_settings_manager</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.renderers</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseRenderer</span><span class="p">,</span> <span class="n">CameraRenderSpec</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.sim.views</span><span class="w"> </span><span class="kn">import</span> <span class="n">FrameView</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">to_camel_case</span>
@@ -827,16 +826,7 @@
         <span class="c1"># initialize base class</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
 
-        <span class="c1"># TODO(follow-up PR): move this flag flip out of Camera. The cleanest path is</span>
-        <span class="c1"># an apply_pre_reset_settings() hook on RendererCfg (default no-op) that</span>
-        <span class="c1"># IsaacRtxRendererCfg overrides to flip /isaaclab/render/rtx_sensors. The</span>
-        <span class="c1"># flag must be set pre-sim.reset() because SimulationContext.is_rendering</span>
-        <span class="c1"># and several env classes read it before the renderer&#39;s __init__ runs.</span>
-        <span class="n">renderer_type</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">renderer_cfg</span><span class="p">,</span> <span class="s2">&quot;renderer_type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">renderer_type</span> <span class="o">==</span> <span class="s2">&quot;isaac_rtx&quot;</span><span class="p">:</span>
-            <span class="n">get_settings_manager</span><span class="p">()</span><span class="o">.</span><span class="n">set_bool</span><span class="p">(</span><span class="s2">&quot;/isaaclab/render/rtx_sensors&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
-
-        <span class="c1"># Compute camera orientation (convention conversion) and spawn</span>
+        <span class="c1"># Compute camera orientation (convention conversion) and spawn.</span>
         <span class="n">rot</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">offset</span><span class="o">.</span><span class="n">rot</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s2">&quot;cpu&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">unsqueeze</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="n">rot_offset</span> <span class="o">=</span> <span class="n">convert_camera_frame_orientation_convention</span><span class="p">(</span>
             <span class="n">rot</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">offset</span><span class="o">.</span><span class="n">convention</span><span class="p">,</span> <span class="n">target</span><span class="o">=</span><span class="s2">&quot;opengl&quot;</span>
@@ -845,6 +835,34 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">spawn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">spawn</span><span class="o">.</span><span class="n">vertical_aperture</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">spawn</span><span class="o">.</span><span class="n">vertical_aperture</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">spawn</span><span class="o">.</span><span class="n">horizontal_aperture</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">height</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">width</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_resolve_and_spawn</span><span class="p">(</span><span class="s2">&quot;camera&quot;</span><span class="p">,</span> <span class="n">translation</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">offset</span><span class="o">.</span><span class="n">pos</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="n">rot_offset</span><span class="p">)</span>
+
+        <span class="c1"># An ISP (any ``isp_cfg`` other than ``None``) requires the HDR AOV;</span>
+        <span class="c1"># an explicit ``&quot;rgb_hdr&quot;`` in ``data_types`` also requires the</span>
+        <span class="c1"># HDR-routing flag flipped on the RTX-bearing backends.</span>
+        <span class="n">require_hdr_output</span> <span class="o">=</span> <span class="s2">&quot;rgb_hdr&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">data_types</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">isp_cfg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+        <span class="c1"># TODO(follow-up PR): move this flag flip out of Camera. The cleanest path is</span>
+        <span class="c1"># an apply_pre_reset_settings() hook on RendererCfg (default no-op) that</span>
+        <span class="c1"># IsaacRtxRendererCfg overrides to flip /isaaclab/render/rtx_sensors. The</span>
+        <span class="c1"># flag must be set pre-sim.reset() because SimulationContext.is_rendering</span>
+        <span class="c1"># and several env classes read it before the renderer&#39;s __init__ runs.</span>
+        <span class="n">renderer_type</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">renderer_cfg</span><span class="p">,</span> <span class="s2">&quot;renderer_type&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">renderer_type</span> <span class="o">==</span> <span class="s2">&quot;isaac_rtx&quot;</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.app.settings_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_settings_manager</span>
+
+            <span class="n">settings</span> <span class="o">=</span> <span class="n">get_settings_manager</span><span class="p">()</span>
+            <span class="n">settings</span><span class="o">.</span><span class="n">set_bool</span><span class="p">(</span><span class="s2">&quot;/isaaclab/render/rtx_sensors&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">require_hdr_output</span><span class="p">:</span>
+                <span class="n">settings</span><span class="o">.</span><span class="n">set_bool</span><span class="p">(</span><span class="s2">&quot;/rtx/rtpt/gaussian/skipTonemapping/enabled&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">renderer_type</span> <span class="o">==</span> <span class="s2">&quot;ovrtx&quot;</span> <span class="ow">and</span> <span class="n">require_hdr_output</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.app.settings_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_settings_manager</span>
+
+            <span class="n">get_settings_manager</span><span class="p">()</span><span class="o">.</span><span class="n">set_bool</span><span class="p">(</span><span class="s2">&quot;/rtx/rtpt/gaussian/skipTonemapping/enabled&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+            <span class="c1"># FIXME: settings set_bool is a no-op for ovrtx</span>
+            <span class="c1"># warning only since it affects only ParticleField3DGaussianSplat scene</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s2">&quot;OVRTX backend with PPISP/HDR requires /rtx/rtpt/gaussian/skipTonemapping/enabled to be false.&quot;</span>
+            <span class="p">)</span>
 
         <span class="c1"># UsdGeom Camera prim for the sensor</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sensor_prims</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">UsdGeom</span><span class="o">.</span><span class="n">Camera</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
@@ -1145,6 +1163,30 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_renderer</span> <span class="o">=</span> <span class="n">sim_ctx</span><span class="o">.</span><span class="n">render_context</span><span class="o">.</span><span class="n">get_renderer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">renderer_cfg</span><span class="p">)</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Using renderer: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_renderer</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
 
+        <span class="c1"># Build the render spec early — both the wrapper ISP (which delegates</span>
+        <span class="c1"># any renderer-side per-camera setup) and ``create_render_data`` consume</span>
+        <span class="c1"># it, and the prims are already authored at this point.</span>
+        <span class="n">cam_paths</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">GetPath</span><span class="p">())</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">sim_utils</span><span class="o">.</span><span class="n">find_matching_prims</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stage</span><span class="p">))</span>
+        <span class="n">env_0_prefix</span> <span class="o">=</span> <span class="s2">&quot;/World/envs/env_0/&quot;</span>
+        <span class="n">rel_under_env0</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">cam_paths</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="n">env_0_prefix</span><span class="p">)</span> <span class="k">if</span> <span class="n">cam_paths</span> <span class="ow">and</span> <span class="n">cam_paths</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">env_0_prefix</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="p">)</span>
+        <span class="n">device_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_device</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="p">)</span>
+        <span class="n">render_spec</span> <span class="o">=</span> <span class="n">CameraRenderSpec</span><span class="p">(</span>
+            <span class="n">cfg</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="p">,</span>
+            <span class="n">device</span><span class="o">=</span><span class="n">device_str</span><span class="p">,</span>
+            <span class="n">num_instances</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">cam_paths</span><span class="p">),</span>
+            <span class="n">camera_prim_paths</span><span class="o">=</span><span class="n">cam_paths</span><span class="p">,</span>
+            <span class="n">view_count</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">cam_paths</span><span class="p">),</span>
+            <span class="n">camera_path_relative_to_env_0</span><span class="o">=</span><span class="n">rel_under_env0</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Delegate per-camera USD setup to the renderer — must run **before**</span>
+        <span class="c1"># ``ensure_prepare_stage`` so renderers that snapshot the stage</span>
+        <span class="c1"># (ovrtx&#39;s ``stage.Export``) capture the resulting overrides in their</span>
+        <span class="c1"># exported USD.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_renderer</span><span class="o">.</span><span class="n">prepare_cameras</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stage</span><span class="p">,</span> <span class="n">render_spec</span><span class="p">)</span>
+
         <span class="c1"># Stage preprocessing must happen before creating the view because the view keeps</span>
         <span class="c1"># references to prims located in the stage.</span>
         <span class="n">sim_ctx</span><span class="o">.</span><span class="n">render_context</span><span class="o">.</span><span class="n">ensure_prepare_stage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stage</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_envs</span><span class="p">)</span>
@@ -1172,21 +1214,6 @@
             <span class="c1"># Add to list</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_sensor_prims</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">UsdGeom</span><span class="o">.</span><span class="n">Camera</span><span class="p">(</span><span class="n">cam_prim</span><span class="p">))</span>
 
-        <span class="c1"># View needs to exist before creating render data</span>
-        <span class="n">cam_paths</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">cam_prim</span><span class="o">.</span><span class="n">GetPath</span><span class="p">()</span><span class="o">.</span><span class="n">pathString</span> <span class="k">for</span> <span class="n">cam_prim</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_view</span><span class="o">.</span><span class="n">prims</span><span class="p">)</span>
-        <span class="n">env_0_prefix</span> <span class="o">=</span> <span class="s2">&quot;/World/envs/env_0/&quot;</span>
-        <span class="n">rel_under_env0</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">cam_paths</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="n">env_0_prefix</span><span class="p">)</span> <span class="k">if</span> <span class="n">cam_paths</span> <span class="ow">and</span> <span class="n">cam_paths</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">env_0_prefix</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
-        <span class="p">)</span>
-        <span class="n">device_str</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_device</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_device</span><span class="p">)</span>
-        <span class="n">render_spec</span> <span class="o">=</span> <span class="n">CameraRenderSpec</span><span class="p">(</span>
-            <span class="n">cfg</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="p">,</span>
-            <span class="n">device</span><span class="o">=</span><span class="n">device_str</span><span class="p">,</span>
-            <span class="n">num_instances</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_instances</span><span class="p">,</span>
-            <span class="n">camera_prim_paths</span><span class="o">=</span><span class="n">cam_paths</span><span class="p">,</span>
-            <span class="n">view_count</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_view</span><span class="o">.</span><span class="n">count</span><span class="p">,</span>
-            <span class="n">camera_path_relative_to_env_0</span><span class="o">=</span><span class="n">rel_under_env0</span><span class="p">,</span>
-        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_render_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_renderer</span><span class="o">.</span><span class="n">create_render_data</span><span class="p">(</span><span class="n">render_spec</span><span class="p">)</span>
 
         <span class="c1"># Create internal buffers (includes intrinsic matrix and pose init)</span>

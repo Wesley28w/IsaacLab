@@ -796,10 +796,10 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.depth_clipping_behavior"><code class="docutils literal notranslate"><span class="pre">CameraCfg.depth_clipping_behavior</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.data_types"><code class="docutils literal notranslate"><span class="pre">CameraCfg.data_types</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.width"><code class="docutils literal notranslate"><span class="pre">CameraCfg.width</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.height"><code class="docutils literal notranslate"><span class="pre">CameraCfg.height</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.prim_path"><code class="docutils literal notranslate"><span class="pre">CameraCfg.prim_path</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.update_period"><code class="docutils literal notranslate"><span class="pre">CameraCfg.update_period</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.debug_vis"><code class="docutils literal notranslate"><span class="pre">CameraCfg.debug_vis</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.height"><code class="docutils literal notranslate"><span class="pre">CameraCfg.height</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.update_latest_camera_pose"><code class="docutils literal notranslate"><span class="pre">CameraCfg.update_latest_camera_pose</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.semantic_filter"><code class="docutils literal notranslate"><span class="pre">CameraCfg.semantic_filter</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.colorize_semantic_segmentation"><code class="docutils literal notranslate"><span class="pre">CameraCfg.colorize_semantic_segmentation</span></code></a></li>
@@ -807,6 +807,7 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.colorize_instance_segmentation"><code class="docutils literal notranslate"><span class="pre">CameraCfg.colorize_instance_segmentation</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.semantic_segmentation_mapping"><code class="docutils literal notranslate"><span class="pre">CameraCfg.semantic_segmentation_mapping</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.renderer_cfg"><code class="docutils literal notranslate"><span class="pre">CameraCfg.renderer_cfg</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.isp_cfg"><code class="docutils literal notranslate"><span class="pre">CameraCfg.isp_cfg</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -2079,17 +2080,17 @@ where N is the number of sensors. Use <code class="docutils literal notranslate"
 <tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sensors.CameraCfg.width" title="isaaclab.sensors.CameraCfg.width"><code class="xref py py-obj docutils literal notranslate"><span class="pre">width</span></code></a></p></td>
 <td><p>Width of the image in pixels.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sensors.CameraCfg.prim_path" title="isaaclab.sensors.CameraCfg.prim_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prim_path</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sensors.CameraCfg.height" title="isaaclab.sensors.CameraCfg.height"><code class="xref py py-obj docutils literal notranslate"><span class="pre">height</span></code></a></p></td>
+<td><p>Height of the image in pixels.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sensors.CameraCfg.prim_path" title="isaaclab.sensors.CameraCfg.prim_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prim_path</span></code></a></p></td>
 <td><p>Prim path (or expression) to the sensor.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sensors.CameraCfg.update_period" title="isaaclab.sensors.CameraCfg.update_period"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_period</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sensors.CameraCfg.update_period" title="isaaclab.sensors.CameraCfg.update_period"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_period</span></code></a></p></td>
 <td><p>Update period of the sensor buffers (in seconds).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sensors.CameraCfg.debug_vis" title="isaaclab.sensors.CameraCfg.debug_vis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">debug_vis</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sensors.CameraCfg.debug_vis" title="isaaclab.sensors.CameraCfg.debug_vis"><code class="xref py py-obj docutils literal notranslate"><span class="pre">debug_vis</span></code></a></p></td>
 <td><p>Whether to visualize the sensor.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sensors.CameraCfg.height" title="isaaclab.sensors.CameraCfg.height"><code class="xref py py-obj docutils literal notranslate"><span class="pre">height</span></code></a></p></td>
-<td><p>Height of the image in pixels.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sensors.CameraCfg.update_latest_camera_pose" title="isaaclab.sensors.CameraCfg.update_latest_camera_pose"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_latest_camera_pose</span></code></a></p></td>
 <td><p>Whether to update the latest camera pose when fetching the camera's data.</p></td>
@@ -2111,6 +2112,9 @@ where N is the number of sensors. Use <code class="docutils literal notranslate"
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sensors.CameraCfg.renderer_cfg" title="isaaclab.sensors.CameraCfg.renderer_cfg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">renderer_cfg</span></code></a></p></td>
 <td><p>Renderer configuration for camera sensor.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sensors.CameraCfg.isp_cfg" title="isaaclab.sensors.CameraCfg.isp_cfg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">isp_cfg</span></code></a></p></td>
+<td><p>Post-render ISP cfg applied by the renderer backend after it produces HDR output.</p></td>
 </tr>
 </tbody>
 </table>
@@ -2164,6 +2168,12 @@ on <a class="reference internal" href="#isaaclab.sensors.CameraCfg.renderer_cfg"
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="isaaclab.sensors.CameraCfg.height">
+<span class="sig-name descname"><span class="pre">height</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#isaaclab.sensors.CameraCfg.height" title="Link to this definition">#</a></dt>
+<dd><p>Height of the image in pixels.</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="isaaclab.sensors.CameraCfg.prim_path">
 <span class="sig-name descname"><span class="pre">prim_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></em><a class="headerlink" href="#isaaclab.sensors.CameraCfg.prim_path" title="Link to this definition">#</a></dt>
 <dd><p>Prim path (or expression) to the sensor.</p>
@@ -2185,12 +2195,6 @@ will be replaced with the environment namespace.</p>
 <dt class="sig sig-object py" id="isaaclab.sensors.CameraCfg.debug_vis">
 <span class="sig-name descname"><span class="pre">debug_vis</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><a class="headerlink" href="#isaaclab.sensors.CameraCfg.debug_vis" title="Link to this definition">#</a></dt>
 <dd><p>Whether to visualize the sensor. Defaults to False.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="isaaclab.sensors.CameraCfg.height">
-<span class="sig-name descname"><span class="pre">height</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#isaaclab.sensors.CameraCfg.height" title="Link to this definition">#</a></dt>
-<dd><p>Height of the image in pixels.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -2292,6 +2296,28 @@ on <a class="reference internal" href="#isaaclab.sensors.CameraCfg.renderer_cfg"
 <dt class="sig sig-object py" id="isaaclab.sensors.CameraCfg.renderer_cfg">
 <span class="sig-name descname"><span class="pre">renderer_cfg</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="isaaclab.renderers.html#isaaclab.renderers.RendererCfg" title="isaaclab.renderers.RendererCfg"><span class="pre">RendererCfg</span></a></em><a class="headerlink" href="#isaaclab.sensors.CameraCfg.renderer_cfg" title="Link to this definition">#</a></dt>
 <dd><p>Renderer configuration for camera sensor.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="isaaclab.sensors.CameraCfg.isp_cfg">
+<span class="sig-name descname"><span class="pre">isp_cfg</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Any</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">CameraISPMode</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></em><a class="headerlink" href="#isaaclab.sensors.CameraCfg.isp_cfg" title="Link to this definition">#</a></dt>
+<dd><p>Post-render ISP cfg applied by the renderer backend after it produces HDR output.</p>
+<p>Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code> (ISP disabled). Auto-discovery is opt-in via a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">CameraISPMode</span></code> sentinel — see below.</p>
+<p>Accepted values:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">None</span></code> — ISP disabled. No HDR AOV is requested and no RTX-side
+tonemapping flags are flipped.</p></li>
+<li><p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">CameraISPMode</span></code> sentinel — the renderer backend walks the USD stage to
+discover an ISP shader (e.g. via the <code class="xref py py-mod docutils literal notranslate"><span class="pre">isaaclab_ppisp</span></code> package).</p></li>
+<li><p>A concrete ISP cfg dataclass (e.g. <code class="xref py py-class docutils literal notranslate"><span class="pre">isaaclab_ppisp.PpispCfg</span></code>) — used directly.</p></li>
+</ul>
+<p>The cfg applies once per Camera sensor batch. The PPISP Warp kernel takes
+scalar coefficients, so every cloned view in a tiled batch shares the same
+ISP configuration — there is no per-view ISP today.</p>
+<p><code class="xref py py-mod docutils literal notranslate"><span class="pre">isaaclab.sensors.camera</span></code> does not depend on any ISP implementation; the
+annotation is intentionally loose (<code class="docutils literal notranslate"><span class="pre">Any</span></code>) so the sensor layer can carry the
+cfg through to a renderer that knows what to do with it.</p>
 </dd></dl>
 
 </dd></dl>
@@ -6480,10 +6506,10 @@ their native solver outputs to this convention.</p></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.depth_clipping_behavior"><code class="docutils literal notranslate"><span class="pre">CameraCfg.depth_clipping_behavior</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.data_types"><code class="docutils literal notranslate"><span class="pre">CameraCfg.data_types</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.width"><code class="docutils literal notranslate"><span class="pre">CameraCfg.width</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.height"><code class="docutils literal notranslate"><span class="pre">CameraCfg.height</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.prim_path"><code class="docutils literal notranslate"><span class="pre">CameraCfg.prim_path</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.update_period"><code class="docutils literal notranslate"><span class="pre">CameraCfg.update_period</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.debug_vis"><code class="docutils literal notranslate"><span class="pre">CameraCfg.debug_vis</span></code></a></li>
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.height"><code class="docutils literal notranslate"><span class="pre">CameraCfg.height</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.update_latest_camera_pose"><code class="docutils literal notranslate"><span class="pre">CameraCfg.update_latest_camera_pose</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.semantic_filter"><code class="docutils literal notranslate"><span class="pre">CameraCfg.semantic_filter</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.colorize_semantic_segmentation"><code class="docutils literal notranslate"><span class="pre">CameraCfg.colorize_semantic_segmentation</span></code></a></li>
@@ -6491,6 +6517,7 @@ their native solver outputs to this convention.</p></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.colorize_instance_segmentation"><code class="docutils literal notranslate"><span class="pre">CameraCfg.colorize_instance_segmentation</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.semantic_segmentation_mapping"><code class="docutils literal notranslate"><span class="pre">CameraCfg.semantic_segmentation_mapping</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.renderer_cfg"><code class="docutils literal notranslate"><span class="pre">CameraCfg.renderer_cfg</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sensors.CameraCfg.isp_cfg"><code class="docutils literal notranslate"><span class="pre">CameraCfg.isp_cfg</span></code></a></li>
 </ul>
 </li>
 </ul>

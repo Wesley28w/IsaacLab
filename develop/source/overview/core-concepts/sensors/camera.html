@@ -742,14 +742,20 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#accessing-camera-data">Accessing camera data</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#annotators-rtx-only">Annotators (RTX only)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rgb-and-rgba">RGB and RGBA</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#post-render-camera-isp">Post-render Camera ISP</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ppisp">PPISP</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration">Configuration</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto-discovery">Auto-discovery</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#renderer-support">Renderer support</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#known-limitations">Known limitations</a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#depth-and-distances">Depth and Distances</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#normals">Normals</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#motion-vectors">Motion Vectors</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#semantic-segmentation">Semantic Segmentation</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#instance-id-segmentation">Instance ID Segmentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#instance-segmentation">Instance Segmentation</a></li>
-</ul>
-</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#instance-id-segmentation">Instance ID Segmentation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#instance-segmentation">Instance Segmentation</a></li>
 </ul>
 </li>
 </ul>
@@ -952,6 +958,121 @@ data types when using the RTX renderer:</p>
 <p><code class="docutils literal notranslate"><span class="pre">rgb</span></code> returns a 3-channel RGB image of type <code class="docutils literal notranslate"><span class="pre">torch.uint8</span></code>, shape <code class="docutils literal notranslate"><span class="pre">(B,</span> <span class="pre">H,</span> <span class="pre">W,</span> <span class="pre">3)</span></code>.</p>
 <p><code class="docutils literal notranslate"><span class="pre">rgba</span></code> returns a 4-channel RGBA image of type <code class="docutils literal notranslate"><span class="pre">torch.uint8</span></code>, shape <code class="docutils literal notranslate"><span class="pre">(B,</span> <span class="pre">H,</span> <span class="pre">W,</span> <span class="pre">4)</span></code>.</p>
 <p>To convert to <code class="docutils literal notranslate"><span class="pre">torch.float32</span></code>, divide by 255.0.</p>
+<p><code class="docutils literal notranslate"><span class="pre">rgb_hdr</span></code> returns a 3-channel scene-linear HDR image of type <code class="docutils literal notranslate"><span class="pre">torch.float32</span></code>, shape <code class="docutils literal notranslate"><span class="pre">(B,</span> <span class="pre">H,</span> <span class="pre">W,</span> <span class="pre">3)</span></code>.</p>
+</section>
+<section id="post-render-camera-isp">
+<h3>Post-render Camera ISP<a class="headerlink" href="#post-render-camera-isp" title="Link to this heading">#</a></h3>
+<p>A camera Image Signal Processing (ISP) pipeline models the chain that maps
+the scene-linear radiance captured by a sensor to the LDR pixel values a
+downstream consumer sees.
+The camera ISP pipeline is usually part of the renderer.
+In Isaac Lab we expose a post-render camera ISP pipeline which is applied on top of the renderer’s HDR scene-linear AOV.
+This makes it possible to implement additional post-render processing not currently supported by the renderer backends.
+The pass is configured via <a class="reference internal" href="../../../api/lab/isaaclab.sensors.html#isaaclab.sensors.CameraCfg.isp_cfg" title="isaaclab.sensors.CameraCfg.isp_cfg"><code class="xref py py-attr docutils literal notranslate"><span class="pre">isp_cfg</span></code></a>
+on every camera and runs once per render tick.</p>
+<section id="ppisp">
+<h4>PPISP<a class="headerlink" href="#ppisp" title="Link to this heading">#</a></h4>
+<p>The shipped ISP implementation is <strong>PPISP</strong> (Physically Plausible Image
+Signal Processing), an NVIDIA Spatial Intelligence Lab pipeline designed
+to bring synthetic imagery — most notably 3D Gaussian splat reconstructions
+— closer to real-camera output without re-training the upstream model. See
+the project page: <a class="reference external" href="https://research.nvidia.com/labs/sil/projects/ppisp">https://research.nvidia.com/labs/sil/projects/ppisp</a> .</p>
+<p>PPISP is typically authored alongside a <a class="reference external" href="https://openusd.org/release/user_guides/schemas/usdVol/ParticleField3DGaussianSplat.html">ParticleField3DGaussianSplat</a>
+USD asset: it carries a <a class="reference external" href="https://openusd.org/release/user_guides/schemas/usdRender/RenderProduct.html">RenderProduct</a>
+whose target camera and PPISP <a class="reference external" href="https://openusd.org/release/api/class_usd_shade_shader.html">UsdShade.Shader</a>
+(a shader prim named <code class="docutils literal notranslate"><span class="pre">PPISP</span></code> whose inputs follow the PPISP naming
+convention) were calibrated against the real capture rig that produced
+the splats. Configuring the camera with the matching PPISP coefficients
+makes the rendered tile match the calibration target.</p>
+<p>The pipeline applies, in order: responsivity → exposure → vignetting →
+color homography → camera response function → uint8 clamp. It runs as a
+single Warp kernel.</p>
+</section>
+<section id="configuration">
+<h4>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">#</a></h4>
+<p><a class="reference internal" href="../../../api/lab/isaaclab.sensors.html#isaaclab.sensors.CameraCfg.isp_cfg" title="isaaclab.sensors.CameraCfg.isp_cfg"><code class="xref py py-attr docutils literal notranslate"><span class="pre">isp_cfg</span></code></a> accepts three forms:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">None</span></code> (default) — ISP disabled.</p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">PpispCfg</span></code> — explicit PPISP coefficients
+(<code class="xref py py-attr docutils literal notranslate"><span class="pre">inputs</span></code>), or
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">shader_prim_path</span></code> to import them from a
+PPISP <code class="docutils literal notranslate"><span class="pre">UsdShade.Shader</span></code> already on the stage.</p></li>
+<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">CameraISPMode</span></code> — auto-discover an ISP shader on the
+stage (see below).</p></li>
+</ul>
+<p>The cfg applies once per Camera sensor batch. The PPISP Warp kernel takes
+scalar coefficients, so every cloned view in a tiled batch shares the same
+ISP configuration — there is no per-view ISP today.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.sensors.camera</span><span class="w"> </span><span class="kn">import</span> <span class="n">CameraCfg</span><span class="p">,</span> <span class="n">CameraISPMode</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab_ppisp</span><span class="w"> </span><span class="kn">import</span> <span class="n">PpispCfg</span>
+
+<span class="c1"># default — ISP disabled</span>
+<span class="n">cfg</span> <span class="o">=</span> <span class="n">CameraCfg</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+
+<span class="c1"># explicit coefficients</span>
+<span class="n">cfg</span> <span class="o">=</span> <span class="n">CameraCfg</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">isp_cfg</span><span class="o">=</span><span class="n">PpispCfg</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;exposureOffset&quot;</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">}))</span>
+
+<span class="c1"># import coefficients from a USD shader path</span>
+<span class="n">cfg</span> <span class="o">=</span> <span class="n">CameraCfg</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">isp_cfg</span><span class="o">=</span><span class="n">PpispCfg</span><span class="p">(</span><span class="n">shader_prim_path</span><span class="o">=</span><span class="s2">&quot;/World/Render/PPISP&quot;</span><span class="p">))</span>
+
+<span class="c1"># auto-discover from the stage</span>
+<span class="n">cfg</span> <span class="o">=</span> <span class="n">CameraCfg</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">isp_cfg</span><span class="o">=</span><span class="n">CameraISPMode</span><span class="o">.</span><span class="n">AUTO_ANY</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="auto-discovery">
+<h4>Auto-discovery<a class="headerlink" href="#auto-discovery" title="Link to this heading">#</a></h4>
+<p>Auto-discovery is opt-in via <code class="xref py py-class docutils literal notranslate"><span class="pre">CameraISPMode</span></code>. Discovery runs
+once at camera construction using the first matched camera prim in the Camera
+sensor batch:</p>
+<ol class="arabic simple">
+<li><p>Walk the stage for a USD <code class="docutils literal notranslate"><span class="pre">RenderProduct</span></code> whose <code class="docutils literal notranslate"><span class="pre">camera</span></code> relationship
+targets the first matched camera prim <strong>and</strong> that has a child
+<code class="docutils literal notranslate"><span class="pre">UsdShade.Shader</span></code> prim named <code class="docutils literal notranslate"><span class="pre">PPISP</span></code>. If found, import its inputs as a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">PpispCfg</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AUTO_ANY</span></code> only: if step 1 finds nothing, fall back to the first
+<code class="docutils literal notranslate"><span class="pre">UsdShade.Shader</span></code> prim named <code class="docutils literal notranslate"><span class="pre">PPISP</span></code> anywhere on the stage.</p></li>
+<li><p>Otherwise the ISP stays disabled for the whole Camera sensor batch.</p></li>
+</ol>
+<p>In practice this means: if the stage carries a <code class="docutils literal notranslate"><span class="pre">ParticleField3DGaussianSplat</span></code>
+together with a <code class="docutils literal notranslate"><span class="pre">RenderProduct</span></code> that binds a <code class="docutils literal notranslate"><span class="pre">PPISP</span></code> shader child to the
+batch’s first matched camera prim, the Camera sensor picks up the matching ISP
+automatically and no Python-side coefficient authoring is required.</p>
+<p><code class="docutils literal notranslate"><span class="pre">AUTO_CAMERA</span></code> runs step 1 only — useful when the stage carries multiple
+PPISP shaders and you want the Camera sensor batch to use exactly the one bound
+to its first matched camera prim.</p>
+</section>
+<section id="renderer-support">
+<h4>Renderer support<a class="headerlink" href="#renderer-support" title="Link to this heading">#</a></h4>
+<p>All three shipped backends advertise the HDR AOV
+(<code class="xref py py-attr docutils literal notranslate"><span class="pre">RGB_HDR</span></code>) and compose the ISP pipeline
+internally: the Isaac RTX renderer sources HDR from the Replicator
+<code class="docutils literal notranslate"><span class="pre">HdrColor</span></code> annotator, the OVRTX renderer from its HDR render var, the
+Newton Warp renderer from its native scene-linear color buffer. Each
+backend allocates its own HDR scratch buffer when the user did not request
+<code class="docutils literal notranslate"><span class="pre">&quot;rgb_hdr&quot;</span></code> in <a class="reference internal" href="../../../api/lab/isaaclab.sensors.html#isaaclab.sensors.CameraCfg.data_types" title="isaaclab.sensors.CameraCfg.data_types"><code class="xref py py-attr docutils literal notranslate"><span class="pre">data_types</span></code></a>, and dispatches the
+PPISP kernel into <code class="docutils literal notranslate"><span class="pre">rgb</span></code> / <code class="docutils literal notranslate"><span class="pre">rgba</span></code> after every render tick.</p>
+</section>
+<section id="known-limitations">
+<h4>Known limitations<a class="headerlink" href="#known-limitations" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p>The ISP writes back into the <code class="docutils literal notranslate"><span class="pre">rgb</span></code> / <code class="docutils literal notranslate"><span class="pre">rgba</span></code> buffers. If neither is
+requested, configuring <code class="docutils literal notranslate"><span class="pre">isp_cfg</span></code> raises at camera init.</p></li>
+<li><p>PPISP inputs are static for the lifetime of the camera. Animated USD
+shader inputs are collapsed to their first authored time sample.</p></li>
+<li><p>Coefficients are global per camera — no per-pixel or per-region
+authoring beyond the radial vignetting term.</p></li>
+<li><p>PPISP is the only ISP implementation today. Other ISP families would
+need a new config type and discoverer entry.</p></li>
+<li><p>On the Isaac RTX and OVRTX backends, enabling <code class="docutils literal notranslate"><span class="pre">isp_cfg</span></code> forces RTX-side
+tonemapping off (<code class="docutils literal notranslate"><span class="pre">/rtx/rtpt/gaussian/skipTonemapping/enabled=False</span></code>)
+and authors a neutral <code class="docutils literal notranslate"><span class="pre">OmniRtxCameraExposureAPI_1</span></code> schema on each
+camera prim so the post-render ISP is the only path that processes
+color. Mixing this with RTX-side exposure authoring is not supported.</p></li>
+<li><p>Auto-discovery resolves at camera construction; later authoring of a
+<code class="docutils literal notranslate"><span class="pre">RenderProduct</span></code> or shader on the stage is not picked up.</p></li>
+</ul>
+</section>
 </section>
 <section id="depth-and-distances">
 <h3>Depth and Distances<a class="headerlink" href="#depth-and-distances" title="Link to this heading">#</a></h3>
@@ -1005,8 +1126,9 @@ The <code class="docutils literal notranslate"><span class="pre">idToLabels</spa
 <li><p>If <code class="docutils literal notranslate"><span class="pre">colorize_instance_id_segmentation=False</span></code>: shape <code class="docutils literal notranslate"><span class="pre">(B,</span> <span class="pre">H,</span> <span class="pre">W,</span> <span class="pre">1)</span></code>, type <code class="docutils literal notranslate"><span class="pre">torch.int32</span></code>.
 The <code class="docutils literal notranslate"><span class="pre">idToLabels</span></code> dict maps instance ID to USD prim path.</p></li>
 </ul>
+</section>
 <section id="instance-segmentation">
-<h4>Instance Segmentation<a class="headerlink" href="#instance-segmentation" title="Link to this heading">#</a></h4>
+<h3>Instance Segmentation<a class="headerlink" href="#instance-segmentation" title="Link to this heading">#</a></h3>
 <figure class="align-center" style="width: 100%">
 <img alt="A scene with instance segmentation" src="../../../../_images/camera_instance.jpg" />
 </figure>
@@ -1020,7 +1142,6 @@ An <code class="docutils literal notranslate"><span class="pre">info</span></cod
 </ul>
 <p>The <code class="docutils literal notranslate"><span class="pre">idToLabels</span></code> dict maps color to USD prim path. The <code class="docutils literal notranslate"><span class="pre">idToSemantics</span></code> dict maps color to
 semantic label.</p>
-</section>
 </section>
 </section>
 </section>
@@ -1078,14 +1199,20 @@ semantic label.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#accessing-camera-data">Accessing camera data</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#annotators-rtx-only">Annotators (RTX only)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rgb-and-rgba">RGB and RGBA</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#post-render-camera-isp">Post-render Camera ISP</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#ppisp">PPISP</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration">Configuration</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#auto-discovery">Auto-discovery</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#renderer-support">Renderer support</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#known-limitations">Known limitations</a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#depth-and-distances">Depth and Distances</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#normals">Normals</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#motion-vectors">Motion Vectors</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#semantic-segmentation">Semantic Segmentation</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#instance-id-segmentation">Instance ID Segmentation</a><ul class="nav section-nav flex-column">
-<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#instance-segmentation">Instance Segmentation</a></li>
-</ul>
-</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#instance-id-segmentation">Instance ID Segmentation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#instance-segmentation">Instance Segmentation</a></li>
 </ul>
 </li>
 </ul>

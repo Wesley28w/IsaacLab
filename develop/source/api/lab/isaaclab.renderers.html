@@ -739,6 +739,7 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#base-renderer">Base Renderer</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.renderers.BaseRenderer"><code class="docutils literal notranslate"><span class="pre">BaseRenderer</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.renderers.BaseRenderer.initialize"><code class="docutils literal notranslate"><span class="pre">BaseRenderer.initialize()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.renderers.BaseRenderer.prepare_cameras"><code class="docutils literal notranslate"><span class="pre">BaseRenderer.prepare_cameras()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.renderers.BaseRenderer.supported_output_types"><code class="docutils literal notranslate"><span class="pre">BaseRenderer.supported_output_types()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.renderers.BaseRenderer.prepare_stage"><code class="docutils literal notranslate"><span class="pre">BaseRenderer.prepare_stage()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.renderers.BaseRenderer.create_render_data"><code class="docutils literal notranslate"><span class="pre">BaseRenderer.create_render_data()</span></code></a></li>
@@ -807,31 +808,34 @@ different renderer backends that can be used with Isaac Lab.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.renderers.BaseRenderer.initialize" title="isaaclab.renderers.BaseRenderer.initialize"><code class="xref py py-obj docutils literal notranslate"><span class="pre">initialize</span></code></a>()</p></td>
 <td><p>Post-physics one-time initialization hook.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.renderers.BaseRenderer.supported_output_types" title="isaaclab.renderers.BaseRenderer.supported_output_types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">supported_output_types</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.renderers.BaseRenderer.prepare_cameras" title="isaaclab.renderers.BaseRenderer.prepare_cameras"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prepare_cameras</span></code></a>(stage, spec)</p></td>
+<td><p>Pre-render per-camera setup the backend needs.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.renderers.BaseRenderer.supported_output_types" title="isaaclab.renderers.BaseRenderer.supported_output_types"><code class="xref py py-obj docutils literal notranslate"><span class="pre">supported_output_types</span></code></a>()</p></td>
 <td><p>Per-output layout (channels + dtype) this renderer can produce.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.renderers.BaseRenderer.prepare_stage" title="isaaclab.renderers.BaseRenderer.prepare_stage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prepare_stage</span></code></a>(stage, num_envs)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.renderers.BaseRenderer.prepare_stage" title="isaaclab.renderers.BaseRenderer.prepare_stage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">prepare_stage</span></code></a>(stage, num_envs)</p></td>
 <td><p>Prepare the stage for rendering before <a class="reference internal" href="#isaaclab.renderers.BaseRenderer.create_render_data" title="isaaclab.renderers.BaseRenderer.create_render_data"><code class="xref py py-meth docutils literal notranslate"><span class="pre">create_render_data()</span></code></a> is called.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.renderers.BaseRenderer.create_render_data" title="isaaclab.renderers.BaseRenderer.create_render_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_render_data</span></code></a>(spec)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.renderers.BaseRenderer.create_render_data" title="isaaclab.renderers.BaseRenderer.create_render_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_render_data</span></code></a>(spec)</p></td>
 <td><p>Create render data for the given camera <code class="xref py py-class docutils literal notranslate"><span class="pre">CameraRenderSpec</span></code>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.renderers.BaseRenderer.set_outputs" title="isaaclab.renderers.BaseRenderer.set_outputs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_outputs</span></code></a>(render_data, output_data)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.renderers.BaseRenderer.set_outputs" title="isaaclab.renderers.BaseRenderer.set_outputs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_outputs</span></code></a>(render_data, output_data)</p></td>
 <td><p>Store reference to output buffers for writing during render.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.renderers.BaseRenderer.update_transforms" title="isaaclab.renderers.BaseRenderer.update_transforms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_transforms</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.renderers.BaseRenderer.update_transforms" title="isaaclab.renderers.BaseRenderer.update_transforms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_transforms</span></code></a>()</p></td>
 <td><p>Update scene transforms before rendering.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.renderers.BaseRenderer.update_camera" title="isaaclab.renderers.BaseRenderer.update_camera"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_camera</span></code></a>(render_data, positions, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.renderers.BaseRenderer.update_camera" title="isaaclab.renderers.BaseRenderer.update_camera"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_camera</span></code></a>(render_data, positions, ...)</p></td>
 <td><p>Update camera poses and intrinsics for the next render.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.renderers.BaseRenderer.render" title="isaaclab.renderers.BaseRenderer.render"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render</span></code></a>(render_data)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.renderers.BaseRenderer.render" title="isaaclab.renderers.BaseRenderer.render"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render</span></code></a>(render_data)</p></td>
 <td><p>Perform rendering and write to output buffers.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.renderers.BaseRenderer.read_output" title="isaaclab.renderers.BaseRenderer.read_output"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_output</span></code></a>(render_data, camera_data)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.renderers.BaseRenderer.read_output" title="isaaclab.renderers.BaseRenderer.read_output"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_output</span></code></a>(render_data, camera_data)</p></td>
 <td><p>Read rendered outputs from the renderer into the camera data container.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.renderers.BaseRenderer.cleanup" title="isaaclab.renderers.BaseRenderer.cleanup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cleanup</span></code></a>(render_data)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.renderers.BaseRenderer.cleanup" title="isaaclab.renderers.BaseRenderer.cleanup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cleanup</span></code></a>(render_data)</p></td>
 <td><p>Release renderer resources associated with the given render data.</p></td>
 </tr>
 </tbody>
@@ -841,6 +845,25 @@ different renderer backends that can be used with Isaac Lab.</p>
 <dt class="sig sig-object py" id="isaaclab.renderers.BaseRenderer.initialize">
 <span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/isaaclab/renderers/base_renderer.html#BaseRenderer.initialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#isaaclab.renderers.BaseRenderer.initialize" title="Link to this definition">#</a></dt>
 <dd><p>Post-physics one-time initialization hook. Called only once.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="isaaclab.renderers.BaseRenderer.prepare_cameras">
+<span class="sig-name descname"><span class="pre">prepare_cameras</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stage</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">CameraRenderSpec</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/isaaclab/renderers/base_renderer.html#BaseRenderer.prepare_cameras"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#isaaclab.renderers.BaseRenderer.prepare_cameras" title="Link to this definition">#</a></dt>
+<dd><p>Pre-render per-camera setup the backend needs.</p>
+<p>The default implementation is a no-op. Renderer subclasses override
+to perform whatever per-camera initialization their backend requires
+— e.g. authoring stage attributes on the resolved camera prims,
+configuring per-tile GPU buffers, or any other state setup.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stage</strong> – Scene stage the camera prims live on, or <code class="docutils literal notranslate"><span class="pre">None</span></code>
+when no stage context applies. Stage-less backends ignore it.</p></li>
+<li><p><strong>spec</strong> – Immutable description of the tiled camera bundle.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -1056,6 +1079,7 @@ instance to populate.</p></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#base-renderer">Base Renderer</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.renderers.BaseRenderer"><code class="docutils literal notranslate"><span class="pre">BaseRenderer</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.renderers.BaseRenderer.initialize"><code class="docutils literal notranslate"><span class="pre">BaseRenderer.initialize()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.renderers.BaseRenderer.prepare_cameras"><code class="docutils literal notranslate"><span class="pre">BaseRenderer.prepare_cameras()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.renderers.BaseRenderer.supported_output_types"><code class="docutils literal notranslate"><span class="pre">BaseRenderer.supported_output_types()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.renderers.BaseRenderer.prepare_stage"><code class="docutils literal notranslate"><span class="pre">BaseRenderer.prepare_stage()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.renderers.BaseRenderer.create_render_data"><code class="docutils literal notranslate"><span class="pre">BaseRenderer.create_render_data()</span></code></a></li>
