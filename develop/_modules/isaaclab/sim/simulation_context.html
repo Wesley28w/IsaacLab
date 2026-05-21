@@ -60,7 +60,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="3.0.0" />
-    <meta name="docbuild:last-update" content="May 20, 2026"/>
+    <meta name="docbuild:last-update" content="May 21, 2026"/>
   </head>
   
   
@@ -686,6 +686,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterator</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">contextlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">contextmanager</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">fields</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">toml</span>
@@ -1142,7 +1143,9 @@
                     <span class="k">continue</span>
                 <span class="n">mod</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;isaaclab_visualizers.</span><span class="si">{</span><span class="n">viz_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
                 <span class="n">cfg_cls</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">mod</span><span class="p">,</span> <span class="n">cfg_class_names</span><span class="p">[</span><span class="n">viz_type</span><span class="p">])</span>
-                <span class="n">default_configs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cfg_cls</span><span class="p">())</span>
+                <span class="n">cfg</span> <span class="o">=</span> <span class="n">cfg_cls</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_apply_default_visualizer_cfg</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
+                <span class="n">default_configs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cfg</span><span class="p">)</span>
             <span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">ModuleNotFoundError</span><span class="p">)</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
                 <span class="c1"># isaaclab_visualizers is optional; log once at warning level</span>
                 <span class="k">if</span> <span class="s2">&quot;isaaclab_visualizers&quot;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">):</span>
@@ -1161,6 +1164,16 @@
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
                 <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[SimulationContext] Failed to create default config for visualizer &#39;</span><span class="si">{</span><span class="n">viz_type</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">default_configs</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_apply_default_visualizer_cfg</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cfg</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply shared default visualizer settings to a backend-specific config.&quot;&quot;&quot;</span>
+        <span class="n">default_cfg</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="p">,</span> <span class="s2">&quot;default_visualizer_cfg&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">default_cfg</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">(</span><span class="n">default_cfg</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;visualizer_type&quot;</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">default_cfg</span><span class="p">,</span> <span class="n">field</span><span class="o">.</span><span class="n">name</span><span class="p">))</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_get_cli_visualizer_types</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return list of visualizer types requested via CLI (setting).&quot;&quot;&quot;</span>
@@ -1336,11 +1349,26 @@
             <span class="n">eye</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">pending</span>
             <span class="k">for</span> <span class="n">viz</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_visualizers</span><span class="p">:</span>
                 <span class="n">viz</span><span class="o">.</span><span class="n">set_camera_view</span><span class="p">(</span><span class="n">eye</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_pending_camera_view</span> <span class="o">=</span> <span class="kc">None</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pending_camera_view</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_visualizers</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scene_data_provider</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">close_provider</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_scene_data_provider</span><span class="p">,</span> <span class="s2">&quot;close&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">close_provider</span><span class="p">):</span>
+                <span class="n">close_provider</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_scene_data_provider</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_scene_data_provider</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SceneDataProvider</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scene_data_provider</span>
+
+<div class="viewcode-block" id="SimulationContext.register_interactive_scene">
+<a class="viewcode-back" href="../../../source/api/lab/isaaclab.sim.html#isaaclab.sim.SimulationContext.register_interactive_scene">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">register_interactive_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Register the active scene so scene data providers can expose scene-owned sensors.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_interactive_scene</span> <span class="o">=</span> <span class="n">scene</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scene_data_provider</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_scene_data_provider</span><span class="o">.</span><span class="n">set_interactive_scene</span><span class="p">(</span><span class="n">scene</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="SimulationContext.get_scene_data_requirements">
 <a class="viewcode-back" href="../../../source/api/lab/isaaclab.sim.html#isaaclab.sim.SimulationContext.get_scene_data_requirements">[docs]</a>
@@ -1802,7 +1830,7 @@ By The Isaac Lab Project Developers.
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on May 20, 2026.
+  Last updated on May 21, 2026.
   <br/>
 </p>
   </div>

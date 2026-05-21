@@ -63,7 +63,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="3.0.0" />
-    <meta name="docbuild:last-update" content="May 20, 2026"/>
+    <meta name="docbuild:last-update" content="May 21, 2026"/>
   </head>
   
   
@@ -755,6 +755,7 @@
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.SimulationContext.render_generation"><code class="docutils literal notranslate"><span class="pre">SimulationContext.render_generation</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.SimulationContext.resolve_visualizer_types"><code class="docutils literal notranslate"><span class="pre">SimulationContext.resolve_visualizer_types()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.SimulationContext.initialize_visualizers"><code class="docutils literal notranslate"><span class="pre">SimulationContext.initialize_visualizers()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.SimulationContext.register_interactive_scene"><code class="docutils literal notranslate"><span class="pre">SimulationContext.register_interactive_scene()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.SimulationContext.get_scene_data_requirements"><code class="docutils literal notranslate"><span class="pre">SimulationContext.get_scene_data_requirements()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.SimulationContext.update_scene_data_requirements"><code class="docutils literal notranslate"><span class="pre">SimulationContext.update_scene_data_requirements()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.SimulationContext.get_clone_plan"><code class="docutils literal notranslate"><span class="pre">SimulationContext.get_clone_plan()</span></code></a></li>
@@ -949,64 +950,67 @@ as a feature request elaborating on the required application.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.initialize_visualizers" title="isaaclab.sim.SimulationContext.initialize_visualizers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">initialize_visualizers</span></code></a>()</p></td>
 <td><p>Initialize visualizers from SimulationCfg.visualizer_cfgs.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.get_scene_data_requirements" title="isaaclab.sim.SimulationContext.get_scene_data_requirements"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_scene_data_requirements</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.register_interactive_scene" title="isaaclab.sim.SimulationContext.register_interactive_scene"><code class="xref py py-obj docutils literal notranslate"><span class="pre">register_interactive_scene</span></code></a>(scene)</p></td>
+<td><p>Register the active scene so scene data providers can expose scene-owned sensors.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.get_scene_data_requirements" title="isaaclab.sim.SimulationContext.get_scene_data_requirements"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_scene_data_requirements</span></code></a>()</p></td>
 <td><p>Return scene-data requirements resolved from visualizers/renderers.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.update_scene_data_requirements" title="isaaclab.sim.SimulationContext.update_scene_data_requirements"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_scene_data_requirements</span></code></a>(requirements)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.update_scene_data_requirements" title="isaaclab.sim.SimulationContext.update_scene_data_requirements"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_scene_data_requirements</span></code></a>(requirements)</p></td>
 <td><p>Update scene-data requirements.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.get_clone_plan" title="isaaclab.sim.SimulationContext.get_clone_plan"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_clone_plan</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.get_clone_plan" title="isaaclab.sim.SimulationContext.get_clone_plan"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_clone_plan</span></code></a>()</p></td>
 <td><p>Return the clone plan published by the scene.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.set_clone_plan" title="isaaclab.sim.SimulationContext.set_clone_plan"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_clone_plan</span></code></a>(plan)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.set_clone_plan" title="isaaclab.sim.SimulationContext.set_clone_plan"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_clone_plan</span></code></a>(plan)</p></td>
 <td><p>Set the cloner's clone plan.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.get_rendering_dt" title="isaaclab.sim.SimulationContext.get_rendering_dt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_rendering_dt</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.get_rendering_dt" title="isaaclab.sim.SimulationContext.get_rendering_dt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_rendering_dt</span></code></a>()</p></td>
 <td><p>Return rendering dt, allowing visualizer-specific override.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.set_camera_view" title="isaaclab.sim.SimulationContext.set_camera_view"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_camera_view</span></code></a>(eye, target)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.set_camera_view" title="isaaclab.sim.SimulationContext.set_camera_view"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_camera_view</span></code></a>(eye, target)</p></td>
 <td><p>Set camera view on all visualizers that support it.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.forward" title="isaaclab.sim.SimulationContext.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.forward" title="isaaclab.sim.SimulationContext.forward"><code class="xref py py-obj docutils literal notranslate"><span class="pre">forward</span></code></a>()</p></td>
 <td><p>Update kinematics without stepping physics.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.reset" title="isaaclab.sim.SimulationContext.reset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset</span></code></a>([soft])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.reset" title="isaaclab.sim.SimulationContext.reset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">reset</span></code></a>([soft])</p></td>
 <td><p>Reset the simulation.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.step" title="isaaclab.sim.SimulationContext.step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">step</span></code></a>([render])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.step" title="isaaclab.sim.SimulationContext.step"><code class="xref py py-obj docutils literal notranslate"><span class="pre">step</span></code></a>([render])</p></td>
 <td><p>Step physics and optionally render.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.render" title="isaaclab.sim.SimulationContext.render"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render</span></code></a>([mode, skip_app_pumping])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.render" title="isaaclab.sim.SimulationContext.render"><code class="xref py py-obj docutils literal notranslate"><span class="pre">render</span></code></a>([mode, skip_app_pumping])</p></td>
 <td><p>Update visualizers and render the scene.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.update_visualizers" title="isaaclab.sim.SimulationContext.update_visualizers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_visualizers</span></code></a>(dt[, skip_app_pumping])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.update_visualizers" title="isaaclab.sim.SimulationContext.update_visualizers"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_visualizers</span></code></a>(dt[, skip_app_pumping])</p></td>
 <td><p>Update visualizers without triggering renderer/GUI.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.play" title="isaaclab.sim.SimulationContext.play"><code class="xref py py-obj docutils literal notranslate"><span class="pre">play</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.play" title="isaaclab.sim.SimulationContext.play"><code class="xref py py-obj docutils literal notranslate"><span class="pre">play</span></code></a>()</p></td>
 <td><p>Start or resume the simulation.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.pause" title="isaaclab.sim.SimulationContext.pause"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pause</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.pause" title="isaaclab.sim.SimulationContext.pause"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pause</span></code></a>()</p></td>
 <td><p>Pause the simulation (can be resumed with play).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.stop" title="isaaclab.sim.SimulationContext.stop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stop</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.stop" title="isaaclab.sim.SimulationContext.stop"><code class="xref py py-obj docutils literal notranslate"><span class="pre">stop</span></code></a>()</p></td>
 <td><p>Stop the simulation completely.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.is_playing" title="isaaclab.sim.SimulationContext.is_playing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_playing</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.is_playing" title="isaaclab.sim.SimulationContext.is_playing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_playing</span></code></a>()</p></td>
 <td><p>Returns True if simulation is playing (not paused or stopped).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.is_stopped" title="isaaclab.sim.SimulationContext.is_stopped"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_stopped</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.is_stopped" title="isaaclab.sim.SimulationContext.is_stopped"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_stopped</span></code></a>()</p></td>
 <td><p>Returns True if simulation is stopped (not just paused).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.set_setting" title="isaaclab.sim.SimulationContext.set_setting"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_setting</span></code></a>(name, value)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.set_setting" title="isaaclab.sim.SimulationContext.set_setting"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_setting</span></code></a>(name, value)</p></td>
 <td><p>Set a setting value.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.get_setting" title="isaaclab.sim.SimulationContext.get_setting"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_setting</span></code></a>(name)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.get_setting" title="isaaclab.sim.SimulationContext.get_setting"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_setting</span></code></a>(name)</p></td>
 <td><p>Get a setting value.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.clear_instance" title="isaaclab.sim.SimulationContext.clear_instance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear_instance</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.clear_instance" title="isaaclab.sim.SimulationContext.clear_instance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear_instance</span></code></a>()</p></td>
 <td><p>Clean up resources and clear the singleton instance.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.clear_stage" title="isaaclab.sim.SimulationContext.clear_stage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear_stage</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.SimulationContext.clear_stage" title="isaaclab.sim.SimulationContext.clear_stage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear_stage</span></code></a>()</p></td>
 <td><p>Clear the current USD stage (preserving /World and PhysicsScene).</p></td>
 </tr>
 </tbody>
@@ -1153,6 +1157,12 @@ as a feature request elaborating on the required application.</p>
 <dt class="sig sig-object py" id="isaaclab.sim.SimulationContext.initialize_visualizers">
 <span class="sig-name descname"><span class="pre">initialize_visualizers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/isaaclab/sim/simulation_context.html#SimulationContext.initialize_visualizers"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#isaaclab.sim.SimulationContext.initialize_visualizers" title="Link to this definition">#</a></dt>
 <dd><p>Initialize visualizers from SimulationCfg.visualizer_cfgs.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="isaaclab.sim.SimulationContext.register_interactive_scene">
+<span class="sig-name descname"><span class="pre">register_interactive_scene</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scene</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/isaaclab/sim/simulation_context.html#SimulationContext.register_interactive_scene"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#isaaclab.sim.SimulationContext.register_interactive_scene" title="Link to this definition">#</a></dt>
+<dd><p>Register the active scene so scene data providers can expose scene-owned sensors.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -1926,6 +1936,7 @@ existing visualizer resolution machinery picks them up. Defaults to None.</p></l
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.SimulationContext.render_generation"><code class="docutils literal notranslate"><span class="pre">SimulationContext.render_generation</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.SimulationContext.resolve_visualizer_types"><code class="docutils literal notranslate"><span class="pre">SimulationContext.resolve_visualizer_types()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.SimulationContext.initialize_visualizers"><code class="docutils literal notranslate"><span class="pre">SimulationContext.initialize_visualizers()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.SimulationContext.register_interactive_scene"><code class="docutils literal notranslate"><span class="pre">SimulationContext.register_interactive_scene()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.SimulationContext.get_scene_data_requirements"><code class="docutils literal notranslate"><span class="pre">SimulationContext.get_scene_data_requirements()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.SimulationContext.update_scene_data_requirements"><code class="docutils literal notranslate"><span class="pre">SimulationContext.update_scene_data_requirements()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.SimulationContext.get_clone_plan"><code class="docutils literal notranslate"><span class="pre">SimulationContext.get_clone_plan()</span></code></a></li>
@@ -2035,7 +2046,7 @@ By The Isaac Lab Project Developers.
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on May 20, 2026.
+  Last updated on May 21, 2026.
   <br/>
 </p>
   </div>

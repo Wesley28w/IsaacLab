@@ -60,7 +60,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="3.0.0" />
-    <meta name="docbuild:last-update" content="May 20, 2026"/>
+    <meta name="docbuild:last-update" content="May 21, 2026"/>
   </head>
   
   
@@ -709,8 +709,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">newton.solvers</span><span class="w"> </span><span class="kn">import</span> <span class="n">SolverBase</span><span class="p">,</span> <span class="n">SolverKamino</span><span class="p">,</span> <span class="n">SolverNotifyFlags</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.physics</span><span class="w"> </span><span class="kn">import</span> <span class="n">CallbackHandle</span><span class="p">,</span> <span class="n">PhysicsEvent</span><span class="p">,</span> <span class="n">PhysicsManager</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.scene_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">SceneDataBackend</span><span class="p">,</span> <span class="n">SceneDataFormat</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.sim</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimulationContext</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.scene_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">SceneDataBackend</span><span class="p">,</span> <span class="n">SceneDataFormat</span><span class="p">,</span> <span class="n">SceneDataProvider</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.sim.utils.newton_model_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">replace_newton_shape_colors</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.sim.utils.stage</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_current_stage</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">checked_apply</span>
@@ -2288,7 +2287,7 @@
 <div class="viewcode-block" id="NewtonManager.get_state">
 <a class="viewcode-back" href="../../../source/api/lab_newton/isaaclab_newton.physics.html#isaaclab_newton.physics.NewtonManager.get_state">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_state</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">scene_data_provider</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_state</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">scene_data_provider</span><span class="p">:</span> <span class="n">SceneDataProvider</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">State</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the current Newton state for visualization.</span>
 
 <span class="sd">        Use this method from visualizers/renderers/video recorders that need a</span>
@@ -2308,14 +2307,11 @@
         <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_num_envs</span>
 
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">_backend_is_newton</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">scene_data_provider</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_backend_is_newton</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">scene_data_provider</span><span class="p">:</span> <span class="n">SceneDataProvider</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return ``True`` when the active sim backend is Newton.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">scene_data_provider</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">scene_data_provider</span><span class="o">.</span><span class="n">backend</span><span class="p">,</span> <span class="n">NewtonSceneDataBackend</span><span class="p">)</span>
-        <span class="n">sim</span> <span class="o">=</span> <span class="n">PhysicsManager</span><span class="o">.</span><span class="n">_sim</span>
-        <span class="k">if</span> <span class="n">sim</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">False</span>
-        <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">get_scene_data_provider</span><span class="p">()</span><span class="o">.</span><span class="n">backend</span><span class="p">,</span> <span class="n">NewtonSceneDataBackend</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">get_scene_data_provider</span><span class="p">()</span><span class="o">.</span><span class="n">backend</span><span class="p">,</span> <span class="n">NewtonSceneDataBackend</span><span class="p">)</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_visualization_model</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -2516,10 +2512,29 @@
 
         <span class="k">return</span> <span class="n">builder</span>
 
+<div class="viewcode-block" id="NewtonManager.get_scene_data_provider">
+<a class="viewcode-back" href="../../../source/api/lab_newton/isaaclab_newton.physics.html#isaaclab_newton.physics.NewtonManager.get_scene_data_provider">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_scene_data_provider</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SceneDataProvider</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the active scene data provider, or None if unavailable.</span>
+
+<span class="sd">        Prefers ``PhysicsManager._sim`` when set; otherwise falls back to</span>
+<span class="sd">        ``SimulationContext.instance()``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">sim</span> <span class="o">=</span> <span class="n">PhysicsManager</span><span class="o">.</span><span class="n">_sim</span>
+        <span class="k">if</span> <span class="n">sim</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.sim</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimulationContext</span>
+
+            <span class="n">sim</span> <span class="o">=</span> <span class="n">SimulationContext</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span>
+
+        <span class="k">assert</span> <span class="n">sim</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="n">sim</span><span class="o">.</span><span class="n">get_scene_data_provider</span><span class="p">()</span></div>
+
+
 <div class="viewcode-block" id="NewtonManager.update_visualization_state">
 <a class="viewcode-back" href="../../../source/api/lab_newton/isaaclab_newton.physics.html#isaaclab_newton.physics.NewtonManager.update_visualization_state">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">update_visualization_state</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">scene_data_provider</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_visualization_state</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">scene_data_provider</span><span class="p">:</span> <span class="n">SceneDataProvider</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Refresh visualization state for the active sim backend.</span>
 
 <span class="sd">        Newton sim backend: no-op — ``_state_0`` is the live, authoritative state</span>
@@ -2534,27 +2549,26 @@
 <span class="sd">        Invoked lazily from :meth:`get_state` so consumers do not need to</span>
 <span class="sd">        coordinate the sync explicitly.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">scene_data_provider</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">scene_data_provider</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_scene_data_provider</span><span class="p">()</span>
+
+        <span class="k">assert</span> <span class="n">scene_data_provider</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
         <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_backend_is_newton</span><span class="p">(</span><span class="n">scene_data_provider</span><span class="p">):</span>
             <span class="k">return</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">_ensure_visualization_model</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_state_0</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_model</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_state_0</span><span class="o">.</span><span class="n">body_q</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span>
-        <span class="n">sdp</span> <span class="o">=</span> <span class="n">scene_data_provider</span>
-        <span class="k">if</span> <span class="n">sdp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">sim</span> <span class="o">=</span> <span class="n">SimulationContext</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">sim</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">sdp</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">get_scene_data_provider</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">sdp</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_scene_data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">cls</span><span class="o">.</span><span class="n">_scene_data</span> <span class="o">=</span> <span class="n">SceneDataFormat</span><span class="o">.</span><span class="n">Transform</span><span class="p">()</span>
         <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_scene_data_mapping</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">body_paths</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">_model</span><span class="p">,</span> <span class="s2">&quot;body_label&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">[])</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">_scene_data_mapping</span> <span class="o">=</span> <span class="n">sdp</span><span class="o">.</span><span class="n">create_mapping</span><span class="p">(</span><span class="n">body_paths</span><span class="p">)</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_scene_data_mapping</span> <span class="o">=</span> <span class="n">scene_data_provider</span><span class="o">.</span><span class="n">create_mapping</span><span class="p">(</span><span class="n">body_paths</span><span class="p">)</span>
 
         <span class="bp">cls</span><span class="o">.</span><span class="n">_scene_data</span><span class="o">.</span><span class="n">transforms</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_state_0</span><span class="o">.</span><span class="n">body_q</span>
-        <span class="n">sdp</span><span class="o">.</span><span class="n">get_transforms</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">_scene_data</span><span class="p">,</span> <span class="n">mapping</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">_scene_data_mapping</span><span class="p">)</span></div>
+        <span class="n">scene_data_provider</span><span class="o">.</span><span class="n">get_transforms</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">_scene_data</span><span class="p">,</span> <span class="n">mapping</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">_scene_data_mapping</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="NewtonManager.get_state_1">
@@ -2886,7 +2900,7 @@ By The Isaac Lab Project Developers.
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on May 20, 2026.
+  Last updated on May 21, 2026.
   <br/>
 </p>
   </div>

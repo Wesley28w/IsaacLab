@@ -63,7 +63,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="3.0.0" />
-    <meta name="docbuild:last-update" content="May 20, 2026"/>
+    <meta name="docbuild:last-update" content="May 21, 2026"/>
   </head>
   
   
@@ -741,6 +741,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration">Configuration</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resolution-rules-cli-config">Resolution Rules (CLI + Config)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#partial-visualization">Partial Visualization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#camera-modes">Camera Modes</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-recording">Video Recording</a></li>
@@ -788,11 +789,11 @@
 <tbody>
 <tr class="row-even"><td><p><strong>Omniverse</strong></p></td>
 <td><p>High-fidelity, Isaac Sim integration</p></td>
-<td><p>USD, visualization markers, live plots</p></td>
+<td><p>USD, visualization markers, live plots, tiled camera panel</p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>Newton</strong></p></td>
 <td><p>Fast iteration</p></td>
-<td><p>Low overhead, visualization markers</p></td>
+<td><p>Low overhead, visualization markers, tiled camera panel</p></td>
 </tr>
 <tr class="row-even"><td><p><strong>Rerun</strong></p></td>
 <td><p>Remote viewing, replay</p></td>
@@ -959,6 +960,44 @@ enables randomly sampling the selected envs. If disabled, the first <code class=
 </table>
 </div>
 </section>
+<section id="camera-modes">
+<h3>Camera Modes<a class="headerlink" href="#camera-modes" title="Link to this heading">#</a></h3>
+<p>The default visualizer camera mode is interactive, with <code class="docutils literal notranslate"><span class="pre">eye</span></code> and <code class="docutils literal notranslate"><span class="pre">lookat</span></code> specifying the initial pose.
+Kit and Newton visualizers can also run additional tiled camera image panels.
+If <code class="docutils literal notranslate"><span class="pre">tiled_cam_view=True</span></code> is set, another window is launched in the visualizer which shows
+a non-interactive tiled camera image view.</p>
+<p>Kit and Newton cap tiled camera views at 100 tiles.</p>
+<p>Note, Kit tiled camera views require launching with <code class="docutils literal notranslate"><span class="pre">--enable_cameras</span></code>.</p>
+<div class="pst-scrollable-table-container"><table class="table" id="id6">
+<caption><span class="caption-text">Camera configuration modes</span><a class="headerlink" href="#id6" title="Link to this table">#</a></caption>
+<colgroup>
+<col style="width: 24.0%" />
+<col style="width: 30.0%" />
+<col style="width: 46.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Mode</p></th>
+<th class="head"><p>Key fields</p></th>
+<th class="head"><p>Behavior</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Default interactive</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tiled_cam_view=False</span></code>, <code class="docutils literal notranslate"><span class="pre">eye=(4,</span> <span class="pre">-4,</span> <span class="pre">3)</span></code>, <code class="docutils literal notranslate"><span class="pre">lookat=(0,</span> <span class="pre">0,</span> <span class="pre">0)</span></code></p></td>
+<td><p>Interactive visualizer camera starts at <code class="docutils literal notranslate"><span class="pre">eye</span></code> and looks at the fixed <code class="docutils literal notranslate"><span class="pre">lookat</span></code> coordinate.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Generated tiled camera</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tiled_cam_view=True</span></code>, <code class="docutils literal notranslate"><span class="pre">tiled_cam_prim_path=None</span></code>, <code class="docutils literal notranslate"><span class="pre">tiled_cam_target_prim_path=&quot;/World/envs/*/Robot/base&quot;</span></code></p></td>
+<td><p>The visualizer creates per-env cameras. Each camera looks at the matched target prim, with <code class="docutils literal notranslate"><span class="pre">tiled_cam_eye</span></code> as an offset from that target.</p></td>
+</tr>
+<tr class="row-even"><td><p>Existing tiled camera sensors</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tiled_cam_view=True</span></code>, <code class="docutils literal notranslate"><span class="pre">tiled_cam_prim_path=&quot;/World/envs/*/Camera&quot;</span></code></p></td>
+<td><p>The visualizer displays existing Isaac Lab <code class="docutils literal notranslate"><span class="pre">Camera</span></code> sensor output. Generated-camera fields such as <code class="docutils literal notranslate"><span class="pre">tiled_cam_eye</span></code> and <code class="docutils literal notranslate"><span class="pre">tiled_cam_target_prim_path</span></code> are ignored.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
 </section>
 <section id="video-recording">
 <h2>Video Recording<a class="headerlink" href="#video-recording" title="Link to this heading">#</a></h2>
@@ -974,8 +1013,8 @@ through the Rerun visualizer.</p></li>
 <p>When both Kit and Newton visualizers are active, Isaac Lab records a single <code class="docutils literal notranslate"><span class="pre">--video</span></code> stream and
 Kit takes precedence. To record from the renderer/physics stack instead of the active visualizer,
 set <code class="docutils literal notranslate"><span class="pre">VideoRecorderCfg.backend_source</span> <span class="pre">=</span> <span class="pre">&quot;renderer&quot;</span></code> in the task configuration.</p>
-<div class="pst-scrollable-table-container"><table class="table" id="id6">
-<caption><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">--video</span></code> compatibility: visualizer × renderer preset</span><a class="headerlink" href="#id6" title="Link to this table">#</a></caption>
+<div class="pst-scrollable-table-container"><table class="table" id="id7">
+<caption><span class="caption-text"><code class="docutils literal notranslate"><span class="pre">--video</span></code> compatibility: visualizer × renderer preset</span><a class="headerlink" href="#id7" title="Link to this table">#</a></caption>
 <colgroup>
 <col style="width: 28.0%" />
 <col style="width: 36.0%" />
@@ -1064,6 +1103,7 @@ Use <code class="docutils literal notranslate"><span class="pre">--visualizer</s
 <li><p>Live plots for monitoring training metrics</p></li>
 <li><p>Full Isaac Sim rendering capabilities and tooling</p></li>
 <li><p>Visualization markers for debugging (arrows, frames, object targets, etc.)</p></li>
+<li><p>Tiled camera views which can track multiple robots</p></li>
 </ul>
 <p><strong>Core Configuration:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab_visualizers.kit</span><span class="w"> </span><span class="kn">import</span> <span class="n">KitVisualizerCfg</span>
@@ -1094,6 +1134,7 @@ Use <code class="docutils literal notranslate"><span class="pre">--visualizer</s
 <li><p>Adjustable update frequency for performance tuning</p></li>
 <li><p>Some customizable rendering options (shadows, sky, wireframe)</p></li>
 <li><p>Visualization markers (joints, contacts, springs, COM, debug markers)</p></li>
+<li><p>Tiled camera views which can track multiple robots</p></li>
 </ul>
 <p><strong>Interactive Controls:</strong></p>
 <div class="pst-scrollable-table-container"><table class="table">
@@ -1139,6 +1180,17 @@ Use <code class="docutils literal notranslate"><span class="pre">--visualizer</s
     <span class="c1"># Camera settings</span>
     <span class="n">eye</span><span class="o">=</span><span class="p">(</span><span class="mf">8.0</span><span class="p">,</span> <span class="mf">8.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">),</span>                     <span class="c1"># Initial camera position (x, y, z)</span>
     <span class="n">lookat</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>                  <span class="c1"># Camera look-at target</span>
+    <span class="n">focal_length</span><span class="o">=</span><span class="mf">12.0</span><span class="p">,</span>                        <span class="c1"># Camera focal length in millimeters</span>
+
+    <span class="c1"># Tiled camera view settings</span>
+    <span class="n">tiled_cam_view</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>                      <span class="c1"># Enable non-interactive tiled camera image view</span>
+    <span class="n">tiled_cam_num</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>                         <span class="c1"># Number of generated camera tiles to display</span>
+    <span class="n">tiled_cam_env_indices</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>               <span class="c1"># Optional explicit env ids to show in the tiled view</span>
+    <span class="n">tiled_cam_prim_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>                 <span class="c1"># Existing Camera sensor prim path, e.g. &quot;/World/envs/*/Camera&quot;</span>
+    <span class="n">tiled_cam_eye</span><span class="o">=</span><span class="p">(</span><span class="mf">4.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">),</span>           <span class="c1"># Eye offset for generated tiled cameras</span>
+    <span class="n">tiled_cam_target_prim_path</span><span class="o">=</span><span class="p">(</span>              <span class="c1"># Prim that generated cameras follow/look at</span>
+        <span class="s2">&quot;/World/envs/*/Robot/base&quot;</span>
+    <span class="p">),</span>
 
     <span class="c1"># Performance tuning</span>
     <span class="n">update_frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>                       <span class="c1"># Update every N frames (1=every frame)</span>
@@ -1391,6 +1443,7 @@ instead:</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration">Configuration</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resolution-rules-cli-config">Resolution Rules (CLI + Config)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#partial-visualization">Partial Visualization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#camera-modes">Camera Modes</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#video-recording">Video Recording</a></li>
@@ -1437,7 +1490,7 @@ By The Isaac Lab Project Developers.
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on May 20, 2026.
+  Last updated on May 21, 2026.
   <br/>
 </p>
   </div>

@@ -63,7 +63,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="3.0.0" />
-    <meta name="docbuild:last-update" content="May 20, 2026"/>
+    <meta name="docbuild:last-update" content="May 21, 2026"/>
   </head>
   
   
@@ -739,8 +739,12 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scene-data-provider">Scene Data Provider</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.scene_data.SceneDataProvider"><code class="docutils literal notranslate"><span class="pre">SceneDataProvider</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.scene_data.SceneDataProvider.__init__"><code class="docutils literal notranslate"><span class="pre">SceneDataProvider.__init__()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.scene_data.SceneDataProvider.set_interactive_scene"><code class="docutils literal notranslate"><span class="pre">SceneDataProvider.set_interactive_scene()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.scene_data.SceneDataProvider.get_interactive_scene"><code class="docutils literal notranslate"><span class="pre">SceneDataProvider.get_interactive_scene()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.scene_data.SceneDataProvider.get_camera_sensors"><code class="docutils literal notranslate"><span class="pre">SceneDataProvider.get_camera_sensors()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.scene_data.SceneDataProvider.transform_count"><code class="docutils literal notranslate"><span class="pre">SceneDataProvider.transform_count</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.scene_data.SceneDataProvider.usd_stage"><code class="docutils literal notranslate"><span class="pre">SceneDataProvider.usd_stage</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.scene_data.SceneDataProvider.get_usd_stage"><code class="docutils literal notranslate"><span class="pre">SceneDataProvider.get_usd_stage()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.scene_data.SceneDataProvider.num_envs"><code class="docutils literal notranslate"><span class="pre">SceneDataProvider.num_envs</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.scene_data.SceneDataProvider.get_camera_transforms"><code class="docutils literal notranslate"><span class="pre">SceneDataProvider.get_camera_transforms()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.scene_data.SceneDataProvider.get_transforms"><code class="docutils literal notranslate"><span class="pre">SceneDataProvider.get_transforms()</span></code></a></li>
@@ -830,6 +834,18 @@ physics backends (<code class="docutils literal notranslate"><span class="pre">i
 <tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.scene_data.SceneDataProvider.__init__" title="isaaclab.scene_data.SceneDataProvider.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(backend)</p></td>
 <td><p>Initialize the scene data provider.</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.scene_data.SceneDataProvider.set_interactive_scene" title="isaaclab.scene_data.SceneDataProvider.set_interactive_scene"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_interactive_scene</span></code></a>(scene)</p></td>
+<td><p>Attach the active interactive scene for scene-owned sensor discovery.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.scene_data.SceneDataProvider.get_interactive_scene" title="isaaclab.scene_data.SceneDataProvider.get_interactive_scene"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_interactive_scene</span></code></a>()</p></td>
+<td><p>Return the registered interactive scene, if available.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.scene_data.SceneDataProvider.get_camera_sensors" title="isaaclab.scene_data.SceneDataProvider.get_camera_sensors"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_camera_sensors</span></code></a>()</p></td>
+<td><p>Return Isaac Lab camera sensors keyed by scene sensor name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.scene_data.SceneDataProvider.get_usd_stage" title="isaaclab.scene_data.SceneDataProvider.get_usd_stage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_usd_stage</span></code></a>()</p></td>
+<td><p>Return the USD stage for callers using the older method-style API.</p></td>
+</tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.scene_data.SceneDataProvider.get_camera_transforms" title="isaaclab.scene_data.SceneDataProvider.get_camera_transforms"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_camera_transforms</span></code></a>()</p></td>
 <td><p>Per-camera, per-environment world transforms discovered from USD.</p></td>
 </tr>
@@ -871,6 +887,24 @@ physics backends (<code class="docutils literal notranslate"><span class="pre">i
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="isaaclab.scene_data.SceneDataProvider.set_interactive_scene">
+<span class="sig-name descname"><span class="pre">set_interactive_scene</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scene</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/isaaclab/scene_data/scene_data_provider.html#SceneDataProvider.set_interactive_scene"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#isaaclab.scene_data.SceneDataProvider.set_interactive_scene" title="Link to this definition">#</a></dt>
+<dd><p>Attach the active interactive scene for scene-owned sensor discovery.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="isaaclab.scene_data.SceneDataProvider.get_interactive_scene">
+<span class="sig-name descname"><span class="pre">get_interactive_scene</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/isaaclab/scene_data/scene_data_provider.html#SceneDataProvider.get_interactive_scene"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#isaaclab.scene_data.SceneDataProvider.get_interactive_scene" title="Link to this definition">#</a></dt>
+<dd><p>Return the registered interactive scene, if available.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="isaaclab.scene_data.SceneDataProvider.get_camera_sensors">
+<span class="sig-name descname"><span class="pre">get_camera_sensors</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/isaaclab/scene_data/scene_data_provider.html#SceneDataProvider.get_camera_sensors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#isaaclab.scene_data.SceneDataProvider.get_camera_sensors" title="Link to this definition">#</a></dt>
+<dd><p>Return Isaac Lab camera sensors keyed by scene sensor name.</p>
+</dd></dl>
+
 <dl class="py property">
 <dt class="sig sig-object py" id="isaaclab.scene_data.SceneDataProvider.transform_count">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">transform_count</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></em><a class="headerlink" href="#isaaclab.scene_data.SceneDataProvider.transform_count" title="Link to this definition">#</a></dt>
@@ -885,6 +919,12 @@ physics backends (<code class="docutils literal notranslate"><span class="pre">i
 <code class="docutils literal notranslate"><span class="pre">omni.usd.get_context().get_stage()</span></code> when the simulation context has no
 cached stage. Returns <code class="docutils literal notranslate"><span class="pre">None</span></code> on Newton-only headless runs without a USD
 stage.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="isaaclab.scene_data.SceneDataProvider.get_usd_stage">
+<span class="sig-name descname"><span class="pre">get_usd_stage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Usd.Stage</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../_modules/isaaclab/scene_data/scene_data_provider.html#SceneDataProvider.get_usd_stage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#isaaclab.scene_data.SceneDataProvider.get_usd_stage" title="Link to this definition">#</a></dt>
+<dd><p>Return the USD stage for callers using the older method-style API.</p>
 </dd></dl>
 
 <dl class="py property">
@@ -1202,8 +1242,12 @@ paths or if no mapping is needed.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scene-data-provider">Scene Data Provider</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.scene_data.SceneDataProvider"><code class="docutils literal notranslate"><span class="pre">SceneDataProvider</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.scene_data.SceneDataProvider.__init__"><code class="docutils literal notranslate"><span class="pre">SceneDataProvider.__init__()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.scene_data.SceneDataProvider.set_interactive_scene"><code class="docutils literal notranslate"><span class="pre">SceneDataProvider.set_interactive_scene()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.scene_data.SceneDataProvider.get_interactive_scene"><code class="docutils literal notranslate"><span class="pre">SceneDataProvider.get_interactive_scene()</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.scene_data.SceneDataProvider.get_camera_sensors"><code class="docutils literal notranslate"><span class="pre">SceneDataProvider.get_camera_sensors()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.scene_data.SceneDataProvider.transform_count"><code class="docutils literal notranslate"><span class="pre">SceneDataProvider.transform_count</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.scene_data.SceneDataProvider.usd_stage"><code class="docutils literal notranslate"><span class="pre">SceneDataProvider.usd_stage</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.scene_data.SceneDataProvider.get_usd_stage"><code class="docutils literal notranslate"><span class="pre">SceneDataProvider.get_usd_stage()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.scene_data.SceneDataProvider.num_envs"><code class="docutils literal notranslate"><span class="pre">SceneDataProvider.num_envs</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.scene_data.SceneDataProvider.get_camera_transforms"><code class="docutils literal notranslate"><span class="pre">SceneDataProvider.get_camera_transforms()</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.scene_data.SceneDataProvider.get_transforms"><code class="docutils literal notranslate"><span class="pre">SceneDataProvider.get_transforms()</span></code></a></li>
@@ -1276,7 +1320,7 @@ By The Isaac Lab Project Developers.
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on May 20, 2026.
+  Last updated on May 21, 2026.
   <br/>
 </p>
   </div>

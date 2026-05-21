@@ -60,7 +60,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="3.0.0" />
-    <meta name="docbuild:last-update" content="May 20, 2026"/>
+    <meta name="docbuild:last-update" content="May 21, 2026"/>
   </head>
   
   
@@ -706,7 +706,39 @@
 <span class="sd">            backend: The simulation backend that supplies raw transform data.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">backend</span> <span class="o">=</span> <span class="n">backend</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_num_envs_cache</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_envs_cache</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_interactive_scene</span><span class="p">:</span> <span class="n">Any</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="SceneDataProvider.set_interactive_scene">
+<a class="viewcode-back" href="../../../source/api/lab/isaaclab.scene_data.html#isaaclab.scene_data.SceneDataProvider.set_interactive_scene">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_interactive_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Attach the active interactive scene for scene-owned sensor discovery.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_interactive_scene</span> <span class="o">=</span> <span class="n">scene</span></div>
+
+
+<div class="viewcode-block" id="SceneDataProvider.get_interactive_scene">
+<a class="viewcode-back" href="../../../source/api/lab/isaaclab.scene_data.html#isaaclab.scene_data.SceneDataProvider.get_interactive_scene">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_interactive_scene</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the registered interactive scene, if available.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interactive_scene</span></div>
+
+
+<div class="viewcode-block" id="SceneDataProvider.get_camera_sensors">
+<a class="viewcode-back" href="../../../source/api/lab/isaaclab.scene_data.html#isaaclab.scene_data.SceneDataProvider.get_camera_sensors">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_camera_sensors</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return Isaac Lab camera sensors keyed by scene sensor name.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interactive_scene</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.sensors.camera</span><span class="w"> </span><span class="kn">import</span> <span class="n">Camera</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="n">name</span><span class="p">:</span> <span class="n">sensor</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">sensor</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_interactive_scene</span><span class="p">,</span> <span class="s2">&quot;sensors&quot;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sensor</span><span class="p">,</span> <span class="n">Camera</span><span class="p">)</span>
+        <span class="p">}</span></div>
 
 
     <span class="nd">@property</span>
@@ -735,6 +767,13 @@
             <span class="k">return</span> <span class="n">omni</span><span class="o">.</span><span class="n">usd</span><span class="o">.</span><span class="n">get_context</span><span class="p">()</span><span class="o">.</span><span class="n">get_stage</span><span class="p">()</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="SceneDataProvider.get_usd_stage">
+<a class="viewcode-back" href="../../../source/api/lab/isaaclab.scene_data.html#isaaclab.scene_data.SceneDataProvider.get_usd_stage">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_usd_stage</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Usd</span><span class="o">.</span><span class="n">Stage</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the USD stage for callers using the older method-style API.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">usd_stage</span></div>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">num_envs</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
@@ -1259,7 +1298,7 @@ By The Isaac Lab Project Developers.
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on May 20, 2026.
+  Last updated on May 21, 2026.
   <br/>
 </p>
   </div>
