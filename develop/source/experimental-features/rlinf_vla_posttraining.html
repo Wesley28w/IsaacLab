@@ -803,10 +803,15 @@ Embodied and Agentic AI. This integration enables <strong>reinforcement learning
 </section>
 <section id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">#</a></h2>
-<ul class="simple">
+<ul>
 <li><p><strong>Isaac Lab</strong> installed and configured</p></li>
 <li><p><strong>Isaac-GR00T</strong> repo (for VLA inference and data transforms)</p></li>
-<li><p>A <strong>pretrained VLA checkpoint</strong> in HuggingFace format</p></li>
+<li><p>A <strong>pretrained VLA checkpoint</strong> in HuggingFace format. A pretrained GR00T checkpoint for
+<code class="docutils literal notranslate"><span class="pre">assemble_trocar</span></code> is available and can be downloaded via:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>hf<span class="w"> </span>download<span class="w"> </span>--repo-type<span class="w"> </span>model<span class="w"> </span>nvidia/Assemble_Trocar<span class="w"> </span>--local-dir<span class="w"> </span>/path/to/local/models
+</pre></div>
+</div>
+</li>
 <li><p>Multi-GPU setup recommended (FSDP requires at least 1 GPU)</p></li>
 </ul>
 </section>
