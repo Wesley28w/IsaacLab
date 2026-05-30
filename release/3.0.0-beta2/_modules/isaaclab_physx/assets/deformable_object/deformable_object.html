@@ -1309,30 +1309,24 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">_initialize_impl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># obtain global simulation view</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_physics_sim_view</span> <span class="o">=</span> <span class="n">SimulationManager</span><span class="o">.</span><span class="n">get_physics_sim_view</span><span class="p">()</span>
-        <span class="c1"># obtain the first prim in the regex expression (all others are assumed to be a copy of this)</span>
-        <span class="n">template_prim</span> <span class="o">=</span> <span class="n">sim_utils</span><span class="o">.</span><span class="n">find_first_matching_prim</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">template_prim</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to find prim for expression: &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
-        <span class="n">template_prim_path</span> <span class="o">=</span> <span class="n">template_prim</span><span class="o">.</span><span class="n">GetPath</span><span class="p">()</span><span class="o">.</span><span class="n">pathString</span>
 
-        <span class="c1"># find deformable root prims</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">has_deformable_body_api</span><span class="p">(</span><span class="n">prim</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;OmniPhysicsDeformableBodyAPI&quot;</span> <span class="ow">in</span> <span class="n">prim</span><span class="o">.</span><span class="n">GetAppliedSchemas</span><span class="p">()</span>
+
+        <span class="n">matches</span> <span class="o">=</span> <span class="n">sim_utils</span><span class="o">.</span><span class="n">resolve_matching_prims_from_source</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">matches</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No prim found at &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+        <span class="n">asset_prim</span><span class="p">,</span> <span class="n">root_expr</span> <span class="o">=</span> <span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">walk_root</span> <span class="o">=</span> <span class="n">asset_prim</span><span class="o">.</span><span class="n">GetPath</span><span class="p">()</span><span class="o">.</span><span class="n">pathString</span>
         <span class="n">root_prims</span> <span class="o">=</span> <span class="n">sim_utils</span><span class="o">.</span><span class="n">get_all_matching_child_prims</span><span class="p">(</span>
-            <span class="n">template_prim_path</span><span class="p">,</span>
-            <span class="n">predicate</span><span class="o">=</span><span class="k">lambda</span> <span class="n">prim</span><span class="p">:</span> <span class="s2">&quot;OmniPhysicsDeformableBodyAPI&quot;</span> <span class="ow">in</span> <span class="n">prim</span><span class="o">.</span><span class="n">GetAppliedSchemas</span><span class="p">(),</span>
-            <span class="n">traverse_instance_prims</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">walk_root</span><span class="p">,</span> <span class="n">predicate</span><span class="o">=</span><span class="n">has_deformable_body_api</span><span class="p">,</span> <span class="n">traverse_instance_prims</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">root_prims</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">root_prims</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">matched</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">GetPath</span><span class="p">()</span><span class="o">.</span><span class="n">pathString</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">root_prims</span><span class="p">]</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Failed to find a deformable body when resolving &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="si">}</span><span class="s2">&#39;.&quot;</span>
-                <span class="s2">&quot; Please ensure that the prim has &#39;OmniPhysicsDeformableBodyAPI&#39; applied.&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Expected exactly one OmniPhysicsDeformableBodyAPI prim under &#39;</span><span class="si">{</span><span class="n">walk_root</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot; (resolved from &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="si">}</span><span class="s2">&#39;), found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">root_prims</span><span class="p">)</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">matched</span><span class="si">}</span><span class="s2">.&quot;</span>
             <span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">root_prims</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Failed to find a single deformable body when resolving &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="si">}</span><span class="s2">&#39;.&quot;</span>
-                <span class="sa">f</span><span class="s2">&quot; Found multiple &#39;</span><span class="si">{</span><span class="n">root_prims</span><span class="si">}</span><span class="s2">&#39; under &#39;</span><span class="si">{</span><span class="n">template_prim_path</span><span class="si">}</span><span class="s2">&#39;.&quot;</span>
-                <span class="s2">&quot; Please ensure that there is only one deformable body in the prim path tree.&quot;</span>
-            <span class="p">)</span>
-        <span class="c1"># we only need the first one from the list</span>
         <span class="n">root_prim</span> <span class="o">=</span> <span class="n">root_prims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="c1"># find deformable material prims</span>
@@ -1385,10 +1379,8 @@
                 <span class="k">if</span> <span class="n">has_mesh</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">_deformable_type</span> <span class="o">=</span> <span class="s2">&quot;surface&quot;</span>
 
-        <span class="c1"># resolve root path back into regex expression</span>
-        <span class="c1"># -- root prim expression</span>
-        <span class="n">root_prim_path</span> <span class="o">=</span> <span class="n">root_prim</span><span class="o">.</span><span class="n">GetPath</span><span class="p">()</span><span class="o">.</span><span class="n">pathString</span>
-        <span class="n">root_prim_path_expr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span> <span class="o">+</span> <span class="n">root_prim_path</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">template_prim_path</span><span class="p">)</span> <span class="p">:]</span>
+        <span class="c1"># resolve root path back into the destination glob expression</span>
+        <span class="n">root_prim_path_expr</span> <span class="o">=</span> <span class="n">root_expr</span> <span class="o">+</span> <span class="n">root_prim</span><span class="o">.</span><span class="n">GetPath</span><span class="p">()</span><span class="o">.</span><span class="n">pathString</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">walk_root</span><span class="p">)</span> <span class="p">:]</span>
         <span class="c1"># -- object view</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_deformable_type</span> <span class="o">==</span> <span class="s2">&quot;surface&quot;</span><span class="p">:</span>
             <span class="c1"># surface deformable</span>
@@ -1420,8 +1412,8 @@
             <span class="n">material_prim_path</span> <span class="o">=</span> <span class="n">material_prim</span><span class="o">.</span><span class="n">GetPath</span><span class="p">()</span><span class="o">.</span><span class="n">pathString</span>
             <span class="c1"># check if the material prim is under the template prim</span>
             <span class="c1"># if not then we are assuming that the single material prim is used for all the deformable bodies</span>
-            <span class="k">if</span> <span class="n">template_prim_path</span> <span class="ow">in</span> <span class="n">material_prim_path</span><span class="p">:</span>
-                <span class="n">material_prim_path_expr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span> <span class="o">+</span> <span class="n">material_prim_path</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">template_prim_path</span><span class="p">)</span> <span class="p">:]</span>
+            <span class="k">if</span> <span class="n">walk_root</span> <span class="ow">in</span> <span class="n">material_prim_path</span><span class="p">:</span>
+                <span class="n">material_prim_path_expr</span> <span class="o">=</span> <span class="n">root_expr</span> <span class="o">+</span> <span class="n">material_prim_path</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">walk_root</span><span class="p">)</span> <span class="p">:]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">material_prim_path_expr</span> <span class="o">=</span> <span class="n">material_prim_path</span>
             <span class="c1"># -- material view</span>

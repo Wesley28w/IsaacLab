@@ -953,15 +953,16 @@
     <span class="c1"># CL: Cloning / Replication logic</span>
     <span class="c1"># TODO: These attributes support cloning-specific logic and should be moved into a cloner class</span>
     <span class="c1"># Pending site requests from sensors.</span>
-    <span class="c1"># Key: (body_pattern, xform_floats), Value: (label, wp.transform)</span>
-    <span class="c1"># identical (body_pattern, transform) reuses the same site.</span>
-    <span class="n">_cl_pending_sites</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="o">...</span><span class="p">]],</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">wp</span><span class="o">.</span><span class="n">transform</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="c1"># Key: (body_pattern, per_world, xform_floats), Value: (label, wp.transform)</span>
+    <span class="c1"># identical (body_pattern, per_world, transform) reuses the same site.</span>
+    <span class="n">_cl_pending_sites</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="o">...</span><span class="p">]],</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">wp</span><span class="o">.</span><span class="n">transform</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="c1"># Maps each site label to its resolved global or local site entry.</span>
     <span class="n">_GlobalSite</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
     <span class="n">_LocalSite</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]]]</span>
     <span class="n">_SiteEntry</span> <span class="o">=</span> <span class="n">_GlobalSite</span> <span class="o">|</span> <span class="n">_LocalSite</span>
     <span class="n">_cl_site_index_map</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">_SiteEntry</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">_world_xforms</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">transform</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="NewtonManager.initialize">
 <a class="viewcode-back" href="../../../source/api/lab_newton/isaaclab_newton.physics.html#isaaclab_newton.physics.NewtonManager.initialize">[docs]</a>
@@ -1407,6 +1408,7 @@
         <span class="n">NewtonManager</span><span class="o">.</span><span class="n">_scene_data_backend</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">NewtonManager</span><span class="o">.</span><span class="n">_cl_pending_sites</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">NewtonManager</span><span class="o">.</span><span class="n">_cl_site_index_map</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">NewtonManager</span><span class="o">.</span><span class="n">_world_xforms</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">NewtonManager</span><span class="o">.</span><span class="n">_pending_extended_state_attributes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="n">NewtonManager</span><span class="o">.</span><span class="n">_pending_extended_contact_attributes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="n">NewtonManager</span><span class="o">.</span><span class="n">_views</span> <span class="o">=</span> <span class="p">[]</span>
@@ -1453,14 +1455,14 @@
 <div class="viewcode-block" id="NewtonManager.cl_register_site">
 <a class="viewcode-back" href="../../../source/api/lab_newton/isaaclab_newton.physics.html#isaaclab_newton.physics.NewtonManager.cl_register_site">[docs]</a>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">cl_register_site</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">body_pattern</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">xform</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">transform</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cl_register_site</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">body_pattern</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">xform</span><span class="p">:</span> <span class="n">wp</span><span class="o">.</span><span class="n">transform</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">per_world</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Register a site request for injection into prototypes before replication.</span>
 
 <span class="sd">        Sensors call this during ``__init__``. Sites are injected into prototype</span>
 <span class="sd">        builders by :meth:`_cl_inject_sites` (called from ``newton_replicate``)</span>
 <span class="sd">        before ``add_builder``, so they replicate correctly per-world.</span>
 
-<span class="sd">        Identical ``(body_pattern, transform)`` registrations share sites.</span>
+<span class="sd">        Identical ``(body_pattern, per_world, transform)`` registrations share sites.</span>
 
 <span class="sd">        The *body_pattern* is matched against prototype-local body labels</span>
 <span class="sd">        (e.g. ``&quot;Robot/link.*&quot;``) when replication is active, or against the</span>
@@ -1473,12 +1475,16 @@
 <span class="sd">                for multi-body wildcards), or ``None`` for global sites</span>
 <span class="sd">                (world-origin reference, etc.).</span>
 <span class="sd">            xform: Site transform relative to body.</span>
+<span class="sd">            per_world: When ``True``, ``body_pattern`` must be ``None`` and one</span>
+<span class="sd">                bodyless site is created in each cloned world&#39;s frame.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            Assigned site label suffix.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">per_world</span> <span class="ow">and</span> <span class="n">body_pattern</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;per_world site registration requires body_pattern=None.&quot;</span><span class="p">)</span>
         <span class="n">xform_key</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">xform</span><span class="p">)</span>
-        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">body_pattern</span><span class="p">,</span> <span class="n">xform_key</span><span class="p">)</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">body_pattern</span><span class="p">,</span> <span class="n">per_world</span><span class="p">,</span> <span class="n">xform_key</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_cl_pending_sites</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_cl_pending_sites</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">label</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;ft_</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">_cl_pending_sites</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
@@ -1523,7 +1529,7 @@
         <span class="bp">cls</span><span class="p">,</span>
         <span class="n">main_builder</span><span class="p">:</span> <span class="n">ModelBuilder</span><span class="p">,</span>
         <span class="n">proto_builders</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">ModelBuilder</span><span class="p">],</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]]]]:</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]]],</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">wp</span><span class="o">.</span><span class="n">transform</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Inject registered sites into prototype builders before replication.</span>
 
 <span class="sd">        Non-global sites are matched against prototype body labels using</span>
@@ -1541,14 +1547,20 @@
 <span class="sd">            proto_builders: ``{src_path: ModelBuilder}`` prototype builders.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            Tuple of ``(global_sites, proto_sites)`` where *global_sites* maps</span>
-<span class="sd">            ``{label: main_builder_shape_idx}`` and *proto_sites* maps</span>
-<span class="sd">            ``{id(proto): {label: [proto_local_shape_idx, ...]}}``.</span>
+<span class="sd">            Tuple of ``(global_sites, proto_sites, world_sites)`` where</span>
+<span class="sd">            *global_sites* maps ``{label: main_builder_shape_idx}``,</span>
+<span class="sd">            *proto_sites* maps ``{id(proto): {label: [proto_local_shape_idx, ...]}}``,</span>
+<span class="sd">            and *world_sites* maps ``{label: env_root_relative_transform}``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">global_sites</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">proto_sites</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="k">for</span> <span class="p">(</span><span class="n">body_pattern</span><span class="p">,</span> <span class="n">_xform_key</span><span class="p">),</span> <span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">xform</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_cl_pending_sites</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">world_sites</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">wp</span><span class="o">.</span><span class="n">transform</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="n">body_pattern</span><span class="p">,</span> <span class="n">per_world</span><span class="p">,</span> <span class="n">_xform_key</span><span class="p">),</span> <span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">xform</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_cl_pending_sites</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">per_world</span><span class="p">:</span>
+                <span class="n">world_sites</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">xform</span>
+                <span class="k">continue</span>
             <span class="k">if</span> <span class="n">body_pattern</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">site_idx</span> <span class="o">=</span> <span class="n">main_builder</span><span class="o">.</span><span class="n">add_site</span><span class="p">(</span><span class="n">body</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">xform</span><span class="o">=</span><span class="n">xform</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
                 <span class="n">global_sites</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="n">site_idx</span>
@@ -1581,7 +1593,7 @@
                 <span class="p">)</span>
 
         <span class="bp">cls</span><span class="o">.</span><span class="n">_cl_pending_sites</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">global_sites</span><span class="p">,</span> <span class="n">proto_sites</span>
+        <span class="k">return</span> <span class="n">global_sites</span><span class="p">,</span> <span class="n">proto_sites</span><span class="p">,</span> <span class="n">world_sites</span>
 
     <span class="nd">@classmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_cl_inject_sites_fallback</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
@@ -1590,12 +1602,16 @@
 <span class="sd">        Populates :attr:`_cl_site_index_map` with the unified per-world structure:</span>
 
 <span class="sd">        - Global sites (``body_pattern is None``): ``(shape_idx, None)``</span>
-<span class="sd">        - Local sites: ``(None, [[idx, ...]])`` — one sublist for the single world.</span>
+<span class="sd">        - Local and world sites: ``(None, [[idx, ...]])`` — one sublist for the single world.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">builder</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_builder</span>
         <span class="n">body_labels</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">builder</span><span class="o">.</span><span class="n">body_label</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="p">(</span><span class="n">body_pattern</span><span class="p">,</span> <span class="n">_xform_key</span><span class="p">),</span> <span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">xform</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_cl_pending_sites</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">body_pattern</span><span class="p">,</span> <span class="n">per_world</span><span class="p">,</span> <span class="n">_xform_key</span><span class="p">),</span> <span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">xform</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_cl_pending_sites</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">per_world</span><span class="p">:</span>
+                <span class="n">site_idx</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">add_site</span><span class="p">(</span><span class="n">body</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">xform</span><span class="o">=</span><span class="n">xform</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+                <span class="bp">cls</span><span class="o">.</span><span class="n">_cl_site_index_map</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="p">[[</span><span class="n">site_idx</span><span class="p">]])</span>
+                <span class="k">continue</span>
             <span class="k">if</span> <span class="n">body_pattern</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">site_idx</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">add_site</span><span class="p">(</span><span class="n">body</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">xform</span><span class="o">=</span><span class="n">xform</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
                 <span class="bp">cls</span><span class="o">.</span><span class="n">_cl_site_index_map</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">site_idx</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
@@ -1803,6 +1819,7 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">env_paths</span><span class="p">:</span>
             <span class="c1"># No env Xforms — flat loading</span>
             <span class="n">builder</span><span class="o">.</span><span class="n">add_usd</span><span class="p">(</span><span class="n">stage</span><span class="p">,</span> <span class="n">schema_resolvers</span><span class="o">=</span><span class="n">schema_resolvers</span><span class="p">)</span>
+            <span class="n">NewtonManager</span><span class="o">.</span><span class="n">_world_xforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">transform</span><span class="p">()]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Load everything except the env subtrees (ground plane, lights, etc.)</span>
             <span class="n">ignore_paths</span> <span class="o">=</span> <span class="p">[</span><span class="n">path</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">env_paths</span><span class="p">]</span>
@@ -1818,11 +1835,12 @@
             <span class="p">)</span>
 
             <span class="c1"># Inject registered sites into the proto before replication</span>
-            <span class="n">global_sites</span><span class="p">,</span> <span class="n">proto_sites</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_cl_inject_sites</span><span class="p">(</span><span class="n">builder</span><span class="p">,</span> <span class="p">{</span><span class="n">proto_path</span><span class="p">:</span> <span class="n">proto</span><span class="p">})</span>
+            <span class="n">global_sites</span><span class="p">,</span> <span class="n">proto_sites</span><span class="p">,</span> <span class="n">world_sites</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_cl_inject_sites</span><span class="p">(</span><span class="n">builder</span><span class="p">,</span> <span class="p">{</span><span class="n">proto_path</span><span class="p">:</span> <span class="n">proto</span><span class="p">})</span>
             <span class="n">global_site_map</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span><span class="n">label</span><span class="p">:</span> <span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">idx</span> <span class="ow">in</span> <span class="n">global_sites</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
             <span class="n">num_worlds</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">env_paths</span><span class="p">)</span>
             <span class="n">local_site_map</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]]]</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="n">site_entries</span> <span class="o">=</span> <span class="n">proto_sites</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="n">proto</span><span class="p">),</span> <span class="p">{})</span>
+            <span class="n">world_xforms</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">transform</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
             <span class="c1"># Add each env as a separate Newton world</span>
             <span class="n">xform_cache</span> <span class="o">=</span> <span class="n">UsdGeom</span><span class="o">.</span><span class="n">XformCache</span><span class="p">()</span>
@@ -1839,7 +1857,14 @@
                     <span class="n">rotation</span><span class="o">.</span><span class="n">GetImaginary</span><span class="p">()[</span><span class="mi">2</span><span class="p">],</span>
                     <span class="n">rotation</span><span class="o">.</span><span class="n">GetReal</span><span class="p">(),</span>
                 <span class="p">)</span>
-                <span class="n">builder</span><span class="o">.</span><span class="n">add_builder</span><span class="p">(</span><span class="n">proto</span><span class="p">,</span> <span class="n">xform</span><span class="o">=</span><span class="n">wp</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">quat</span><span class="p">))</span>
+                <span class="n">env_xform</span> <span class="o">=</span> <span class="n">wp</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">quat</span><span class="p">)</span>
+                <span class="n">world_xforms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">env_xform</span><span class="p">)</span>
+                <span class="n">builder</span><span class="o">.</span><span class="n">add_builder</span><span class="p">(</span><span class="n">proto</span><span class="p">,</span> <span class="n">xform</span><span class="o">=</span><span class="n">env_xform</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">xform</span> <span class="ow">in</span> <span class="n">world_sites</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">local_site_map</span><span class="p">:</span>
+                        <span class="n">local_site_map</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_worlds</span><span class="p">)]</span>
+                    <span class="n">site_idx</span> <span class="o">=</span> <span class="n">builder</span><span class="o">.</span><span class="n">add_site</span><span class="p">(</span><span class="n">body</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">xform</span><span class="o">=</span><span class="n">wp</span><span class="o">.</span><span class="n">transform_multiply</span><span class="p">(</span><span class="n">env_xform</span><span class="p">,</span> <span class="n">xform</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+                    <span class="n">local_site_map</span><span class="p">[</span><span class="n">label</span><span class="p">][</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">site_idx</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">proto_shape_indices</span> <span class="ow">in</span> <span class="n">site_entries</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                     <span class="k">if</span> <span class="n">label</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">local_site_map</span><span class="p">:</span>
                         <span class="n">local_site_map</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_worlds</span><span class="p">)]</span>
@@ -1851,6 +1876,7 @@
                 <span class="o">**</span><span class="n">global_site_map</span><span class="p">,</span>
                 <span class="o">**</span><span class="p">{</span><span class="n">label</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">per_world</span><span class="p">)</span> <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">per_world</span> <span class="ow">in</span> <span class="n">local_site_map</span><span class="o">.</span><span class="n">items</span><span class="p">()},</span>
             <span class="p">}</span>
+            <span class="n">NewtonManager</span><span class="o">.</span><span class="n">_world_xforms</span> <span class="o">=</span> <span class="n">world_xforms</span>
             <span class="n">NewtonManager</span><span class="o">.</span><span class="n">_num_envs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">env_paths</span><span class="p">)</span>
 
         <span class="bp">cls</span><span class="o">.</span><span class="n">set_builder</span><span class="p">(</span><span class="n">builder</span><span class="p">)</span></div>

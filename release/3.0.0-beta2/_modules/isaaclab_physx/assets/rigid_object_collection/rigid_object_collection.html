@@ -1976,52 +1976,28 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_body_names_list</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
         <span class="c1"># obtain global simulation view</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_physics_sim_view</span> <span class="o">=</span> <span class="n">SimulationManager</span><span class="o">.</span><span class="n">get_physics_sim_view</span><span class="p">()</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">has_rigid_body_api</span><span class="p">(</span><span class="n">prim</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">prim</span><span class="o">.</span><span class="n">HasAPI</span><span class="p">(</span><span class="n">UsdPhysics</span><span class="o">.</span><span class="n">RigidBodyAPI</span><span class="p">))</span>
+
         <span class="n">root_prim_path_exprs</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">rigid_body_cfg</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">rigid_objects</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="c1"># obtain the first prim in the regex expression (all others are assumed to be a copy of this)</span>
-            <span class="n">template_prim</span> <span class="o">=</span> <span class="n">sim_utils</span><span class="o">.</span><span class="n">find_first_matching_prim</span><span class="p">(</span><span class="n">rigid_body_cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">template_prim</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to find prim for expression: &#39;</span><span class="si">{</span><span class="n">rigid_body_cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
-            <span class="n">template_prim_path</span> <span class="o">=</span> <span class="n">template_prim</span><span class="o">.</span><span class="n">GetPath</span><span class="p">()</span><span class="o">.</span><span class="n">pathString</span>
-
-            <span class="c1"># find rigid root prims</span>
+            <span class="n">matches</span> <span class="o">=</span> <span class="n">sim_utils</span><span class="o">.</span><span class="n">resolve_matching_prims_from_source</span><span class="p">(</span><span class="n">rigid_body_cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">matches</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No prim found at &#39;</span><span class="si">{</span><span class="n">rigid_body_cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+            <span class="n">asset_prim</span><span class="p">,</span> <span class="n">root_expr</span> <span class="o">=</span> <span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">walk_root</span> <span class="o">=</span> <span class="n">asset_prim</span><span class="o">.</span><span class="n">GetPath</span><span class="p">()</span><span class="o">.</span><span class="n">pathString</span>
             <span class="n">root_prims</span> <span class="o">=</span> <span class="n">sim_utils</span><span class="o">.</span><span class="n">get_all_matching_child_prims</span><span class="p">(</span>
-                <span class="n">template_prim_path</span><span class="p">,</span>
-                <span class="n">predicate</span><span class="o">=</span><span class="k">lambda</span> <span class="n">prim</span><span class="p">:</span> <span class="n">prim</span><span class="o">.</span><span class="n">HasAPI</span><span class="p">(</span><span class="n">UsdPhysics</span><span class="o">.</span><span class="n">RigidBodyAPI</span><span class="p">),</span>
-                <span class="n">traverse_instance_prims</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">walk_root</span><span class="p">,</span> <span class="n">predicate</span><span class="o">=</span><span class="n">has_rigid_body_api</span><span class="p">,</span> <span class="n">traverse_instance_prims</span><span class="o">=</span><span class="kc">False</span>
             <span class="p">)</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">root_prims</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">root_prims</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">matched</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="o">.</span><span class="n">GetPath</span><span class="p">()</span><span class="o">.</span><span class="n">pathString</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">root_prims</span><span class="p">]</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Failed to find a rigid body when resolving &#39;</span><span class="si">{</span><span class="n">rigid_body_cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="si">}</span><span class="s2">&#39;.&quot;</span>
-                    <span class="s2">&quot; Please ensure that the prim has &#39;USD RigidBodyAPI&#39; applied.&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Expected exactly one RigidBodyAPI prim under &#39;</span><span class="si">{</span><span class="n">walk_root</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot; (resolved from &#39;</span><span class="si">{</span><span class="n">rigid_body_cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="si">}</span><span class="s2">&#39;), found </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">root_prims</span><span class="p">)</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">matched</span><span class="si">}</span><span class="s2">.&quot;</span>
                 <span class="p">)</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">root_prims</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Failed to find a single rigid body when resolving &#39;</span><span class="si">{</span><span class="n">rigid_body_cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="si">}</span><span class="s2">&#39;.&quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot; Found multiple &#39;</span><span class="si">{</span><span class="n">root_prims</span><span class="si">}</span><span class="s2">&#39; under &#39;</span><span class="si">{</span><span class="n">template_prim_path</span><span class="si">}</span><span class="s2">&#39;.&quot;</span>
-                    <span class="s2">&quot; Please ensure that there is only one rigid body in the prim path tree.&quot;</span>
-                <span class="p">)</span>
-
-            <span class="c1"># check that no rigid object has an articulation root API, which decreases simulation performance</span>
-            <span class="n">articulation_prims</span> <span class="o">=</span> <span class="n">sim_utils</span><span class="o">.</span><span class="n">get_all_matching_child_prims</span><span class="p">(</span>
-                <span class="n">template_prim_path</span><span class="p">,</span>
-                <span class="n">predicate</span><span class="o">=</span><span class="k">lambda</span> <span class="n">prim</span><span class="p">:</span> <span class="n">prim</span><span class="o">.</span><span class="n">HasAPI</span><span class="p">(</span><span class="n">UsdPhysics</span><span class="o">.</span><span class="n">ArticulationRootAPI</span><span class="p">),</span>
-                <span class="n">traverse_instance_prims</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="p">)</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">articulation_prims</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">articulation_prims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">GetAttribute</span><span class="p">(</span><span class="s2">&quot;physxArticulation:articulationEnabled&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">Get</span><span class="p">():</span>
-                    <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;Found an articulation root when resolving &#39;</span><span class="si">{</span><span class="n">rigid_body_cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="si">}</span><span class="s2">&#39; in the rigid object&quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot; collection. These are located at: &#39;</span><span class="si">{</span><span class="n">articulation_prims</span><span class="si">}</span><span class="s2">&#39; under &#39;</span><span class="si">{</span><span class="n">template_prim_path</span><span class="si">}</span><span class="s2">&#39;.&quot;</span>
-                        <span class="s2">&quot; Please disable the articulation root in the USD or from code by setting the parameter&quot;</span>
-                        <span class="s2">&quot; &#39;ArticulationRootPropertiesCfg.articulation_enabled&#39; to False in the spawn configuration.&quot;</span>
-                    <span class="p">)</span>
-
-            <span class="c1"># resolve root prim back into regex expression</span>
-            <span class="n">root_prim_path</span> <span class="o">=</span> <span class="n">root_prims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">GetPath</span><span class="p">()</span><span class="o">.</span><span class="n">pathString</span>
-            <span class="n">root_prim_path_expr</span> <span class="o">=</span> <span class="n">rigid_body_cfg</span><span class="o">.</span><span class="n">prim_path</span> <span class="o">+</span> <span class="n">root_prim_path</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">template_prim_path</span><span class="p">)</span> <span class="p">:]</span>
+            <span class="n">root_prim_path_expr</span> <span class="o">=</span> <span class="n">root_expr</span> <span class="o">+</span> <span class="n">root_prims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">GetPath</span><span class="p">()</span><span class="o">.</span><span class="n">pathString</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">walk_root</span><span class="p">)</span> <span class="p">:]</span>
             <span class="n">root_prim_path_exprs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">root_prim_path_expr</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.*&quot;</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">))</span>
-
             <span class="bp">self</span><span class="o">.</span><span class="n">_body_names_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
         <span class="c1"># -- object view</span>

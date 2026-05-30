@@ -1007,7 +1007,15 @@
 <span class="sd">            c. Creates rigid body view for object</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">elastomer_pattern</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parent_prims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">GetPath</span><span class="p">()</span><span class="o">.</span><span class="n">pathString</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;env_0&quot;</span><span class="p">,</span> <span class="s2">&quot;env_*&quot;</span><span class="p">)</span>
+        <span class="c1"># Resolve the elastomer&#39;s destination expression (multi-env glob form for PhysX views).</span>
+        <span class="c1"># The sensor&#39;s cfg.prim_path lives under the elastomer; the parent expression is the</span>
+        <span class="c1"># elastomer body itself (matching :attr:`SensorBase._parent_prims`).</span>
+        <span class="n">elastomer_expr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">matches</span> <span class="o">=</span> <span class="n">sim_utils</span><span class="o">.</span><span class="n">resolve_matching_prims_from_source</span><span class="p">(</span><span class="n">elastomer_expr</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">matches</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No prim found at &#39;</span><span class="si">{</span><span class="n">elastomer_expr</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+        <span class="n">elastomer_dest_expr</span> <span class="o">=</span> <span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">elastomer_pattern</span> <span class="o">=</span> <span class="n">elastomer_dest_expr</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.*&quot;</span><span class="p">,</span> <span class="s2">&quot;*&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_elastomer_body_view</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_physics_sim_view</span><span class="o">.</span><span class="n">create_rigid_body_view</span><span class="p">([</span><span class="n">elastomer_pattern</span><span class="p">])</span>
         <span class="c1"># Get elastomer COM for velocity correction</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_elastomer_com_b</span> <span class="o">=</span> <span class="p">(</span>
@@ -1104,8 +1112,14 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c1"># Get the elastomer prim path</span>
-        <span class="n">elastomer_prim_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parent_prims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">GetPath</span><span class="p">()</span><span class="o">.</span><span class="n">pathString</span>
+        <span class="c1"># Resolve the elastomer&#39;s source-side env prim and use it as the walk root.</span>
+        <span class="c1"># The sensor&#39;s cfg.prim_path lives under the elastomer; the parent expression is the</span>
+        <span class="c1"># elastomer body itself (matching :attr:`SensorBase._parent_prims`).</span>
+        <span class="n">elastomer_expr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">matches</span> <span class="o">=</span> <span class="n">sim_utils</span><span class="o">.</span><span class="n">resolve_matching_prims_from_source</span><span class="p">(</span><span class="n">elastomer_expr</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">matches</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No prim found at &#39;</span><span class="si">{</span><span class="n">elastomer_expr</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+        <span class="n">elastomer_prim_path</span> <span class="o">=</span> <span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">GetPath</span><span class="p">()</span><span class="o">.</span><span class="n">pathString</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">is_visual_mesh</span><span class="p">(</span><span class="n">prim</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;Check if a mesh prim has visual properties (visual mesh, not collision mesh).&quot;&quot;&quot;</span>

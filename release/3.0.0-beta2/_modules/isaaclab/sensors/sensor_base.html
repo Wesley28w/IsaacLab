@@ -698,12 +698,19 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">warp</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">wp</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">pxr</span><span class="w"> </span><span class="kn">import</span> <span class="n">UsdPhysics</span>
+
 <span class="kn">import</span><span class="w"> </span><span class="nn">isaaclab.sim</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sim_utils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.cloner.cloner_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">iter_clone_plan_matches</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.physics</span><span class="w"> </span><span class="kn">import</span> <span class="n">PhysicsEvent</span><span class="p">,</span> <span class="n">PhysicsManager</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.sim.utils.queries</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_first_matching_ancestor_prim</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.sim.utils.transforms</span><span class="w"> </span><span class="kn">import</span> <span class="n">resolve_prim_pose</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.kernels</span><span class="w"> </span><span class="kn">import</span> <span class="n">reset_envs_kernel</span><span class="p">,</span> <span class="n">update_outdated_envs_kernel</span><span class="p">,</span> <span class="n">update_timestamp_kernel</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">isaaclab.cloner</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClonePlan</span>
+
     <span class="kn">from</span><span class="w"> </span><span class="nn">.sensor_base_cfg</span><span class="w"> </span><span class="kn">import</span> <span class="n">SensorBaseCfg</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
@@ -739,6 +746,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_is_initialized</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="c1"># flag for whether the sensor is in visualization mode</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_is_visualizing</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1"># clone plan used for this sensor&#39;s latest initialization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_clone_plan</span><span class="p">:</span> <span class="n">ClonePlan</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stage</span> <span class="o">=</span> <span class="n">sim_utils</span><span class="o">.</span><span class="n">get_current_stage</span><span class="p">()</span>
 
         <span class="c1"># register various callback functions</span>
@@ -904,10 +913,19 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_device</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">device</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_backend</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">backend</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sim_physics_dt</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">get_physics_dt</span><span class="p">()</span>
-        <span class="c1"># Count number of environments</span>
-        <span class="n">env_prim_path_expr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_parent_prims</span> <span class="o">=</span> <span class="n">sim_utils</span><span class="o">.</span><span class="n">find_matching_prims</span><span class="p">(</span><span class="n">env_prim_path_expr</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_num_envs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parent_prims</span><span class="p">)</span>
+        <span class="c1"># Count number of environments.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_clone_plan</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">get_clone_plan</span><span class="p">()</span>
+        <span class="n">clone_plan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clone_plan</span>
+        <span class="n">clone_plan_matches</span> <span class="o">=</span> <span class="p">()</span>
+        <span class="k">if</span> <span class="n">clone_plan</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">clone_plan_matches</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">iter_clone_plan_matches</span><span class="p">(</span><span class="n">clone_plan</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">clone_plan_matches</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_parent_prims</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_num_envs</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">clone_plan</span><span class="o">.</span><span class="n">clone_mask</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">env_prim_path_expr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_parent_prims</span> <span class="o">=</span> <span class="n">sim_utils</span><span class="o">.</span><span class="n">find_matching_prims</span><span class="p">(</span><span class="n">env_prim_path_expr</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_num_envs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parent_prims</span><span class="p">)</span>
         <span class="c1"># Create warp env mask arrays for &quot;all envs&quot; cases and resets.</span>
         <span class="c1"># Note: We use wp.to_torch() to create zero-copy torch tensor views of warp arrays.</span>
         <span class="c1"># This allows warp arrays to be passed to warp kernels while the corresponding torch</span>
@@ -1010,6 +1028,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">_invalidate_initialize_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Invalidates the scene elements.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_is_initialized</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_clone_plan</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">sim_ctx</span> <span class="o">=</span> <span class="n">sim_utils</span><span class="o">.</span><span class="n">SimulationContext</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">sim_ctx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">sim_ctx</span><span class="o">.</span><span class="n">vis_marker_registry</span><span class="o">.</span><span class="n">clear_debug_vis_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
@@ -1081,73 +1100,66 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_reset_mask_torch</span><span class="p">[</span><span class="n">env_ids</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reset_mask</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_resolve_and_spawn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sensor_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">**</span><span class="n">spawn_kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resolve physics-body prim paths and spawn the sensor prim if needed.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_resolve_rigid_body_ancestor_expr</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resolve the rigid-body ancestor view expression and the sensor-to-body offset.</span>
 
-<span class="sd">        Behavior matrix (``spawn`` refers to ``cfg.spawn``):</span>
+<span class="sd">        The sensor&#39;s :attr:`SensorBaseCfg.prim_path` may point to any frame</span>
+<span class="sd">        inside the asset. To create a physics view, this helper walks ancestors</span>
+<span class="sd">        from that prim until it finds one with ``UsdPhysics.RigidBodyAPI``,</span>
+<span class="sd">        builds the corresponding destination-side expression, and computes the</span>
+<span class="sd">        fixed transform from that body to the configured sensor frame.</span>
 
-<span class="sd">        +----------------+------------------+--------------------------------------------+</span>
-<span class="sd">        | ``spawn``      | ``prim_path``    | Action                                     |</span>
-<span class="sd">        +================+==================+============================================+</span>
-<span class="sd">        | not ``None``   | physics body     | Append ``/&lt;sensor_name&gt;``, spawn child.    |</span>
-<span class="sd">        +----------------+------------------+--------------------------------------------+</span>
-<span class="sd">        | not ``None``   | non-physics prim | Use existing prim, skip spawn.             |</span>
-<span class="sd">        |                | (already exists) |                                            |</span>
-<span class="sd">        +----------------+------------------+--------------------------------------------+</span>
-<span class="sd">        | not ``None``   | does not exist   | Spawn prim at ``prim_path``.               |</span>
-<span class="sd">        +----------------+------------------+--------------------------------------------+</span>
-<span class="sd">        | ``None``       | physics body     | Raise ``ValueError``.                      |</span>
-<span class="sd">        +----------------+------------------+--------------------------------------------+</span>
-<span class="sd">        | ``None``       | non-physics prim | Use as-is (no spawn).                      |</span>
-<span class="sd">        +----------------+------------------+--------------------------------------------+</span>
+<span class="sd">        Combines two resolution paths:</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            sensor_name: Short identifier (e.g. ``&quot;raycaster&quot;``, ``&quot;camera&quot;``).</span>
-<span class="sd">            **spawn_kwargs: Extra keyword arguments forwarded to ``cfg.spawn.func``</span>
-<span class="sd">                (e.g. ``translation``, ``orientation``).</span>
+<span class="sd">        1. When an active :class:`~isaaclab.cloner.ClonePlan` exists, the</span>
+<span class="sd">           source-side env path is taken from the plan via</span>
+<span class="sd">           :func:`~isaaclab.cloner.resolve_clone_plan_source`, the rigid-body ancestor</span>
+<span class="sd">           is located on that source env, and the destination expression is</span>
+<span class="sd">           reconstructed by trimming the sensor-relative suffix from the plan&#39;s</span>
+<span class="sd">           destination glob.</span>
+<span class="sd">        2. Otherwise (stage scan fallback for non-cloned setups), the first</span>
+<span class="sd">           matching env is located via</span>
+<span class="sd">           :func:`~isaaclab.sim.utils.queries.find_first_matching_prim`, the</span>
+<span class="sd">           rigid-body ancestor is located on that env, and the destination</span>
+<span class="sd">           expression is the configured :attr:`SensorBaseCfg.prim_path` minus</span>
+<span class="sd">           the sensor-relative suffix.</span>
 
-<span class="sd">        Raises:</span>
-<span class="sd">            ValueError: If ``spawn`` is ``None`` and ``prim_path`` is a physics body.</span>
-<span class="sd">            RuntimeError: If the prim does not exist after the spawn attempt.</span>
+<span class="sd">        The returned expression may still contain regex-style wildcards (e.g.</span>
+<span class="sd">        ``.*``); callers are responsible for converting to glob form for their</span>
+<span class="sd">        physics view (e.g. ``.replace(&quot;.*&quot;, &quot;*&quot;)``).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A tuple of:</span>
+
+<span class="sd">            * ``rigid_parent_expr``: destination-side view expression that</span>
+<span class="sd">              matches the rigid-body ancestor across envs.</span>
+<span class="sd">            * ``fixed_pos_b``: sensor-relative-to-body translation [m] (xyz),</span>
+<span class="sd">              or ``None`` when the sensor is mounted directly at the body</span>
+<span class="sd">              origin.</span>
+<span class="sd">            * ``fixed_quat_b``: sensor-relative-to-body rotation as a</span>
+<span class="sd">              quaternion ``(x, y, z, w)``, or ``None`` when the sensor is</span>
+<span class="sd">              mounted directly at the body origin.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="kn">from</span><span class="w"> </span><span class="nn">pxr</span><span class="w"> </span><span class="kn">import</span> <span class="n">UsdPhysics</span>  <span class="c1"># noqa: PLC0415</span>
+        <span class="n">matches</span> <span class="o">=</span> <span class="n">sim_utils</span><span class="o">.</span><span class="n">resolve_matching_prims_from_source</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">matches</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No prim found at &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+        <span class="n">prim</span><span class="p">,</span> <span class="n">target_expr</span> <span class="o">=</span> <span class="n">matches</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="n">spawn</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="p">,</span> <span class="s2">&quot;spawn&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="n">has_spawn</span> <span class="o">=</span> <span class="n">spawn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">ancestor_prim</span> <span class="o">=</span> <span class="n">get_first_matching_ancestor_prim</span><span class="p">(</span>
+            <span class="n">prim</span><span class="o">.</span><span class="n">GetPath</span><span class="p">(),</span> <span class="n">predicate</span><span class="o">=</span><span class="k">lambda</span> <span class="n">_prim</span><span class="p">:</span> <span class="n">_prim</span><span class="o">.</span><span class="n">HasAPI</span><span class="p">(</span><span class="n">UsdPhysics</span><span class="o">.</span><span class="n">RigidBodyAPI</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">ancestor_prim</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to find a rigid body ancestor prim at path expression: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-        <span class="c1"># Determine the path to probe for physics-body redirect</span>
-        <span class="n">spawn_path</span> <span class="o">=</span> <span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">spawn</span><span class="p">,</span> <span class="s2">&quot;spawn_path&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="p">)</span> <span class="k">if</span> <span class="n">has_spawn</span> <span class="k">else</span> <span class="kc">None</span>
-        <span class="n">probe_path</span> <span class="o">=</span> <span class="n">spawn_path</span> <span class="k">if</span> <span class="n">spawn_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span>
+        <span class="k">if</span> <span class="n">ancestor_prim</span> <span class="o">==</span> <span class="n">prim</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">target_expr</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
-        <span class="n">prim</span> <span class="o">=</span> <span class="n">sim_utils</span><span class="o">.</span><span class="n">find_first_matching_prim</span><span class="p">(</span><span class="n">probe_path</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">prim</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">prim</span><span class="o">.</span><span class="n">IsValid</span><span class="p">():</span>
-            <span class="n">is_physics</span> <span class="o">=</span> <span class="n">prim</span><span class="o">.</span><span class="n">HasAPI</span><span class="p">(</span><span class="n">UsdPhysics</span><span class="o">.</span><span class="n">ArticulationRootAPI</span><span class="p">)</span> <span class="ow">or</span> <span class="n">prim</span><span class="o">.</span><span class="n">HasAPI</span><span class="p">(</span><span class="n">UsdPhysics</span><span class="o">.</span><span class="n">RigidBodyAPI</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">is_physics</span><span class="p">:</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">has_spawn</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;Sensor prim_path &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="si">}</span><span class="s2">&#39; resolves to a physics body but&quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot; no spawner is configured (spawn=None). Either set spawn or point&quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot; prim_path at a non-physics child (e.g. &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">sensor_name</span><span class="si">}</span><span class="s2">&#39;).&quot;</span>
-                    <span class="p">)</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Sensor prim_path &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="si">}</span><span class="s2">&#39; points at a physics body.&quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot; Redirecting to &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">sensor_name</span><span class="si">}</span><span class="s2">&#39;.&quot;</span>
-                <span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">sensor_name</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">spawn</span><span class="p">,</span> <span class="s2">&quot;spawn_path&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">spawn</span><span class="o">.</span><span class="n">spawn_path</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">spawn</span><span class="o">.</span><span class="n">spawn_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">sensor_name</span><span class="si">}</span><span class="s2">&quot;</span>
-
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">has_spawn</span><span class="p">:</span>
-            <span class="k">return</span>
-
-        <span class="n">spawn_target</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">spawn</span><span class="p">,</span> <span class="s2">&quot;spawn_path&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span>
-        <span class="n">prim</span> <span class="o">=</span> <span class="n">sim_utils</span><span class="o">.</span><span class="n">find_first_matching_prim</span><span class="p">(</span><span class="n">spawn_target</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">prim</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">prim</span><span class="o">.</span><span class="n">IsValid</span><span class="p">():</span>
-            <span class="n">spawn</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="n">spawn_target</span><span class="p">,</span> <span class="n">spawn</span><span class="p">,</span> <span class="o">**</span><span class="n">spawn_kwargs</span><span class="p">)</span>
-
-        <span class="n">check_path</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">spawn</span><span class="p">,</span> <span class="s2">&quot;spawn_path&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">prim_path</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sim_utils</span><span class="o">.</span><span class="n">find_matching_prims</span><span class="p">(</span><span class="n">check_path</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not find prim with path </span><span class="si">{</span><span class="n">check_path</span><span class="si">!r}</span><span class="s2">.&quot;</span><span class="p">)</span></div>
+        <span class="n">relative_path</span> <span class="o">=</span> <span class="n">prim</span><span class="o">.</span><span class="n">GetPath</span><span class="p">()</span><span class="o">.</span><span class="n">MakeRelativePath</span><span class="p">(</span><span class="n">ancestor_prim</span><span class="o">.</span><span class="n">GetPath</span><span class="p">())</span><span class="o">.</span><span class="n">pathString</span>
+        <span class="n">rigid_parent_expr</span> <span class="o">=</span> <span class="n">target_expr</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">relative_path</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">fixed_pos_b</span><span class="p">,</span> <span class="n">fixed_quat_b</span> <span class="o">=</span> <span class="n">resolve_prim_pose</span><span class="p">(</span><span class="n">prim</span><span class="p">,</span> <span class="n">ancestor_prim</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">rigid_parent_expr</span><span class="p">,</span> <span class="n">fixed_pos_b</span><span class="p">,</span> <span class="n">fixed_quat_b</span></div>
 
 </pre></div>
 

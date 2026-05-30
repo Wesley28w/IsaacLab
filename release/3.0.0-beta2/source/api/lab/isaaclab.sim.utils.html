@@ -759,6 +759,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.utils.queries.get_all_matching_child_prims"><code class="docutils literal notranslate"><span class="pre">get_all_matching_child_prims()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.utils.queries.find_first_matching_prim"><code class="docutils literal notranslate"><span class="pre">find_first_matching_prim()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.utils.queries.find_matching_prims"><code class="docutils literal notranslate"><span class="pre">find_matching_prims()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.utils.queries.resolve_matching_prims_from_source"><code class="docutils literal notranslate"><span class="pre">resolve_matching_prims_from_source()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.utils.queries.find_matching_prim_paths"><code class="docutils literal notranslate"><span class="pre">find_matching_prim_paths()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.utils.queries.find_global_fixed_joint_prim"><code class="docutils literal notranslate"><span class="pre">find_global_fixed_joint_prim()</span></code></a></li>
 </ul>
@@ -1232,10 +1233,13 @@ a default predicate will be used that deletes all prims.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.utils.queries.find_matching_prims" title="isaaclab.sim.utils.queries.find_matching_prims"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_matching_prims</span></code></a>(prim_path_regex[, stage])</p></td>
 <td><p>Find all the matching prims in the stage based on input regex expression.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.utils.queries.find_matching_prim_paths" title="isaaclab.sim.utils.queries.find_matching_prim_paths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_matching_prim_paths</span></code></a>(prim_path_regex[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.utils.queries.resolve_matching_prims_from_source" title="isaaclab.sim.utils.queries.resolve_matching_prims_from_source"><code class="xref py py-obj docutils literal notranslate"><span class="pre">resolve_matching_prims_from_source</span></code></a>(path_expr, *)</p></td>
+<td><p>Resolve prims matching <code class="docutils literal notranslate"><span class="pre">path_expr</span></code> (regex) under the first instance.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.utils.queries.find_matching_prim_paths" title="isaaclab.sim.utils.queries.find_matching_prim_paths"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_matching_prim_paths</span></code></a>(prim_path_regex[, ...])</p></td>
 <td><p>Find all the matching prim paths in the stage based on input regex expression.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#isaaclab.sim.utils.queries.find_global_fixed_joint_prim" title="isaaclab.sim.utils.queries.find_global_fixed_joint_prim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_global_fixed_joint_prim</span></code></a>(prim_path[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#isaaclab.sim.utils.queries.find_global_fixed_joint_prim" title="isaaclab.sim.utils.queries.find_global_fixed_joint_prim"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_global_fixed_joint_prim</span></code></a>(prim_path[, ...])</p></td>
 <td><p>Find the fixed joint prim under the specified prim path that connects the target to the simulation world.</p></td>
 </tr>
 </tbody>
@@ -1399,6 +1403,39 @@ Defaults to None (i.e: traversal happens till the end of the tree).</p></li>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If the prim path is not global (i.e: does not start with ‘/’).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="isaaclab.sim.utils.queries.resolve_matching_prims_from_source">
+<span class="sig-prename descclassname"><span class="pre">isaaclab.sim.utils.queries.</span></span><span class="sig-name descname"><span class="pre">resolve_matching_prims_from_source</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_expr</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">predicate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://trimesh.org/trimesh.typed.html#trimesh.typed.Callable" title="(in trimesh)"><span class="pre">Callable</span></a><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">pxr.Usd.Prim</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">env_regex_ns</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'/World/envs/env_.*'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)"><span class="pre">list</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><span class="pre">pxr.Usd.Prim</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/isaaclab/sim/utils/queries.html#resolve_matching_prims_from_source"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#isaaclab.sim.utils.queries.resolve_matching_prims_from_source" title="Link to this definition">#</a></dt>
+<dd><p>Resolve prims matching <code class="docutils literal notranslate"><span class="pre">path_expr</span></code> (regex) under the first instance.</p>
+<p>Identify the env-id segment, concretize it to the <em>first instance</em> (the authored source
+template in clone-plan mode, env-0 in legacy mode), then evaluate the remainder of
+<code class="docutils literal notranslate"><span class="pre">path_expr</span></code> as a path-segment regex via <a class="reference internal" href="#isaaclab.sim.utils.queries.find_matching_prims" title="isaaclab.sim.utils.queries.find_matching_prims"><code class="xref py py-func docutils literal notranslate"><span class="pre">find_matching_prims()</span></code></a>. Downstream regex
+tokens (e.g. <code class="docutils literal notranslate"><span class="pre">LF_.*</span></code>, <code class="docutils literal notranslate"><span class="pre">.*_foot</span></code>) are preserved verbatim and matched there.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path_expr</strong> – Destination-side path expression (e.g. a <code class="docutils literal notranslate"><span class="pre">prim_path</span></code>), which may contain
+regex wildcards in the env-id and/or asset-relative segments.</p></li>
+<li><p><strong>predicate</strong> – Optional callable accepting a <code class="xref py py-class docutils literal notranslate"><span class="pre">Usd.Prim</span></code> and returning <code class="docutils literal notranslate"><span class="pre">True</span></code> for
+prims to keep. <code class="docutils literal notranslate"><span class="pre">None</span></code> keeps every match.</p></li>
+<li><p><strong>env_regex_ns</strong> – Instance-root namespace regex, defaulting to the standard
+<code class="docutils literal notranslate"><span class="pre">&quot;/World/envs/env_.*&quot;</span></code>. In legacy (no-clone-plan) resolution, when <code class="docutils literal notranslate"><span class="pre">path_expr</span></code>
+sits under this namespace its path depth fixes the per-instance (“env”) boundary.
+Otherwise the boundary falls back to the first regex segment of <code class="docutils literal notranslate"><span class="pre">path_expr</span></code> (the
+first <code class="docutils literal notranslate"><span class="pre">.*</span></code> is treated as the env id), which covers ad-hoc roots such as
+<code class="docutils literal notranslate"><span class="pre">&quot;/World/Table_.*/Object&quot;</span></code>. Layouts the fallback would mis-split (e.g. more than
+one wildcard level) must pass an explicit namespace here. Ignored when a clone plan
+owns <code class="docutils literal notranslate"><span class="pre">path_expr</span></code>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of <code class="docutils literal notranslate"><span class="pre">(matched_prim,</span> <span class="pre">destination_expr)</span></code> pairs, where <code class="docutils literal notranslate"><span class="pre">destination_expr</span></code> is the
+multi-instance path expression (not a single concrete instance) so callers can build
+views spanning every instance. Empty when <code class="docutils literal notranslate"><span class="pre">path_expr</span></code> matches no prim.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2743,6 +2780,7 @@ function instead.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.utils.queries.get_all_matching_child_prims"><code class="docutils literal notranslate"><span class="pre">get_all_matching_child_prims()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.utils.queries.find_first_matching_prim"><code class="docutils literal notranslate"><span class="pre">find_first_matching_prim()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.utils.queries.find_matching_prims"><code class="docutils literal notranslate"><span class="pre">find_matching_prims()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.utils.queries.resolve_matching_prims_from_source"><code class="docutils literal notranslate"><span class="pre">resolve_matching_prims_from_source()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.utils.queries.find_matching_prim_paths"><code class="docutils literal notranslate"><span class="pre">find_matching_prim_paths()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#isaaclab.sim.utils.queries.find_global_fixed_joint_prim"><code class="docutils literal notranslate"><span class="pre">find_global_fixed_joint_prim()</span></code></a></li>
 </ul>
