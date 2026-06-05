@@ -11,8 +11,6 @@ from isaaclab.sim.spawners.materials.visual_materials_cfg import PreviewSurfaceC
 from isaaclab_tasks.direct.stack.feature_extractor import FeatureExtractor, FeatureExtractorCfg
 import torch
 import numpy as np
-
-from isaacsim.core.utils.torch.transformations import tfcombine, tf_inverse, tf_vector
 from pxr import UsdGeom
 
 import isaaclab.sim as sim_utils
@@ -275,8 +273,14 @@ class StackCameraShakeEnv(DirectRLEnv):
 
         # this slows down the finger joints
         self.robot_dof_speed_scales = torch.ones_like(self.robot_dof_lower_limits)
-        self.robot_dof_speed_scales[self._robot.find_joints("pad_left")[0]] = 0.1
-        self.robot_dof_speed_scales[self._robot.find_joints("pad_right")[0]] = 0.1
+        
+        # Look up the actual joint indices instead of body indices
+        left_joint_idx, _ = self._robot.find_joints("gripper_base_to_gripper_left3")
+        right_joint_idx, _ = self._robot.find_joints("gripper_base_to_gripper_right3") # Double-check your right joint name layout
+
+        # Extract the integer index out of the returned list and apply the scale
+        self.robot_dof_speed_scales[left_joint_idx[0]] = 0.1
+        self.robot_dof_speed_scales[right_joint_idx[0]] = 0.1
 
         # set the targets to zero
         self.robot_dof_targets = torch.zeros((self.num_envs, self._robot.num_joints), device=self.device)
