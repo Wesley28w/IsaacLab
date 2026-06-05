@@ -256,7 +256,7 @@ class StackEnv(DirectRLEnv):
         # Extract the integer index out of the returned list and apply the scale
         self.robot_dof_speed_scales[left_joint_idx[0]] = 0.1
         self.robot_dof_speed_scales[right_joint_idx[0]] = 0.1
-        
+
         # set the targets to zero
         self.robot_dof_targets = torch.zeros((self.num_envs, self._robot.num_joints), device=self.device)
 
@@ -275,20 +275,31 @@ class StackEnv(DirectRLEnv):
 
         stage = get_current_stage()
 
+        # print("--- DISK USD HIERARCHY PATHS IN ENVIRONMENT 0 ---")
+        # for body_path in self._robot.body_names:
+        #     print(body_path)
+        #     self._robot.find_bodies(body_path)
+        # print("-------------------------------------------------")
+
+        # print("----Traversing Paths of Stage ----")
+        # for prim in stage.Traverse():
+        #     print(prim.GetPath())
+        # print("--------------------------------")
+
         # set up the positions of parts
         hand_pose = get_env_local_pose(
             self.scene.env_origins[0],
-            UsdGeom.Xformable(stage.GetPrimAtPath("/World/envs/env_0/Robot/gripper_base")),
+            UsdGeom.Xformable(stage.GetPrimAtPath("/World/envs/env_0/MyCobot280/MyCobot280/gripper_base")),
             self.device
         )
         lfinger_pose = get_env_local_pose(
             self.scene.env_origins[0],
-            UsdGeom.Xformable(stage.GetPrimAtPath("/World/envs/env_0/Robot/pad_left")),
+            UsdGeom.Xformable(stage.GetPrimAtPath("/World/envs/env_0/MyCobot280/MyCobot280/pad_left")),
             self.device
         )
         rfinger_pose = get_env_local_pose(
             self.scene.env_origins[0],
-            UsdGeom.Xformable(stage.GetPrimAtPath("/World/envs/env_0/Robot/pad_right")),
+            UsdGeom.Xformable(stage.GetPrimAtPath("/World/envs/env_0/MyCobot280/MyCobot280/pad_right")),
             self.device
         )
 

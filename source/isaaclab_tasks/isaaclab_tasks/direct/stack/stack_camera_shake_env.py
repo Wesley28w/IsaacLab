@@ -303,19 +303,20 @@ class StackCameraShakeEnv(DirectRLEnv):
         # set up the positions of parts
         hand_pose = get_env_local_pose(
             self.scene.env_origins[0],
-            UsdGeom.Xformable(stage.GetPrimAtPath("/World/envs/env_0/Robot/gripper_base")),
+            UsdGeom.Xformable(stage.GetPrimAtPath("/World/envs/env_0/MyCobot280/MyCobot280/gripper_base")),
             self.device
         )
         lfinger_pose = get_env_local_pose(
             self.scene.env_origins[0],
-            UsdGeom.Xformable(stage.GetPrimAtPath("/World/envs/env_0/Robot/pad_left")),
+            UsdGeom.Xformable(stage.GetPrimAtPath("/World/envs/env_0/MyCobot280/MyCobot280/pad_left")),
             self.device
         )
         rfinger_pose = get_env_local_pose(
             self.scene.env_origins[0],
-            UsdGeom.Xformable(stage.GetPrimAtPath("/World/envs/env_0/Robot/pad_right")),
+            UsdGeom.Xformable(stage.GetPrimAtPath("/World/envs/env_0/MyCobot280/MyCobot280/pad_right")),
             self.device
         )
+
 
         # -- Setting up all positions at init
         # in between the fingers
