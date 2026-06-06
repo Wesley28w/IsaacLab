@@ -4,6 +4,7 @@ from isaaclab.assets.rigid_object.rigid_object import RigidObject
 from isaaclab.assets.rigid_object.rigid_object_cfg import RigidObjectCfg
 from isaaclab.controllers.differential_ik import DifferentialIKController
 from isaaclab.controllers.differential_ik_cfg import DifferentialIKControllerCfg
+from isaaclab.sim.simulation_cfg import PhysxCfg
 from isaaclab.sim.spawners.materials.visual_materials_cfg import PreviewSurfaceCfg
 import torch
 import numpy as np
@@ -40,11 +41,23 @@ class StackShakeEnvCfg(DirectRLEnvCfg):
             dynamic_friction=1.0,
             restitution=0.0,
         ),
+        physx=PhysxCfg(
+            gpu_max_rigid_contact_count=2**21,     # Increase to ~2M
+            gpu_max_rigid_patch_count=2**18,       # Increase to ~262k (Fixes your error)
+            gpu_found_lost_pairs_capacity=2**21,
+            gpu_found_lost_aggregate_pairs_capacity=2**21,
+            gpu_total_aggregate_pairs_capacity=2**21,
+            gpu_max_soft_body_contacts=2**20,
+            gpu_max_particle_contacts=2**20,
+            gpu_heap_capacity=2**26,               # Give the GPU heap more room
+            gpu_temp_buffer_capacity=2**24,
+            gpu_max_num_partitions=8,              # Helps with 1500+ envs
+        ),
     )
 
     # scene
     scene: InteractiveSceneCfg = InteractiveSceneCfg(
-        num_envs=4096, env_spacing=3.0, replicate_physics=True, clone_in_fabric=True
+        num_envs=4096, env_spacing=3.0, replicate_physics=False
     )
 
     # robot
