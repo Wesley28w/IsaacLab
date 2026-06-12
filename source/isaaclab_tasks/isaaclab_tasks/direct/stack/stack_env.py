@@ -774,7 +774,7 @@ class StackEnv(DirectRLEnv):
             + (self.cfg.target_reward_weight* place_on_target_reward) ** 2
             + (self.cfg.target_fine_reward_weight * place_on_target_fine_reward) ** 2
             + (self.cfg.target_close_reward_weight * place_on_target_close_reward) ** 2
-            + self.cfg.target_close_bonus_weight* place_on_target_close_reward
+            + self.cfg.target_close_bonus_weight * place_on_target_close_reward
             + self.cfg.stack_coarse_reward_weight * stack_coarse_reward
             + self.cfg.stack_fine_reward_weight * stack_fine_reward
             + self.cfg.xy_alignment_reward_weight * xy_alignment_reward
